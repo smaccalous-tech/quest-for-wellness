@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — Quest for Wellness, LLC</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --teal:#1a9aaa;--teal-deep:#0a4f6a;--teal-light:#29b8c8;
+  --teal-bg:#e8f7fa;--navy:#072f40;
+  --white:#fff;--text:#1a2e35;--text-muted:#5a7a85;
+  --border:rgba(26,154,170,0.18);--border-strong:rgba(26,154,170,0.4);
+  --radius:10px;--error:#c0392b;--warning:#d4850a;--success:#1a8a6a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#f2f8fa;color:var(--text);min-height:100vh}
+
+/* Login */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(160deg,#0a4f6a,#072f40)}
+.login-box{background:white;border-radius:14px;padding:40px;width:100%;max-width:380px}
+.login-logo-row{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.login-logo-row img{width:44px;height:44px;border-radius:50%;object-fit:cover}
+.login-logo-row div strong{display:block;font-size:15px;font-weight:500;color:var(--teal-deep)}
+.login-logo-row div span{font-size:11px;color:var(--text-muted)}
+.login-badge{display:inline-flex;align-items:center;gap:6px;background:#fff3cd;border:1px solid #ffc107;border-radius:20px;padding:4px 12px;font-size:11px;color:#856404;margin-bottom:18px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:11px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px}
+.field input{width:100%;padding:10px 13px;border:1px solid var(--border-strong);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text)}
+.field input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(26,154,170,0.12)}
+.btn-login{width:100%;padding:12px;background:var(--teal-deep);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-top:6px}
+.btn-login:hover{background:var(--navy)}
+
+/* App shell */
+.app{display:none;min-height:100vh;flex-direction:column}
+.app.show{display:flex}
+.app-layout{display:flex;flex:1}
+
+/* Sidebar */
+.sidebar{width:230px;background:var(--navy);display:flex;flex-direction:column;flex-shrink:0}
+.sb-logo{padding:18px 16px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:10px}
+.sb-logo img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(41,184,200,0.35)}
+.sb-logo-text strong{display:block;font-size:13px;color:#e8f7fa;font-weight:500}
+.sb-logo-text span{font-size:10px;color:rgba(232,247,250,0.45)}
+.sb-section{font-size:10px;font-weight:500;color:rgba(232,247,250,0.35);text-transform:uppercase;letter-spacing:0.09em;padding:14px 14px 5px}
+.sb-btn{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:rgba(232,247,250,0.65);border:none;background:transparent;width:100%;text-align:left;font-family:'DM Sans',sans-serif;margin-bottom:1px;transition:all 0.14s}
+.sb-btn:hover{background:rgba(255,255,255,0.08);color:#e8f7fa}
+.sb-btn.active{background:rgba(41,184,200,0.2);color:#e8f7fa}
+.sb-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.5;flex-shrink:0}
+.sb-badge{margin-left:auto;background:#29b8c8;color:#042C53;font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px}
+.sb-footer{margin-top:auto;padding:14px;border-top:1px solid rgba(255,255,255,0.07)}
+.sb-user{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.sb-avatar{width:28px;height:28px;border-radius:50%;background:rgba(41,184,200,0.25);color:#29b8c8;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.sb-user-text strong{display:block;font-size:12px;color:#e8f7fa;font-weight:500}
+.sb-user-text span{font-size:10px;color:rgba(232,247,250,0.45)}
+.sb-logout{width:100%;padding:6px;background:rgba(255,255,255,0.06);border:none;color:rgba(232,247,250,0.5);border-radius:6px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.sb-logout:hover{background:rgba(255,255,255,0.12);color:#e8f7fa}
+
+/* Main */
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+.topbar{background:white;border-bottom:1px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between}
+.topbar-title{font-size:17px;font-weight:500;color:var(--teal-deep)}
+.topbar-sub{font-size:11px;color:var(--text-muted);margin-top:1px}
+.topbar-actions{display:flex;gap:8px}
+.btn{padding:8px 16px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.btn-primary{background:var(--teal);color:white}.btn-primary:hover{background:var(--teal-deep)}
+.btn-outline{background:white;color:var(--teal-deep);border:1px solid var(--border-strong)}.btn-outline:hover{background:var(--teal-bg)}
+.btn-danger{background:white;color:var(--error);border:1px solid rgba(192,57,43,0.3)}.btn-danger:hover{background:#fef0f0}
+.btn-warn{background:white;color:var(--warning);border:1px solid rgba(212,133,10,0.3)}.btn-warn:hover{background:#fff8f0}
+.btn-sm{padding:6px 12px;font-size:12px}
+
+.content{flex:1;overflow-y:auto;padding:24px}
+.panel{display:none}.panel.active{display:block}
+
+/* Stat row */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:24px}
+.stat{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px}
+.stat-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px}
+.stat-value{font-size:24px;font-weight:500;color:var(--teal-deep)}
+.stat-sub{font-size:11px;color:var(--text-muted);margin-top:2px}
+
+/* Cards */
+.card{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.card-title{font-size:12px;font-weight:500;color:var(--teal-deep);text-transform:uppercase;letter-spacing:0.07em}
+
+/* Table */
+table{width:100%;border-collapse:collapse}
+th{font-size:11px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;padding:0 12px 10px;text-align:left;border-bottom:1px solid var(--border)}
+td{padding:12px;font-size:13px;color:var(--text);border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafcfd}
+.td-actions{display:flex;gap:6px;flex-wrap:wrap}
+
+/* Status badges */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:10px;font-size:11px;font-weight:500}
+.badge-active{background:#e8f5e9;color:#2e7d32}
+.badge-inactive{background:#f5f5f5;color:#888}
+.badge-new{background:var(--teal-bg);color:var(--teal-deep)}
+.badge-upcoming{background:#e3f2fd;color:#1565c0}
+.badge-completed{background:#f5f5f5;color:#666}
+.badge-pending{background:#fff8f0;color:#d4850a}
+
+/* Search & filter bar */
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.toolbar input{padding:8px 12px;border:1px solid var(--border-strong);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);min-width:200px}
+.toolbar input:focus{outline:none;border-color:var(--teal)}
+.toolbar select{padding:8px 12px;border:1px solid var(--border-strong);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:white}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(7,47,64,0.45);z-index:300;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.show{display:flex}
+.modal{background:white;border-radius:12px;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;box-shadow:0 16px 64px rgba(7,47,64,0.25)}
+.modal-head{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;position:sticky;top:0;background:white;z-index:1}
+.modal-head h3{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--teal-deep)}
+.modal-close{background:none;border:none;font-size:20px;color:var(--text-muted);cursor:pointer;padding:2px 6px;line-height:1}
+.modal-body{padding:22px}
+.modal-field{margin-bottom:14px}
+.modal-field label{display:block;font-size:11px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px}
+.modal-field input,.modal-field select,.modal-field textarea{width:100%;padding:9px 12px;border:1px solid var(--border-strong);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text)}
+.modal-field textarea{resize:vertical;min-height:80px}
+.modal-field input:focus,.modal-field select:focus,.modal-field textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(26,154,170,0.1)}
+.modal-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal-footer{padding:16px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;position:sticky;bottom:0;background:white}
+
+/* Upload zone */
+.upload-zone{border:2px dashed var(--border-strong);border-radius:9px;padding:24px;text-align:center;cursor:pointer;transition:all 0.15s;margin-bottom:12px}
+.upload-zone:hover{border-color:var(--teal);background:var(--teal-bg)}
+.upload-zone p{font-size:13px;color:var(--text-muted)}
+.upload-zone span{color:var(--teal);font-weight:500}
+
+/* Calendar grid (admin view) */
+.admin-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:20px}
+.admin-cal-label{text-align:center;font-size:10px;font-weight:500;color:var(--text-muted);padding:5px 0;text-transform:uppercase}
+.admin-cal-day{min-height:70px;border:1px solid var(--border);border-radius:6px;padding:5px;background:white;font-size:11px;cursor:pointer;transition:border-color 0.12s;position:relative}
+.admin-cal-day:hover{border-color:var(--teal)}
+.admin-cal-day.today{border-color:var(--teal);background:var(--teal-bg)}
+.admin-cal-day.empty{background:transparent;border-color:transparent;cursor:default}
+.admin-day-num{font-size:12px;font-weight:500;color:var(--teal-deep);margin-bottom:3px}
+.admin-day-appt{background:var(--teal-deep);color:white;border-radius:3px;padding:2px 5px;font-size:10px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.admin-day-appt.pending{background:var(--warning)}
+
+/* Availability toggles */
+.avail-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.avail-day{text-align:center}
+.avail-day label{display:block;font-size:11px;font-weight:500;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.04em}
+.avail-toggle{width:36px;height:20px;background:#e0e0e0;border-radius:10px;position:relative;cursor:pointer;transition:background 0.15s;margin:0 auto;border:none}
+.avail-toggle.on{background:var(--teal)}
+.avail-toggle::after{content:'';position:absolute;width:14px;height:14px;background:white;border-radius:50%;top:3px;left:3px;transition:transform 0.15s}
+.avail-toggle.on::after{transform:translateX(16px)}
+
+/* Alert box */
+.alert{border-radius:8px;padding:12px 16px;font-size:13px;margin-bottom:16px;display:flex;align-items:flex-start;gap:10px}
+.alert-warn{background:#fff8f0;border:1px solid rgba(212,133,10,0.3);color:#a65f00}
+.alert-info{background:var(--teal-bg);border:1px solid rgba(26,154,170,0.25);color:var(--teal-deep)}
+
+/* Toast */
+.toast{position:fixed;bottom:28px;right:28px;background:var(--teal-deep);color:white;padding:12px 20px;border-radius:9px;font-size:13px;font-weight:500;z-index:999;display:none;box-shadow:0 4px 20px rgba(7,47,64,0.3)}
+.toast.show{display:block}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginWrap" class="login-wrap">
+  <div class="login-box">
+    <div class="login-logo-row">
+      <img src="FINAL_LOGO.jpg" alt="Logo">
+      <div><strong>Quest for Wellness</strong><span>Admin Panel</span></div>
+    </div>
+    <div class="login-badge">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#856404" stroke-width="1.5"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/></svg>
+      Practitioner access only
+    </div>
+    <div class="field"><label>Email</label><input type="email" id="adminEmail" placeholder="kelly@questforwellnessllc.com"></div>
+    <div class="field"><label>Password</label><input type="password" id="adminPass" placeholder="••••••••"></div>
+    <button class="btn-login" onclick="adminLogin()">Sign in to admin panel</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="adminApp" class="app">
+<div class="app-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <img src="FINAL_LOGO.jpg" alt="Logo">
+      <div class="sb-logo-text"><strong>Admin Panel</strong><span>Quest for Wellness</span></div>
+    </div>
+    <nav style="padding:10px 8px;flex:1">
+      <div class="sb-section">Overview</div>
+      <button class="sb-btn active" onclick="showP('dashboard',this)">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard
+      </button>
+      <div class="sb-section">Appointments</div>
+      <button class="sb-btn" onclick="showP('calendar',this)">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Calendar
+        <span class="sb-badge">3</span>
+      </button>
+      <button class="sb-btn" onclick="showP('availability',this)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Availability
+      </button>
+      <div class="sb-section">Clients</div>
+      <button class="sb-btn" onclick="showP('clients',this)">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clients
+      </button>
+      <button class="sb-btn" onclick="showP('intakes',this)">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Intake Forms
+        <span class="sb-badge">2</span>
+      </button>
+      <div class="sb-section">Portal</div>
+      <button class="sb-btn" onclick="showP('notes',this)">
+        <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Post Notes
+      </button>
+      <button class="sb-btn" onclick="showP('documents',this)">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Upload Documents
+      </button>
+      <button class="sb-btn" onclick="showP('messages',this)">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Messages
+        <span class="sb-badge">4</span>
+      </button>
+      <div class="sb-section">Settings</div>
+      <button class="sb-btn" onclick="showP('passwords',this)">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Password Reset
+      </button>
+    </nav>
+    <div class="sb-footer">
+      <div class="sb-user">
+        <div class="sb-avatar">KP</div>
+        <div class="sb-user-text"><strong>Kelly Parsons</strong><span>CHHP · CNC · Admin</span></div>
+      </div>
+      <button class="sb-logout" onclick="adminLogout()">Sign out</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar-title" id="pTitle">Dashboard</div>
+        <div class="topbar-sub" id="pSub">Quest for Wellness, LLC — Admin Panel</div>
+      </div>
+      <div class="topbar-actions" id="topbarActions"></div>
+    </div>
+
+    <div class="content">
+
+      <!-- ── DASHBOARD ── -->
+      <div class="panel active" id="p-dashboard">
+        <div class="stat-row">
+          <div class="stat"><div class="stat-label">Total clients</div><div class="stat-value">24</div><div class="stat-sub">3 new this month</div></div>
+          <div class="stat"><div class="stat-label">This week</div><div class="stat-value">5</div><div class="stat-sub">Appointments</div></div>
+          <div class="stat"><div class="stat-label">Pending</div><div class="stat-value" style="color:var(--warning)">3</div><div class="stat-sub">New booking requests</div></div>
+          <div class="stat"><div class="stat-label">New intakes</div><div class="stat-value" style="color:var(--teal)">2</div><div class="stat-sub">Awaiting review</div></div>
+          <div class="stat"><div class="stat-label">Unread messages</div><div class="stat-value">4</div><div class="stat-sub">From clients</div></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="card">
+            <div class="card-head"><span class="card-title">Today's appointments</span><button class="btn btn-sm btn-primary" onclick="openModal('newApptModal')">+ New</button></div>
+            <table>
+              <tr><th>Time</th><th>Client</th><th>Type</th><th>Status</th></tr>
+              <tr><td>10:00 AM</td><td>Jane Doe</td><td>Follow-up scan</td><td><span class="badge badge-upcoming">Upcoming</span></td></tr>
+              <tr><td>1:00 PM</td><td>Mark Chen</td><td>Initial assessment</td><td><span class="badge badge-upcoming">Upcoming</span></td></tr>
+              <tr><td>3:00 PM</td><td>Susan Park</td><td>Quick scan (30 min)</td><td><span class="badge badge-upcoming">Upcoming</span></td></tr>
+            </table>
+          </div>
+          <div class="card">
+            <div class="card-head"><span class="card-title">Pending booking requests</span></div>
+            <table>
+              <tr><th>Client</th><th>Requested</th><th>Action</th></tr>
+              <tr>
+                <td>Lisa Torres</td><td>Jan 30 · 2:00 PM</td>
+                <td><div class="td-actions"><button class="btn btn-sm btn-primary" onclick="toast('Confirmed Lisa Torres for Jan 30')">Confirm</button><button class="btn btn-sm btn-danger" onclick="toast('Declined')">Decline</button></div></td>
+              </tr>
+              <tr>
+                <td>Tom Walsh</td><td>Feb 3 · 10:00 AM</td>
+                <td><div class="td-actions"><button class="btn btn-sm btn-primary" onclick="toast('Confirmed Tom Walsh for Feb 3')">Confirm</button><button class="btn btn-sm btn-danger" onclick="toast('Declined')">Decline</button></div></td>
+              </tr>
+              <tr>
+                <td>Amy Li</td><td>Feb 5 · 11:00 AM</td>
+                <td><div class="td-actions"><button class="btn btn-sm btn-primary" onclick="toast('Confirmed Amy Li for Feb 5')">Confirm</button><button class="btn btn-sm btn-danger" onclick="toast('Declined')">Decline</button></div></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CALENDAR ── -->
+      <div class="panel" id="p-calendar">
+        <div class="card-head" style="margin-bottom:16px">
+          <div style="display:flex;align-items:center;gap:12px">
+            <button class="btn btn-outline" onclick="adminChangeMonth(-1)">←</button>
+            <span style="font-size:16px;font-weight:500;color:var(--teal-deep)" id="adminCalMonth">January 2025</span>
+            <button class="btn btn-outline" onclick="adminChangeMonth(1)">→</button>
+          </div>
+          <button class="btn btn-primary" onclick="openModal('newApptModal')">+ Schedule appointment</button>
+        </div>
+        <div class="admin-cal" id="adminCalGrid"></div>
+      </div>
+
+      <!-- ── AVAILABILITY ── -->
+      <div class="panel" id="p-availability">
+        <div class="alert alert-info" style="margin-bottom:20px">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0;margin-top:1px"><circle cx="8" cy="8" r="6"/><line x1="8" y1="5" x2="8" y2="8"/><line x1="8" y1="11" x2="8.01" y2="11"/></svg>
+          Toggle which days of the week you are available for client bookings.
+        </div>
+        <div class="card">
+          <div class="card-title" style="margin-bottom:20px">Weekly availability</div>
+          <div class="avail-grid" id="availGrid"></div>
+          <hr style="border:none;border-top:1px solid var(--border);margin:24px 0">
+          <div class="card-title" style="margin-bottom:14px">Available time range</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:320px">
+            <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.06em">First slot</div><input type="time" value="09:00" style="padding:8px 10px;border:1px solid var(--border-strong);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;width:100%"></div>
+            <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.06em">Last slot</div><input type="time" value="16:00" style="padding:8px 10px;border:1px solid var(--border-strong);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;width:100%"></div>
+          </div>
+          <br>
+          <div class="card-title" style="margin-bottom:14px">Appointment duration</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="radio" name="dur" checked> 60 min (standard — $150)</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="radio" name="dur"> 30 min (quick scan — $75)</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="radio" name="dur"> 90 min (extended)</label>
+          </div>
+          <br>
+          <button class="btn btn-primary" onclick="toast('Availability saved!')">Save availability</button>
+        </div>
+      </div>
+
+      <!-- ── CLIENTS ── -->
+      <div class="panel" id="p-clients">
+        <div class="toolbar">
+          <input type="text" placeholder="Search clients..." id="clientSearch" oninput="filterClients()">
+          <select id="clientFilter" onchange="filterClients()">
+            <option value="all">All clients</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+          <button class="btn btn-primary" onclick="openModal('newClientModal')">+ Add client</button>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table id="clientTable">
+            <thead><tr><th>Client</th><th>Email</th><th>Phone</th><th>Last visit</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="clientBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── INTAKE FORMS ── -->
+      <div class="panel" id="p-intakes">
+        <div class="alert alert-warn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0;margin-top:1px"><path d="M8 2l6 12H2L8 2z"/><line x1="8" y1="7" x2="8" y2="10"/><line x1="8" y1="12" x2="8.01" y2="12"/></svg>
+          2 new intake forms have been submitted and are awaiting your review.
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table>
+            <thead><tr><th>Name</th><th>Email</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Lisa Torres</strong></td>
+                <td>lisa.torres@email.com</td>
+                <td>Jan 20, 2025</td>
+                <td><span class="badge badge-new">New</span></td>
+                <td><div class="td-actions">
+                  <button class="btn btn-sm btn-outline" onclick="toast('Opening Lisa Torres intake form...')">Review</button>
+                  <button class="btn btn-sm btn-primary" onclick="toast('Lisa Torres added as client')">Add as client</button>
+                </div></td>
+              </tr>
+              <tr>
+                <td><strong>Tom Walsh</strong></td>
+                <td>tom.walsh@email.com</td>
+                <td>Jan 22, 2025</td>
+                <td><span class="badge badge-new">New</span></td>
+                <td><div class="td-actions">
+                  <button class="btn btn-sm btn-outline" onclick="toast('Opening Tom Walsh intake form...')">Review</button>
+                  <button class="btn btn-sm btn-primary" onclick="toast('Tom Walsh added as client')">Add as client</button>
+                </div></td>
+              </tr>
+              <tr>
+                <td>Jane Doe</td><td>jane@example.com</td><td>Dec 5, 2024</td>
+                <td><span class="badge badge-active">Client</span></td>
+                <td><button class="btn btn-sm btn-outline" onclick="toast('Opening Jane Doe intake form...')">View</button></td>
+              </tr>
+              <tr>
+                <td>Mark Chen</td><td>mark.chen@email.com</td><td>Dec 18, 2024</td>
+                <td><span class="badge badge-active">Client</span></td>
+                <td><button class="btn btn-sm btn-outline" onclick="toast('Opening Mark Chen intake form...')">View</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── POST NOTES ── -->
+      <div class="panel" id="p-notes">
+        <div class="card">
+          <div class="card-title" style="margin-bottom:18px">Post appointment notes to client portal</div>
+          <div class="modal-field"><label>Select client</label>
+            <select><option>Jane Doe</option><option>Mark Chen</option><option>Susan Park</option><option>Amy Li</option></select>
+          </div>
+          <div class="modal-field"><label>Appointment date</label><input type="date"></div>
+          <div class="modal-field"><label>Note title</label><input type="text" placeholder="e.g. Follow-up scan — January 2025"></div>
+          <div class="modal-field"><label>Session summary</label><textarea rows="4" placeholder="Overall session summary for the client..."></textarea></div>
+          <div class="modal-field"><label>Key findings</label><textarea rows="3" placeholder="Areas of improvement, areas of concern..."></textarea></div>
+          <div class="modal-field"><label>Recommendations</label><textarea rows="4" placeholder="Supplement changes, lifestyle recommendations..."></textarea></div>
+          <div class="modal-field"><label>Next steps</label><textarea rows="2" placeholder="Follow-up timeline, next appointment recommendation..."></textarea></div>
+          <div style="display:flex;gap:10px;margin-top:8px">
+            <button class="btn btn-primary" onclick="toast('Notes posted to client portal!')">Post to client portal</button>
+            <button class="btn btn-outline" onclick="toast('Saved as draft')">Save draft</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── DOCUMENTS ── -->
+      <div class="panel" id="p-documents">
+        <div class="card">
+          <div class="card-title" style="margin-bottom:18px">Upload documents to client portal</div>
+          <div class="modal-field"><label>Select client</label>
+            <select><option>Jane Doe</option><option>Mark Chen</option><option>Susan Park</option></select>
+          </div>
+          <div class="modal-field"><label>Document type</label>
+            <select><option>Qest4 scan results</option><option>Supplement protocol</option><option>Lifestyle guide</option><option>Lab report</option><option>Other</option></select>
+          </div>
+          <div class="modal-field"><label>Document name</label><input type="text" placeholder="e.g. Jan 2025 — Scan results & recommendations"></div>
+          <div class="upload-zone" onclick="toast('File picker would open here')">
+            <p>Drag & drop your PDF here, or <span>browse files</span></p>
+            <p style="font-size:11px;margin-top:4px;color:#aaa">PDF files only · Max 20 MB</p>
+          </div>
+          <button class="btn btn-primary" onclick="toast('Document uploaded to client portal!')">Upload to portal</button>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><span class="card-title">Recently uploaded</span></div>
+          <table>
+            <thead><tr><th>Client</th><th>Document</th><th>Uploaded</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td>Jane Doe</td><td>Jan 7 scan results</td><td>Jan 8, 2025</td><td><button class="btn btn-sm btn-danger" onclick="toast('Document removed')">Remove</button></td></tr>
+              <tr><td>Jane Doe</td><td>Supplement protocol Jan 2025</td><td>Jan 8, 2025</td><td><button class="btn btn-sm btn-danger" onclick="toast('Document removed')">Remove</button></td></tr>
+              <tr><td>Mark Chen</td><td>Initial assessment Dec 2024</td><td>Dec 19, 2024</td><td><button class="btn btn-sm btn-danger" onclick="toast('Document removed')">Remove</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── MESSAGES (ADMIN) ── -->
+      <div class="panel" id="p-messages">
+        <div class="card" style="padding:0;overflow:hidden">
+          <div style="display:grid;grid-template-columns:200px 1fr">
+            <div style="border-right:1px solid var(--border)">
+              <div style="padding:12px 14px;border-bottom:1px solid var(--border);font-size:11px;font-weight:500;color:var(--teal-deep);text-transform:uppercase;letter-spacing:0.06em">Client messages</div>
+              <div id="adminMsgList"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;min-height:420px">
+              <div style="padding:14px 18px;border-bottom:1px solid var(--border)">
+                <div style="font-size:14px;font-weight:500;color:var(--teal-deep)" id="adminMsgClient">Jane Doe</div>
+                <div style="font-size:11px;color:var(--text-muted)">jane@example.com</div>
+              </div>
+              <div id="adminMsgBubbles" style="flex:1;padding:16px;display:flex;flex-direction:column;gap:10px;background:#fafcfd;min-height:260px"></div>
+              <div style="padding:12px 16px;border-top:1px solid var(--border);background:white;display:flex;gap:10px">
+                <textarea id="adminMsgInput" style="flex:1;padding:8px 12px;border:1px solid var(--border-strong);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;resize:none;height:38px" placeholder="Reply to client..."></textarea>
+                <button class="btn btn-primary" onclick="adminSendMsg()">Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PASSWORDS ── -->
+      <div class="panel" id="p-passwords">
+        <div class="card">
+          <div class="card-title" style="margin-bottom:18px">Reset client password</div>
+          <div class="alert alert-info" style="margin-bottom:18px">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0;margin-top:1px"><circle cx="8" cy="8" r="6"/><line x1="8" y1="5" x2="8" y2="8"/></svg>
+            The client will receive an email with a secure link to set a new password.
+          </div>
+          <div class="modal-field"><label>Select client</label>
+            <select id="pwClient">
+              <option>Jane Doe — jane@example.com</option>
+              <option>Mark Chen — mark.chen@email.com</option>
+              <option>Susan Park — susan.p@email.com</option>
+              <option>Amy Li — amy.li@email.com</option>
+            </select>
+          </div>
+          <button class="btn btn-warn" onclick="toast('Password reset email sent!')">Send password reset email</button>
+        </div>
+
+        <div class="card">
+          <div class="card-title" style="margin-bottom:18px">Revoke client portal access</div>
+          <div class="alert alert-warn" style="margin-bottom:18px">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0;margin-top:1px"><path d="M8 2l6 12H2L8 2z"/><line x1="8" y1="7" x2="8" y2="10"/></svg>
+            Revoking access will immediately prevent the client from logging in. Their data is preserved and access can be restored.
+          </div>
+          <div class="modal-field"><label>Select client</label>
+            <select id="revokeClient">
+              <option>Jane Doe — jane@example.com</option>
+              <option>Mark Chen — mark.chen@email.com</option>
+              <option>Susan Park — susan.p@email.com</option>
+            </select>
+          </div>
+          <button class="btn btn-danger" onclick="confirmRevoke()">Revoke portal access</button>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app-layout -->
+</div><!-- /app -->
+
+<!-- Modals -->
+<div class="modal-overlay" id="newApptModal">
+  <div class="modal">
+    <div class="modal-head"><h3>Schedule appointment</h3><button class="modal-close" onclick="closeModal('newApptModal')">×</button></div>
+    <div class="modal-body">
+      <div class="modal-field"><label>Client</label><select><option>Jane Doe</option><option>Mark Chen</option><option>Susan Park</option><option>New client...</option></select></div>
+      <div class="modal-row">
+        <div class="modal-field"><label>Date</label><input type="date"></div>
+        <div class="modal-field"><label>Time</label><input type="time" value="10:00"></div>
+      </div>
+      <div class="modal-field"><label>Appointment type</label>
+        <select><option>Initial wellness assessment (60 min — $150)</option><option>Follow-up Qest4 scan (60 min — $150)</option><option>Quick scan (30 min — $75)</option></select>
+      </div>
+      <div class="modal-field"><label>Notes (optional)</label><textarea placeholder="Internal notes for this appointment..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('newApptModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="closeModal('newApptModal');toast('Appointment scheduled!')">Schedule</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="newClientModal">
+  <div class="modal">
+    <div class="modal-head"><h3>Add new client</h3><button class="modal-close" onclick="closeModal('newClientModal')">×</button></div>
+    <div class="modal-body">
+      <div class="modal-row">
+        <div class="modal-field"><label>First name</label><input type="text" placeholder="First"></div>
+        <div class="modal-field"><label>Last name</label><input type="text" placeholder="Last"></div>
+      </div>
+      <div class="modal-field"><label>Email</label><input type="email" placeholder="client@example.com"></div>
+      <div class="modal-field"><label>Phone</label><input type="tel" placeholder="(720) 555-0000"></div>
+      <div class="modal-field"><label>Portal access</label>
+        <select><option>Send invitation email</option><option>Create manually</option><option>No portal access yet</option></select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('newClientModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="closeModal('newClientModal');toast('Client added successfully!')">Add client</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+// ── Auth ──
+function adminLogin(){
+  const e=document.getElementById('adminEmail').value;
+  const p=document.getElementById('adminPass').value;
+  if(!e||!p){alert('Please enter credentials.');return;}
+  document.getElementById('loginWrap').style.display='none';
+  document.getElementById('adminApp').classList.add('show');
+  initAll();
+}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('loginWrap').style.display!=='none')adminLogin();});
+function adminLogout(){document.getElementById('adminApp').classList.remove('show');document.getElementById('loginWrap').style.display='flex';}
+
+// ── Panel nav ──
+const pMeta={
+  dashboard:['Dashboard','Overview of your practice'],
+  calendar:['Calendar','Schedule & manage appointments'],
+  availability:['Availability','Set your available days and hours'],
+  clients:['Clients','Manage your client roster'],
+  intakes:['Intake Forms','Review new client intake submissions'],
+  notes:['Post Appointment Notes','Write and publish session notes to the client portal'],
+  documents:['Upload Documents','Send files to client portals'],
+  messages:['Messages','Reply to client messages'],
+  passwords:['Password & Access','Reset passwords and manage portal access']
+};
+function showP(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('p-'+id).classList.add('active');
+  document.querySelectorAll('.sb-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  const [t,s]=pMeta[id]||['',''];
+  document.getElementById('pTitle').textContent=t;
+  document.getElementById('pSub').textContent=s;
+}
+
+// ── Toast ──
+let toastTimer;
+function toast(msg){
+  const el=document.getElementById('toastEl');
+  el.textContent=msg; el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove('show'),3000);
+}
+
+// ── Modals ──
+function openModal(id){document.getElementById(id).classList.add('show');}
+function closeModal(id){document.getElementById(id).classList.remove('show');}
+document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('show');}));
+
+// ── Clients data ──
+const clients=[
+  {name:'Jane Doe',email:'jane@example.com',phone:'(720)555-0192',last:'Jan 7, 2025',status:'active'},
+  {name:'Mark Chen',email:'mark.chen@email.com',phone:'(720)555-0284',last:'Dec 18, 2024',status:'active'},
+  {name:'Susan Park',email:'susan.p@email.com',phone:'(303)555-0119',last:'Dec 3, 2024',status:'active'},
+  {name:'Amy Li',email:'amy.li@email.com',phone:'(720)555-0341',last:'Nov 20, 2024',status:'active'},
+  {name:'Robert James',email:'rjames@email.com',phone:'(303)555-0457',last:'Oct 15, 2024',status:'inactive'},
+  {name:'Carla Mendez',email:'carla.m@email.com',phone:'(720)555-0562',last:'Sep 8, 2024',status:'inactive'},
+];
+function renderClients(data){
+  document.getElementById('clientBody').innerHTML=data.map(c=>`
+    <tr>
+      <td><strong>${c.name}</strong></td>
+      <td>${c.email}</td>
+      <td>${c.phone}</td>
+      <td>${c.last}</td>
+      <td><span class="badge badge-${c.status}">${c.status}</span></td>
+      <td><div class="td-actions">
+        <button class="btn btn-sm btn-outline" onclick="toast('Opening ${c.name} profile...')">View</button>
+        <button class="btn btn-sm btn-warn" onclick="toast('Password reset sent to ${c.email}')">Reset pw</button>
+        <button class="btn btn-sm btn-danger" onclick="toast('${c.name} access revoked')">Revoke</button>
+      </div></td>
+    </tr>`).join('');
+}
+function filterClients(){
+  const q=document.getElementById('clientSearch').value.toLowerCase();
+  const f=document.getElementById('clientFilter').value;
+  renderClients(clients.filter(c=>(f==='all'||c.status===f)&&(c.name.toLowerCase().includes(q)||c.email.toLowerCase().includes(q))));
+}
+
+// ── Availability ──
+const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const defaultOn=[false,false,true,false,true,false,false];
+function renderAvail(){
+  const grid=document.getElementById('availGrid');
+  grid.innerHTML=days.map((d,i)=>`
+    <div class="avail-day">
+      <label>${d}</label>
+      <button class="avail-toggle${defaultOn[i]?' on':''}" onclick="toggleAvail(this)">${''}</button>
+    </div>`).join('');
+}
+function toggleAvail(btn){btn.classList.toggle('on');}
+
+// ── Admin calendar ──
+let aYear=2025,aMon=0;
+const appts={'2025-1-14':[{t:'10:00',n:'Jane Doe',type:'Follow-up'}],'2025-1-21':[{t:'2:00',n:'Mark Chen',type:'Initial'}],'2025-1-28':[{t:'10:00',n:'Jane Doe',type:'Follow-up'},{t:'1:00',n:'Mark Chen',type:'Initial'},{t:'3:00',n:'Susan Park',type:'Quick scan'}]};
+function renderAdminCal(){
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('adminCalMonth').textContent=months[aMon]+' '+aYear;
+  const grid=document.getElementById('adminCalGrid');
+  grid.innerHTML=days.map(d=>`<div class="admin-cal-label">${d}</div>`).join('');
+  const first=new Date(aYear,aMon,1).getDay();
+  const total=new Date(aYear,aMon+1,0).getDate();
+  const today=new Date();
+  for(let i=0;i<first;i++) grid.innerHTML+=`<div class="admin-cal-day empty"></div>`;
+  for(let d=1;d<=total;d++){
+    const key=`${aYear}-${aMon+1}-${d}`;
+    const dayAppts=appts[key]||[];
+    const isToday=d===today.getDate()&&aMon===today.getMonth()&&aYear===today.getFullYear();
+    grid.innerHTML+=`<div class="admin-cal-day${isToday?' today':''}">
+      <div class="admin-day-num">${d}</div>
+      ${dayAppts.map(a=>`<div class="admin-day-appt">${a.t} ${a.n}</div>`).join('')}
+    </div>`;
+  }
+}
+function adminChangeMonth(d){aMon+=d;if(aMon>11){aMon=0;aYear++;}if(aMon<0){aMon=11;aYear--;}renderAdminCal();}
+
+// ── Admin messages ──
+const msgClients=[
+  {name:'Jane Doe',preview:'When should I take magnesium?',msgs:[{from:'client',text:'Hi Kelly, quick question — when should I take the magnesium glycinate?'},{from:'kelly',text:'Great question! Best taken 30–60 min before bed for sleep support.'},{from:'client',text:'Perfect, thank you!'}]},
+  {name:'Mark Chen',preview:'Can I reschedule Jan 28?',msgs:[{from:'client',text:'Hi Kelly, is it possible to reschedule my January 28 appointment?'},{from:'kelly',text:'Of course! What dates work for you?'}]},
+  {name:'Susan Park',preview:'Feeling much better!',msgs:[{from:'client',text:'Just wanted to update you — the protocol is working amazingly. I feel so much better!'},{from:'kelly',text:'That is so wonderful to hear Susan, thank you for sharing!'}]},
+  {name:'Amy Li',preview:'Question about supplements',msgs:[{from:'client',text:'Should I take the probiotic with or without food?'},{from:'kelly',text:'With food is best — it helps protect the live cultures.'}]},
+];
+let activeMsgIdx=0;
+function renderMsgList(){
+  document.getElementById('adminMsgList').innerHTML=msgClients.map((c,i)=>`
+    <div class="msg-thread${i===activeMsgIdx?' active':''}" onclick="selectMsg(${i})" style="padding:12px 14px;border-bottom:1px solid var(--border);cursor:pointer">
+      <div style="font-size:13px;font-weight:500;color:var(--text)">${i<4?'<span style="width:7px;height:7px;background:var(--teal);border-radius:50%;display:inline-block;margin-right:5px;vertical-align:middle"></span>':''}${c.name}</div>
+      <div style="font-size:11px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.preview}</div>
+    </div>`).join('');
+}
+function selectMsg(i){
+  activeMsgIdx=i;
+  const c=msgClients[i];
+  document.getElementById('adminMsgClient').textContent=c.name;
+  document.getElementById('adminMsgBubbles').innerHTML=c.msgs.map(m=>`
+    <div style="max-width:75%;padding:9px 13px;border-radius:10px;font-size:13px;line-height:1.5;${m.from==='client'?'background:var(--teal-bg);align-self:flex-start;border-radius:10px 10px 10px 3px':'background:var(--teal-deep);color:#e8f7fa;align-self:flex-end;border-radius:10px 10px 3px 10px'}">${m.text}</div>`).join('');
+  renderMsgList();
+}
+function adminSendMsg(){
+  const input=document.getElementById('adminMsgInput');
+  const text=input.value.trim();
+  if(!text)return;
+  msgClients[activeMsgIdx].msgs.push({from:'kelly',text});
+  input.value='';
+  selectMsg(activeMsgIdx);
+  toast('Reply sent to '+msgClients[activeMsgIdx].name);
+}
+
+function confirmRevoke(){
+  const name=document.getElementById('revokeClient').value.split(' —')[0];
+  if(confirm('Are you sure you want to revoke portal access for '+name+'? They will not be able to log in until access is restored.')) toast(name+' portal access revoked.');
+}
+
+function initAll(){renderClients(clients);renderAvail();renderAdminCal();renderMsgList();selectMsg(0);}
+</script>
+</body>
+</html>

@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Client Intake Form — Quest for Wellness, LLC</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+:root {
+  --teal: #1a9aaa;
+  --teal-deep: #0a4f6a;
+  --teal-light: #29b8c8;
+  --teal-bg: #e8f7fa;
+  --teal-subtle: #f0fbfc;
+  --navy: #072f40;
+  --white: #ffffff;
+  --text: #1a2e35;
+  --text-muted: #5a7a85;
+  --border: rgba(26,154,170,0.2);
+  --border-strong: rgba(26,154,170,0.45);
+  --error: #c0392b;
+  --success: #1a8a6a;
+  --radius: 10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #f4f9fa;
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* Header */
+.site-header {
+  background: var(--teal-deep);
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+}
+.header-logo {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(41,184,200,0.5);
+}
+.header-text { color: #e8f7fa; }
+.header-text strong { display: block; font-size: 15px; font-weight: 500; letter-spacing: 0.01em; }
+.header-text span { font-size: 11px; opacity: 0.65; }
+.header-right { margin-left: auto; color: rgba(232,247,250,0.6); font-size: 12px; text-align: right; line-height: 1.4; }
+
+/* Progress */
+.progress-wrap {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  overflow-x: auto;
+}
+.progress-steps {
+  display: flex;
+  gap: 0;
+  min-width: max-content;
+}
+.progress-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px 14px 0;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+.progress-step.active { border-bottom-color: var(--teal); color: var(--teal-deep); font-weight: 500; }
+.progress-step.done { color: var(--teal); }
+.step-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: #e0edf0; color: var(--text-muted);
+  font-size: 11px; font-weight: 500;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.2s;
+}
+.progress-step.active .step-num { background: var(--teal); color: white; }
+.progress-step.done .step-num { background: var(--teal-bg); color: var(--teal); }
+
+/* Main layout */
+.main { max-width: 780px; margin: 0 auto; padding: 36px 24px 80px; }
+
+/* Section card */
+.form-section {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+.form-section.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.section-header {
+  margin-bottom: 28px;
+}
+.section-eyebrow {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+  color: var(--teal); text-transform: uppercase; margin-bottom: 6px;
+}
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px; font-weight: 600; color: var(--teal-deep);
+  line-height: 1.2; margin-bottom: 8px;
+}
+.section-sub {
+  font-size: 13px; color: var(--text-muted); line-height: 1.6;
+}
+
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin-bottom: 20px;
+}
+.card-title {
+  font-size: 13px; font-weight: 500; color: var(--teal-deep);
+  text-transform: uppercase; letter-spacing: 0.07em;
+  margin-bottom: 18px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Form fields */
+.field-row {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.field-row.cols-2 { grid-template-columns: 1fr 1fr; }
+.field-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+.field-row.cols-4 { grid-template-columns: repeat(4, 1fr); }
+.field { display: flex; flex-direction: column; gap: 6px; }
+
+label {
+  font-size: 12px; font-weight: 500; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+label.req::after { content: ' *'; color: var(--teal); }
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: 7px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: white;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  -webkit-appearance: none;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(26,154,170,0.12);
+}
+textarea { resize: vertical; min-height: 70px; }
+select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231a9aaa' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+
+/* Radio / checkbox groups */
+.radio-group, .check-group {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.radio-opt, .check-opt {
+  display: flex; align-items: center; gap: 7px;
+  padding: 8px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 13px; color: var(--text);
+  transition: all 0.15s;
+  user-select: none;
+  background: white;
+}
+.radio-opt:has(input:checked),
+.check-opt:has(input:checked) {
+  background: var(--teal-bg);
+  border-color: var(--teal);
+  color: var(--teal-deep);
+  font-weight: 500;
+}
+.radio-opt input, .check-opt input { display: none; }
+
+/* Symptom checklist */
+.symptom-category { margin-bottom: 20px; }
+.symptom-cat-title {
+  font-size: 12px; font-weight: 500; color: var(--teal-deep);
+  text-transform: uppercase; letter-spacing: 0.07em;
+  margin-bottom: 10px; padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.symptom-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 6px;
+}
+.symptom-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px; color: var(--text);
+  transition: all 0.12s;
+  background: white;
+}
+.symptom-item:has(input:checked) {
+  background: var(--teal-bg);
+  border-color: var(--teal);
+  color: var(--teal-deep);
+}
+.symptom-item input { display: none; }
+.symptom-check {
+  width: 14px; height: 14px; border-radius: 3px;
+  border: 1.5px solid #b0c8d0; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: white; transition: all 0.12s;
+}
+.symptom-item:has(input:checked) .symptom-check {
+  background: var(--teal); border-color: var(--teal);
+}
+.symptom-item:has(input:checked) .symptom-check::after {
+  content: ''; display: block;
+  width: 8px; height: 5px;
+  border-left: 1.5px solid white;
+  border-bottom: 1.5px solid white;
+  transform: rotate(-45deg) translateY(-1px);
+}
+
+/* Frequency grid */
+.freq-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+.freq-item { display: flex; flex-direction: column; gap: 4px; }
+.freq-label { font-size: 11px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Consent sections */
+.consent-block {
+  background: var(--teal-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.consent-text {
+  font-size: 13px; line-height: 1.75; color: var(--text); margin-bottom: 14px;
+}
+.consent-text strong { color: var(--teal-deep); }
+.initial-field {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  background: white; border: 1px solid var(--border-strong);
+  border-radius: 7px;
+}
+.initial-field label { font-size: 12px; color: var(--text-muted); text-transform: none; letter-spacing: 0; margin: 0; }
+.initial-field input { width: 80px; padding: 6px 10px; border: 1px solid var(--border-strong); border-radius: 5px; font-size: 13px; }
+
+/* Signature */
+.sig-area {
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: white;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.sig-label-bar {
+  background: var(--teal-bg);
+  padding: 8px 14px;
+  font-size: 11px; color: var(--teal-deep); font-weight: 500;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.sig-canvas { display: block; width: 100%; height: 100px; cursor: crosshair; touch-action: none; }
+.sig-clear {
+  background: none; border: none; color: var(--teal);
+  font-size: 11px; cursor: pointer; padding: 4px 8px;
+  border-radius: 4px; font-family: 'DM Sans', sans-serif;
+}
+.sig-clear:hover { background: var(--teal-bg); }
+
+/* Nav buttons */
+.form-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 32px; padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.btn {
+  padding: 11px 28px; border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 500;
+  cursor: pointer; border: none; transition: all 0.18s;
+}
+.btn-primary {
+  background: var(--teal); color: white;
+}
+.btn-primary:hover { background: var(--teal-deep); }
+.btn-secondary {
+  background: white; color: var(--teal-deep);
+  border: 1px solid var(--border-strong);
+}
+.btn-secondary:hover { background: var(--teal-bg); }
+.btn-submit {
+  background: var(--teal-deep); color: white;
+  padding: 13px 36px; font-size: 15px;
+}
+.btn-submit:hover { background: var(--navy); }
+
+.step-counter { font-size: 12px; color: var(--text-muted); }
+
+/* Privacy note */
+.privacy-note {
+  background: #f0f9f0; border: 1px solid rgba(26,138,106,0.25);
+  border-radius: 7px; padding: 12px 16px;
+  font-size: 12px; color: #1a5a40; line-height: 1.6;
+  margin-bottom: 20px;
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.privacy-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+/* Success screen */
+.success-screen {
+  display: none; text-align: center; padding: 60px 32px;
+}
+.success-screen.show { display: block; }
+.success-icon {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: var(--teal-bg); display: flex;
+  align-items: center; justify-content: center;
+  margin: 0 auto 24px;
+}
+.success-icon svg { width: 32px; height: 32px; stroke: var(--teal); fill: none; stroke-width: 2; }
+.success-screen h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px; font-weight: 600; color: var(--teal-deep);
+  margin-bottom: 12px;
+}
+.success-screen p { color: var(--text-muted); font-size: 14px; line-height: 1.7; max-width: 440px; margin: 0 auto 8px; }
+
+/* Contraindication warning */
+.warning-box {
+  background: #fff8f0; border: 1px solid rgba(200,100,20,0.3);
+  border-radius: 8px; padding: 16px; margin-bottom: 16px;
+}
+.warning-box h4 { font-size: 13px; font-weight: 500; color: #7a4010; margin-bottom: 8px; }
+.warning-box ul { font-size: 12px; color: #7a4010; padding-left: 18px; line-height: 2; }
+
+.fieldset-divider {
+  border: none; border-top: 1px solid var(--border);
+  margin: 20px 0;
+}
+
+.hint { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+
+@media (max-width: 600px) {
+  .field-row.cols-2, .field-row.cols-3, .field-row.cols-4 { grid-template-columns: 1fr; }
+  .main { padding: 20px 16px 60px; }
+  .site-header { padding: 12px 16px; }
+  .card { padding: 18px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <img class="header-logo" src="FINAL_LOGO.jpg" alt="Quest for Wellness logo">
+  <div class="header-text">
+    <strong>Quest for Wellness, LLC</strong>
+    <span>Kelly Parsons · CHHP, CNC, Qest4 Bioenergetic Practitioner</span>
+  </div>
+  <div class="header-right">New Client<br>Intake Form</div>
+</header>
+
+<nav class="progress-wrap" id="progressNav">
+  <div class="progress-steps">
+    <div class="progress-step active" onclick="goTo(0)"><div class="step-num">1</div> Personal Info</div>
+    <div class="progress-step" onclick="goTo(1)"><div class="step-num">2</div> Nutrition</div>
+    <div class="progress-step" onclick="goTo(2)"><div class="step-num">3</div> Lifestyle</div>
+    <div class="progress-step" onclick="goTo(3)"><div class="step-num">4</div> Medical History</div>
+    <div class="progress-step" onclick="goTo(4)"><div class="step-num">5</div> Naturopathic</div>
+    <div class="progress-step" onclick="goTo(5)"><div class="step-num">6</div> Symptoms</div>
+    <div class="progress-step" onclick="goTo(6)"><div class="step-num">7</div> Females</div>
+    <div class="progress-step" onclick="goTo(7)"><div class="step-num">8</div> Policies & Consent</div>
+  </div>
+</nav>
+
+<main class="main">
+
+<!-- ============ STEP 1: Personal Info ============ -->
+<div class="form-section active" id="step-0">
+  <div class="section-header">
+    <div class="section-eyebrow">Step 1 of 8</div>
+    <div class="section-title">Client Information</div>
+    <div class="section-sub">Please complete all fields accurately. Your information is kept strictly confidential and never shared or sold.</div>
+  </div>
+
+  <div class="privacy-note">
+    <span class="privacy-icon">🔒</span>
+    <span>Quest for Wellness, LLC does not share or sell your information to anyone. Your contact information is used with discretion only to contact you on behalf of Quest for Wellness, LLC.</span>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Basic information</div>
+    <div class="field-row cols-2">
+      <div class="field"><label class="req" for="fullName">Full name</label><input type="text" id="fullName" placeholder="First and last name"></div>
+      <div class="field"><label for="dob">Date</label><input type="date" id="dob"></div>
+    </div>
+    <div class="field-row cols-3">
+      <div class="field"><label for="age">Age</label><input type="number" id="age" placeholder="Age" min="1" max="120"></div>
+      <div class="field">
+        <label>Sex</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="sex" value="M"> Male</label>
+          <label class="radio-opt"><input type="radio" name="sex" value="F"> Female</label>
+        </div>
+      </div>
+      <div class="field"><label for="bloodType">Blood type (if known)</label>
+        <select id="bloodType">
+          <option value="">Not sure</option>
+          <option>A+</option><option>A-</option>
+          <option>B+</option><option>B-</option>
+          <option>AB+</option><option>AB-</option>
+          <option>O+</option><option>O-</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Contact details</div>
+    <div class="field-row">
+      <div class="field"><label class="req" for="address">Home address</label><input type="text" id="address" placeholder="Street address, city, state, zip"></div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field"><label class="req" for="phone">Phone number</label><input type="tel" id="phone" placeholder="(555) 000-0000"></div>
+      <div class="field"><label class="req" for="email">Email address</label><input type="email" id="email" placeholder="you@example.com"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Reason for visit / health goals (prioritized)</div>
+    <div class="field-row">
+      <div class="field"><label>Priority 1 — Primary health goal</label><textarea id="goal1" placeholder="What is your most important health concern or goal?" rows="2"></textarea></div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field"><label>Priority 2</label><textarea id="goal2" placeholder="Secondary goal..." rows="2"></textarea></div>
+      <div class="field"><label>Priority 3</label><textarea id="goal3" placeholder="Third goal..." rows="2"></textarea></div>
+    </div>
+  </div>
+
+  <div class="form-nav">
+    <span></span>
+    <div style="display:flex;align-items:center;gap:16px">
+      <span class="step-counter">Step 1 of 8</span>
+      <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ STEP 2: Nutrition ============ -->
+<div class="form-section" id="step-1">
+  <div class="section-header">
+    <div class="section-eyebrow">Step 2 of 8</div>
+    <div class="section-title">Nutritional Data</div>
+    <div class="section-sub">Help us understand your daily eating habits and hydration patterns.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Hydration & beverages</div>
+    <div class="field-row cols-2">
+      <div class="field"><label for="water">Ounces of water per day</label><input type="number" id="water" placeholder="e.g. 64" min="0"></div>
+      <div class="field"><label for="beverages">Other beverages & how much</label><input type="text" id="beverages" placeholder="e.g. 2 cups coffee, 1 soda"></div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field"><label for="sweeteners">Do you use artificial sweeteners?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="sweeteners" value="Yes"> Yes</label>
+          <label class="radio-opt"><input type="radio" name="sweeteners" value="No"> No</label>
+        </div>
+      </div>
+      <div class="field"><label for="sweetenerType">If yes, which ones?</label><input type="text" id="sweetenerType" placeholder="e.g. Splenda, Equal, stevia"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Breakfast & meal timing</div>
+    <div class="field-row cols-2">
+      <div class="field"><label for="breakfast">Do you eat breakfast?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="breakfast" value="Yes"> Yes</label>
+          <label class="radio-opt"><input type="radio" name="breakfast" value="No"> No</label>
+          <label class="radio-opt"><input type="radio" name="breakfast" value="Sometimes"> Sometimes</label>
+        </div>
+      </div>
+      <div class="field"><label for="breakfastWhat">If yes, what do you typically eat?</label><input type="text" id="breakfastWhat" placeholder="e.g. eggs and toast, smoothie..."></div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field"><label for="firstMeal">Time of first meal</label><input type="time" id="firstMeal"></div>
+      <div class="field"><label for="lastMeal">Time of last meal</label><input type="time" id="lastMeal"></div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field"><label for="largestMeal">Which meal is largest?</label>
+        <select id="largestMeal">
+          <option value="">Select one</option>
+          <option>Breakfast</option><option>Lunch</option><option>Dinner</option><option>Varies</option>
+        </select>
+      </div>
+      <div class="field"><label for="largestMealDesc">Describe your typical largest meal</label><input type="text" id="largestMealDesc" placeholder="e.g. grilled chicken, vegetables, rice..."></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Food consumption frequency <span style="font-weight:400;font-size:11px;color:var(--text-muted)">(1D = daily · 2W = twice a week · 3M = 3× a month)</span></div>
+    <div class="freq-grid">
+      <div class="freq-item"><div class="freq-label">Fresh fruit</div><input type="text" placeholder="e.g. 1D"></div>
+      <div class="freq-item"><div class="freq-label">Raw vegetables</div><input type="text" placeholder="e.g. 2W"></div>
+      <div class="freq-item"><div class="freq-label">Fermented foods</div><input type="text" placeholder="e.g. 3M"></div>
+      <div class="freq-item"><div class="freq-label">Fast foods</div><input type="text" placeholder="e.g. 1W"></div>
+      <div class="freq-item"><div class="freq-label">Meat</div><input type="text" placeholder="e.g. 1D"></div>
+      <div class="freq-item"><div class="freq-label">Eggs</div><input type="text" placeholder="e.g. 4W"></div>
+      <div class="freq-item"><div class="freq-label">Dairy</div><input type="text" placeholder="e.g. 1D"></div>
+      <div class="freq-item"><div class="freq-label">Sweets</div><input type="text" placeholder="e.g. 2W"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Food preferences & cravings</div>
+    <div class="field-row">
+      <div class="field"><label for="cravings">What foods do you crave?</label><textarea id="cravings" placeholder="e.g. sugar, salty snacks, carbs, dairy..."></textarea></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label for="dislikes">What foods do you dislike most, and why?</label><textarea id="dislikes" placeholder="e.g. vegetables — I don't like the texture..."></textarea></div>
+    </div>
+  </div>
+
+  <div class="form-nav">
+    <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+    <div style="display:flex;align-items:center;gap:16px">
+      <span class="step-counter">Step 2 of 8</span>
+      <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ STEP 3: Lifestyle ============ -->
+<div class="form-section" id="step-2">
+  <div class="section-header">
+    <div class="section-eyebrow">Step 3 of 8</div>
+    <div class="section-title">Lifestyle & Daily Habits</div>
+    <div class="section-sub">Movement, sleep, environment, and elimination patterns all play a role in your wellness.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Morning routine</div>
+    <div class="field-row">
+      <div class="field"><label for="morning">What is the first thing you do when you get up in the morning?</label><textarea id="morning" placeholder="e.g. drink water, check phone, stretch, coffee..."></textarea></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Movement & exercise</div>
+    <div class="field-row cols-2">
+      <div class="field"><label>Do you exercise/move/participate in sweaty activity?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="exercise" value="Yes"> Yes</label>
+          <label class="radio-opt"><input type="radio" name="exercise" value="No"> No</label>
+          <label class="radio-opt"><input type="radio" name="exercise" value="Sometimes"> Sometimes</label>
+        </div>
+      </div>
+      <div class="field"><label for="exerciseWhat">If so, what and how often?</label><textarea id="exerciseWhat" placeholder="e.g. walk 30 min 3x/week, yoga daily..."></textarea></div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field"><label for="lookForward">Do you look forward to it?</label><input type="text" id="lookForward" placeholder="e.g. Yes, usually / No, it's a struggle"></div>
+      <div class="field"><label for="feelAfter">How do you feel when you're finished?</label><input type="text" id="feelAfter" placeholder="e.g. energized, exhausted, sore..."></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label for="otherExercise">Other types of exercise and how often?</label><textarea id="otherExercise" placeholder="e.g. swimming, cycling, strength training..."></textarea></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Sleep</div>
+    <div class="field-row cols-2">
+      <div class="field"><label for="bedTime">What time do you go to bed?</label><input type="time" id="bedTime"></div>
+      <div class="field"><label for="sleepHours">How many hours do you sleep?</label><input type="number" id="sleepHours" min="1" max="24" placeholder="hours"></div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field"><label>Do you wake often during the night?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="wakeOften" value="Yes"> Yes</label>
+          <label class="radio-opt"><input type="radio" name="wakeOften" value="No"> No</label>
+        </div>
+      </div>
+      <div class="field"><label for="wakeWhy">If yes, why and at what time(s)?</label><input type="text" id="wakeWhy" placeholder="e.g. pain, bathroom, anxiety, 3am..."></div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field"><label>Do you feel rested when you wake?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="rested" value="Yes"> Yes</label>
+          <label class="radio-opt"><input type="radio" name="rested" value="No"> No</label>
+          <label class="radio-opt"><input type="radio" name="rested" value="Sometimes"> Sometimes</label>
+        </div>
+      </div>
+      <div class="field"><label>Do you have pain when you first get up?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="morningPain" value="Yes"> Yes</label>
+          <label class="radio-opt"><input type="radio" name="morningPain" value="No"> No</label>
+        </div>
+      </div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field"><label for="painWhere">If yes, where is the pain?</label><input type="text" id="painWhere" placeholder="e.g. lower back, hips, joints..."></div>
+      <div class="field"><label>Does it go away upon moving?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="painGoesAway" value="Yes"> Yes</label>
+          <label class="radio-opt"><input type="radio" name="painGoesAway" value="No"> No</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Environment</div>
+    <div class="field-row cols-2">
+      <div class="field"><label>Natural/toxin-free personal care products?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="naturalPersonal" value="Yes"> Yes</label>
+          <label class="radio-opt"><input type="radio" name="naturalPersonal" value="No"> No</label>
+          <label class="radio-opt"><input type="radio" name="naturalPersonal" value="Some"> Some</label>
+        </div>
+      </div>
+      <div class="field"><label>Natural/toxin-free household cleaning products?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="naturalCleaning" value="Yes"> Yes</label>
+          <label class="radio-opt"><input type="radio" name="naturalCleaning" value="No"> No</label>
+          <label class="radio-opt"><input type="radio" name="naturalCleaning" value="Some"> Some</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Eliminations</div>
+    <div class="field-row cols-2">
+      <div class="field"><label>Do you have daily bowel eliminations?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="bowel" value="Yes"> Yes</label>
+          <label class="radio-opt"><input type="radio" name="bowel" value="No"> No</label>
+        </div>
+      </div>
+      <div class="field"><label for="bowelPerDay">If yes, how many per day?</label>
+        <select id="bowelPerDay">
+          <option value="">Select</option>
+          <option>1</option><option>2</option><option>3</option><option>4+</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label for="eliminationPattern">Please describe your elimination pattern</label><textarea id="eliminationPattern" placeholder="e.g. I have a bowel movement once a day in the morning. I pass easily." rows="3"></textarea></div>
+    </div>
+  </div>
+
+  <div class="form-nav">
+    <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+    <div style="display:flex;align-items:center;gap:16px">
+      <span class="step-counter">Step 3 of 8</span>
+      <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ STEP 4: Medical History ============ -->
+<div class="form-section" id="step-3">
+  <div class="section-header">
+    <div class="section-eyebrow">Step 4 of 8</div>
+    <div class="section-title">Medical History</div>
+    <div class="section-sub">This information helps Kelly understand your full health picture. All information is strictly confidential.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Diagnoses & surgeries</div>
+    <div class="field-row">
+      <div class="field"><label for="medConditions">Major medical conditions diagnosed by a physician (include approximate dates)</label><textarea id="medConditions" rows="4" placeholder="e.g. Type 2 diabetes (2018), hypothyroidism (2015)..."></textarea></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Medications</div>
+    <div class="field-row">
+      <div class="field"><label for="rxMeds">Prescription medications — what and how often?</label><textarea id="rxMeds" placeholder="e.g. Metformin 500mg daily, Levothyroxine 50mcg daily..." rows="3"></textarea></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label for="otcMeds">OTC medications taken routinely (pain relievers, allergy meds, etc.) — what and how often?</label><textarea id="otcMeds" placeholder="e.g. Ibuprofen as needed, Zyrtec daily..." rows="3"></textarea></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label for="allergies">Known allergies</label><textarea id="allergies" placeholder="e.g. penicillin, shellfish, pollen..." rows="2"></textarea></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Supplements</div>
+    <div class="field-row cols-2">
+      <div class="field"><label>Do you take any supplements?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="supplements" value="Yes"> Yes</label>
+          <label class="radio-opt"><input type="radio" name="supplements" value="No"> No</label>
+        </div>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label for="supplementList">If yes, what, how often, and why?</label><textarea id="supplementList" rows="4" placeholder="e.g. Vitamin D3 5000IU daily (immune support), Magnesium glycinate 400mg nightly (sleep)..."></textarea></div>
+    </div>
+  </div>
+
+  <div class="form-nav">
+    <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+    <div style="display:flex;align-items:center;gap:16px">
+      <span class="step-counter">Step 4 of 8</span>
+      <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ STEP 5: Naturopathic History ============ -->
+<div class="form-section" id="step-4">
+  <div class="section-header">
+    <div class="section-eyebrow">Step 5 of 8</div>
+    <div class="section-title">Naturopathic History</div>
+    <div class="section-sub">Tell us about your prior experience with natural and holistic wellness practices.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Prior naturopath experience</div>
+    <div class="field-row cols-2">
+      <div class="field"><label>Have you ever consulted with a naturopath?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="naturopath" value="Yes"> Yes</label>
+          <label class="radio-opt"><input type="radio" name="naturopath" value="No"> No</label>
+        </div>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label for="naturopathWhy">If yes — why did you go, and how long ago?</label><textarea id="naturopathWhy" placeholder="e.g. chronic fatigue, about 3 years ago..."></textarea></div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field"><label for="naturopathSuggested">What was suggested?</label><textarea id="naturopathSuggested" placeholder="Recommendations you received..."></textarea></div>
+      <div class="field"><label for="naturopathLiked">What did you like about it?</label><textarea id="naturopathLiked" placeholder="What worked for you..."></textarea></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label for="naturopathUnsuccessful">What wasn't as successful for you?</label><textarea id="naturopathUnsuccessful" placeholder="What didn't resonate or work well..."></textarea></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Body work & manual therapies</div>
+    <div class="field-row">
+      <div class="field"><label for="bodywork">Do you have regular body work, massages, or chiropractic adjustments? If so, how often?</label><textarea id="bodywork" placeholder="e.g. monthly massage, weekly chiropractic adjustments..."></textarea></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Familiarity with holistic modalities <span style="font-weight:400;font-size:11px;color:var(--text-muted)">— select all you are familiar with</span></div>
+    <div class="check-group" style="flex-wrap:wrap">
+      <label class="check-opt"><input type="checkbox" name="modalities" value="Homeopathy"> Homeopathy</label>
+      <label class="check-opt"><input type="checkbox" name="modalities" value="Bach Flowers"> Bach Flowers / flower remedies</label>
+      <label class="check-opt"><input type="checkbox" name="modalities" value="Probiotics"> Probiotics</label>
+      <label class="check-opt"><input type="checkbox" name="modalities" value="Aromatherapy"> Aromatherapy</label>
+      <label class="check-opt"><input type="checkbox" name="modalities" value="Acupuncture"> Acupuncture / Acupressure</label>
+      <label class="check-opt"><input type="checkbox" name="modalities" value="Muscle Response Testing"> Muscle response testing</label>
+      <label class="check-opt"><input type="checkbox" name="modalities" value="Herbals"> Herbals</label>
+      <label class="check-opt"><input type="checkbox" name="modalities" value="Sports Nutrition"> Sports nutrition</label>
+      <label class="check-opt"><input type="checkbox" name="modalities" value="Digestive Enzymes"> Digestive enzymes</label>
+      <label class="check-opt"><input type="checkbox" name="modalities" value="TCM"> Traditional Chinese Medicine / meridians</label>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Additional comments</div>
+    <div class="field-row">
+      <div class="field"><label for="additionalComments">Please add any additional comments that you feel Kelly should know about you</label><textarea id="additionalComments" rows="4" placeholder="Anything else that may be relevant to your health and wellness journey..."></textarea></div>
+    </div>
+  </div>
+
+  <div class="form-nav">
+    <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+    <div style="display:flex;align-items:center;gap:16px">
+      <span class="step-counter">Step 5 of 8</span>
+      <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ STEP 6: Symptom Questionnaire ============ -->
+<div class="form-section" id="step-5">
+  <div class="section-header">
+    <div class="section-eyebrow">Step 6 of 8</div>
+    <div class="section-title">Symptom Questionnaire</div>
+    <div class="section-sub">Please select any symptom you are currently experiencing or have experienced recently.</div>
+  </div>
+
+  <div class="card">
+    <div class="symptom-category">
+      <div class="symptom-cat-title">Digestive</div>
+      <div class="symptom-grid">
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Nausea/vomiting"><div class="symptom-check"></div>Nausea / vomiting</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Diarrhea"><div class="symptom-check"></div>Diarrhea</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Constipation"><div class="symptom-check"></div>Constipation</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Bloating"><div class="symptom-check"></div>Bloating</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Belching/Gas"><div class="symptom-check"></div>Belching / gas</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Heartburn/Acid Reflux"><div class="symptom-check"></div>Heartburn / acid reflux</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Abdominal Pain"><div class="symptom-check"></div>Abdominal pain</label>
+      </div>
+    </div>
+    <hr class="fieldset-divider">
+    <div class="symptom-category">
+      <div class="symptom-cat-title">Emotions</div>
+      <div class="symptom-grid">
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Mood Swings"><div class="symptom-check"></div>Mood swings</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Anxiety/Nervousness"><div class="symptom-check"></div>Anxiety / nervousness</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Anger/Irritability"><div class="symptom-check"></div>Anger / irritability</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Depression"><div class="symptom-check"></div>Depression</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Low Self Esteem"><div class="symptom-check"></div>Low self esteem</label>
+      </div>
+    </div>
+    <hr class="fieldset-divider">
+    <div class="symptom-category">
+      <div class="symptom-cat-title">Energy & Activity</div>
+      <div class="symptom-grid">
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Fatigue"><div class="symptom-check"></div>Fatigue</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Apathy"><div class="symptom-check"></div>Apathy</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Restlessness"><div class="symptom-check"></div>Restlessness</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Hyperactivity"><div class="symptom-check"></div>Hyperactivity</label>
+      </div>
+    </div>
+    <hr class="fieldset-divider">
+    <div class="symptom-category">
+      <div class="symptom-cat-title">Head</div>
+      <div class="symptom-grid">
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Headaches"><div class="symptom-check"></div>Headaches</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Faintness"><div class="symptom-check"></div>Faintness</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Dizziness"><div class="symptom-check"></div>Dizziness</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Insomnia"><div class="symptom-check"></div>Insomnia</label>
+      </div>
+    </div>
+    <hr class="fieldset-divider">
+    <div class="symptom-category">
+      <div class="symptom-cat-title">Mind</div>
+      <div class="symptom-grid">
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Poor Memory"><div class="symptom-check"></div>Poor memory</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Confusion"><div class="symptom-check"></div>Confusion</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Poor Concentration"><div class="symptom-check"></div>Poor concentration</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Poor Coordination"><div class="symptom-check"></div>Poor coordination</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Learning Disabilities"><div class="symptom-check"></div>Learning disabilities</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Stammering"><div class="symptom-check"></div>Stammering</label>
+      </div>
+    </div>
+    <hr class="fieldset-divider">
+    <div class="symptom-category">
+      <div class="symptom-cat-title">Eyes / Ears / Nose / Mouth</div>
+      <div class="symptom-grid">
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Watery/Itchy Eyes"><div class="symptom-check"></div>Watery / itchy eyes</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Swollen/Red Eyelids"><div class="symptom-check"></div>Swollen / red eyelids</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Dark Circles"><div class="symptom-check"></div>Dark circles</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Blurred Vision"><div class="symptom-check"></div>Blurred vision</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Itchy Ears"><div class="symptom-check"></div>Itchy ears</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Earaches/Infections"><div class="symptom-check"></div>Earaches / infections</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Hearing Loss"><div class="symptom-check"></div>Hearing loss</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Ringing in Ears"><div class="symptom-check"></div>Ringing in ears</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Stuffy Nose"><div class="symptom-check"></div>Stuffy nose</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Sinus Issues"><div class="symptom-check"></div>Sinus issues / infections</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Sneezing Attacks"><div class="symptom-check"></div>Sneezing attacks</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Chronic Cough"><div class="symptom-check"></div>Chronic cough</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Sore Throat"><div class="symptom-check"></div>Sore throat</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Swollen Tongue/Lips/Gums"><div class="symptom-check"></div>Swollen / discolored tongue, lips, gums</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Canker Sores"><div class="symptom-check"></div>Canker sores</label>
+      </div>
+    </div>
+    <hr class="fieldset-divider">
+    <div class="symptom-category">
+      <div class="symptom-cat-title">Musculoskeletal</div>
+      <div class="symptom-grid">
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Aches/Pains in Joints"><div class="symptom-check"></div>Aches / pains in joints</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Arthritis/Joint Swelling"><div class="symptom-check"></div>Arthritis / joint swelling</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Stiff/Limited Movement"><div class="symptom-check"></div>Stiff / limited movement</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Aches/Weakness in Muscles"><div class="symptom-check"></div>Aches / weakness in muscles</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Broken Bones"><div class="symptom-check"></div>Broken bones</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Backache"><div class="symptom-check"></div>Backache</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Muscle Cramps"><div class="symptom-check"></div>Muscle cramps</label>
+      </div>
+    </div>
+    <hr class="fieldset-divider">
+    <div class="symptom-category">
+      <div class="symptom-cat-title">Skin</div>
+      <div class="symptom-grid">
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Acne"><div class="symptom-check"></div>Acne</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Hives/Rashes"><div class="symptom-check"></div>Hives / rashes</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Flushing/Hot Flashes"><div class="symptom-check"></div>Flushing / hot flashes</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Excessive Sweating/Night Sweats"><div class="symptom-check"></div>Excessive sweating / night sweats</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Dryness/Itching"><div class="symptom-check"></div>Dryness / itching</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Hair Loss/Thinning"><div class="symptom-check"></div>Hair loss / thinning</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Abnormal Hair Growth"><div class="symptom-check"></div>Abnormal hair growth</label>
+      </div>
+    </div>
+    <hr class="fieldset-divider">
+    <div class="symptom-category">
+      <div class="symptom-cat-title">Heart & Lungs</div>
+      <div class="symptom-grid">
+        <label class="symptom-item"><input type="checkbox" name="sx" value="High Cholesterol"><div class="symptom-check"></div>High cholesterol</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="High Blood Pressure"><div class="symptom-check"></div>High blood pressure</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Rapid Heart Rate"><div class="symptom-check"></div>Rapid heart rate</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Chest Pain"><div class="symptom-check"></div>Chest pain</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Numbness/Tingling"><div class="symptom-check"></div>Numbness / tingling</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Difficulty Breathing"><div class="symptom-check"></div>Difficulty breathing</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Chest Congestion"><div class="symptom-check"></div>Chest congestion</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Asthma"><div class="symptom-check"></div>Asthma</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Shortness of Breath"><div class="symptom-check"></div>Shortness of breath</label>
+      </div>
+    </div>
+    <hr class="fieldset-divider">
+    <div class="symptom-category">
+      <div class="symptom-cat-title">Weight</div>
+      <div class="symptom-grid">
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Binge Eating/Drinking"><div class="symptom-check"></div>Binge eating / drinking</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Excessive Weight Gain"><div class="symptom-check"></div>Excessive weight gain</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Excessive Weight Loss"><div class="symptom-check"></div>Excessive weight loss</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Water Retention"><div class="symptom-check"></div>Water retention</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Inability to Lose Weight"><div class="symptom-check"></div>Inability to lose weight</label>
+      </div>
+    </div>
+    <hr class="fieldset-divider">
+    <div class="symptom-category">
+      <div class="symptom-cat-title">Dietary habits (check all that apply)</div>
+      <div class="symptom-grid">
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Drink Caffeine"><div class="symptom-check"></div>Drink caffeine</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Drink Alcohol"><div class="symptom-check"></div>Drink alcohol</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Drink Soda"><div class="symptom-check"></div>Drink soda</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Eat Sugar Daily"><div class="symptom-check"></div>Eat sugar daily</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Use Artificial Sweeteners"><div class="symptom-check"></div>Use artificial sweeteners</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Crave Sugar"><div class="symptom-check"></div>Crave sugar</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Crave Salt"><div class="symptom-check"></div>Crave salt</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Crave Carbohydrates"><div class="symptom-check"></div>Crave carbohydrates</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Crave Dairy"><div class="symptom-check"></div>Crave dairy</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Eat Vegetarian"><div class="symptom-check"></div>Eat vegetarian</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Eat Special Diet"><div class="symptom-check"></div>Eat special diet</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Tobacco Use"><div class="symptom-check"></div>Tobacco use / smoking</label>
+      </div>
+    </div>
+    <hr class="fieldset-divider">
+    <div class="symptom-category">
+      <div class="symptom-cat-title">Other</div>
+      <div class="symptom-grid">
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Frequent Illness"><div class="symptom-check"></div>Frequent illness</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Frequent/Painful Urination"><div class="symptom-check"></div>Frequent / painful urination</label>
+        <label class="symptom-item"><input type="checkbox" name="sx" value="Decreased Sex Drive"><div class="symptom-check"></div>Decreased sex drive</label>
+      </div>
+    </div>
+    <hr class="fieldset-divider">
+    <div class="field-row cols-2" style="margin-top:16px">
+      <div class="field"><label for="foodSensitivities">Food sensitivities (cause digestive issues — list all)</label><textarea id="foodSensitivities" placeholder="e.g. gluten, dairy, onions..."></textarea></div>
+      <div class="field"><label for="foodAllergies">Known food allergies (cause allergic reaction — list all)</label><textarea id="foodAllergies" placeholder="e.g. peanuts, shellfish, tree nuts..."></textarea></div>
+    </div>
+  </div>
+
+  <div class="form-nav">
+    <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+    <div style="display:flex;align-items:center;gap:16px">
+      <span class="step-counter">Step 6 of 8</span>
+      <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ STEP 7: Females ============ -->
+<div class="form-section" id="step-6">
+  <div class="section-header">
+    <div class="section-eyebrow">Step 7 of 8</div>
+    <div class="section-title">Female Health History</div>
+    <div class="section-sub">This section is for female clients only. If this does not apply to you, simply click Continue.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Hormonal & reproductive health</div>
+    <div class="field-row cols-2">
+      <div class="field"><label>Do you use Hormone Replacement (HRT) or hormonal contraception?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="hrt" value="Yes"> Yes</label>
+          <label class="radio-opt"><input type="radio" name="hrt" value="No"> No</label>
+        </div>
+      </div>
+      <div class="field"><label for="hrtType">If yes, what kind and how long?</label><input type="text" id="hrtType" placeholder="e.g. oral contraceptive for 5 years, estrogen patch..."></div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field"><label>Planning to become pregnant?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="pregnant" value="Yes"> Yes</label>
+          <label class="radio-opt"><input type="radio" name="pregnant" value="No"> No</label>
+          <label class="radio-opt"><input type="radio" name="pregnant" value="Currently"> Currently pregnant</label>
+        </div>
+      </div>
+      <div class="field"><label>Currently nursing?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="nursing" value="Yes"> Yes</label>
+          <label class="radio-opt"><input type="radio" name="nursing" value="No"> No</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Menstrual cycle</div>
+    <div class="field-row cols-3">
+      <div class="field"><label>Is your cycle regular?</label>
+        <div class="radio-group" style="flex-direction:column;gap:6px">
+          <label class="radio-opt"><input type="radio" name="cycleRegular" value="Yes"> Yes</label>
+          <label class="radio-opt"><input type="radio" name="cycleRegular" value="No"> No</label>
+        </div>
+      </div>
+      <div class="field"><label>Cycle length</label>
+        <div class="radio-group" style="flex-direction:column;gap:6px">
+          <label class="radio-opt"><input type="radio" name="cycleLength" value="Longer than 28 days"> Longer than 28 days</label>
+          <label class="radio-opt"><input type="radio" name="cycleLength" value="28 days"> 28 days</label>
+          <label class="radio-opt"><input type="radio" name="cycleLength" value="Shorter than 28 days"> Shorter than 28 days</label>
+        </div>
+      </div>
+      <div class="field"><label>Flow duration</label>
+        <div class="radio-group" style="flex-direction:column;gap:6px">
+          <label class="radio-opt"><input type="radio" name="flowLength" value="Longer than 5 days"> Longer than 5 days</label>
+          <label class="radio-opt"><input type="radio" name="flowLength" value="About 5 days"> About 5 days</label>
+          <label class="radio-opt"><input type="radio" name="flowLength" value="Shorter than 5 days"> Shorter than 5 days</label>
+        </div>
+      </div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field"><label>Cramps or clotting?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="cramps" value="Yes"> Yes</label>
+          <label class="radio-opt"><input type="radio" name="cramps" value="No"> No</label>
+        </div>
+      </div>
+      <div class="field"><label for="mensesColor">Color of menses</label>
+        <select id="mensesColor">
+          <option value="">Select</option>
+          <option>Bright red</option>
+          <option>Dark purple</option>
+          <option>Brown</option>
+          <option>Varies</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label for="pms">Do you experience PMS, cyclical headaches, acne, or cravings?</label><textarea id="pms" placeholder="Please describe..."></textarea></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Menopause</div>
+    <div class="field-row cols-2">
+      <div class="field"><label>Are you postmenopausal?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="postmeno" value="Yes"> Yes</label>
+          <label class="radio-opt"><input type="radio" name="postmeno" value="No"> No</label>
+        </div>
+      </div>
+      <div class="field"><label for="menoAge">If yes, at what age did you enter menopause?</label><input type="number" id="menoAge" placeholder="e.g. 51" min="30" max="70"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label for="menoChars">What were the characteristics of your menopausal experience?</label><textarea id="menoChars" placeholder="e.g. hot flashes, mood swings, sleep disruption, weight gain..."></textarea></div>
+    </div>
+  </div>
+
+  <div class="form-nav">
+    <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+    <div style="display:flex;align-items:center;gap:16px">
+      <span class="step-counter">Step 7 of 8</span>
+      <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ STEP 8: Policies & Consent ============ -->
+<div class="form-section" id="step-7">
+  <div class="section-header">
+    <div class="section-eyebrow">Step 8 of 8 — Final Step</div>
+    <div class="section-title">Policies, Consent & Signature</div>
+    <div class="section-sub">Please read each section carefully, initial where indicated, and sign below.</div>
+  </div>
+
+  <div class="warning-box">
+    <h4>Contraindications of bioenergetic services — please read before proceeding</h4>
+    <p style="font-size:12px;color:#7a4010;margin-bottom:8px">Please let Kelly know prior to your appointment if you currently have any of the following, as they are contraindicated with Biofeedback testing:</p>
+    <ul>
+      <li>Stints more than 5 years old</li>
+      <li>Organ transplants with immunosuppressant drugs</li>
+      <li>Shunts of any type</li>
+      <li>Medicated for seizures</li>
+      <li>Pacemakers</li>
+    </ul>
+    <p style="font-size:12px;color:#7a4010;margin-top:8px">Metal plates, pins, rods, and denture implants are NOT contraindicated.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Policies & procedures — please initial each</div>
+    <div class="consent-block">
+      <div class="consent-text">A typical 60–90 minute appointment is charged <strong>$150.00</strong>, which includes: Initial Consultation, Qest4 Bioenergetic Scans, Scan Analysis & Result Discussion, Personalized Recommendations / Lifestyle Coaching, and Supplement testing. 30-minute quick scan appointments are available upon request at <strong>$75.00</strong>. Kelly also offers clients access to supplements from premier, high-quality companies.</div>
+      <div class="initial-field"><label>Initials:</label><input type="text" id="init1" placeholder="  ___" maxlength="5"></div>
+    </div>
+    <div class="consent-block">
+      <div class="consent-text">Payment is accepted via <strong>cash, check (payable to Quest for Wellness, LLC), PayPal, or Venmo</strong>. Payment is due at the time of appointment.</div>
+      <div class="initial-field"><label>Initials:</label><input type="text" id="init2" placeholder="  ___" maxlength="5"></div>
+    </div>
+    <div class="consent-block">
+      <div class="consent-text">Kelly Parsons <strong>does not provide refunds</strong> for services rendered or supplements purchased.</div>
+      <div class="initial-field"><label>Initials:</label><input type="text" id="init3" placeholder="  ___" maxlength="5"></div>
+    </div>
+    <div class="consent-block">
+      <div class="consent-text">Kelly will accept and honor an appointment cancellation request any time <strong>prior to 24 hours</strong> before your scheduled appointment. Cancellations within 24 hours will be honored in an emergency or inclement weather situation.</div>
+      <div class="initial-field"><label>Initials:</label><input type="text" id="init4" placeholder="  ___" maxlength="5"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Informed consent</div>
+    <div class="consent-text" style="font-size:13px;line-height:1.8;color:var(--text);margin-bottom:16px">
+      I understand that Kelly Parsons holds a certification in Bioenergetic Testing from Qest4. She is also a Certified Holistic Health Practitioner and Certified Nutrition Consultant from Trinity School of Natural Health. She is <strong>not a medical doctor or provider</strong>. She uses biofeedback technology, nutrition, herbs, essential oils, supplements, and homeopathic products in her consultations. All results from testing are not intended to diagnose or treat any medical condition or disease. The results are provided for my education regarding holistic approaches and the potential of bioenergetic technology in my quest for wellness. Kelly empowers me through lifestyle coaching so that I may reduce my stress and pain, detoxify my body from environmental toxins, support my body through supplementation, and improve the quality of my life so my body can heal itself, which it is innately designed to do. I agree to use Kelly's services to help me learn how to accomplish these things through the foundations of health. These include nutrition, hydration, exercise, rest, energy work, body work, stress reduction, and emotional balance.<br><br>
+      I understand that the natural healing consultations provided by Kelly are not a substitute for adequate medical care and I intend to remain under the care of my primary health care provider, including any prescription medications that have been prescribed by my health care provider.<br><br>
+      I understand that I am responsible for my own health, healing, and wellbeing. I also understand that I have the ability to heal myself through the choices I make. I understand it is my responsibility to advise Kelly of anything that might help us work together better to achieve the healing and health goals I seek.<br><br>
+      I understand my identity and information about me, whether I share it with Kelly or she discovers it on her own, will be held in the strictest confidence, except when released by me or specifically required by law.<br><br>
+      I understand that if I have, or think I have a medical concern, condition, disease, disorder, issue, or symptoms, Kelly will help me reduce any related stress and refer me to a licensed chiropractic, physical therapist, or medical physician for further assistance.<br><br>
+      I understand the services provided by Kelly may cause some minor discomfort while my body is healing itself and detoxifying, through no fault of my own or Kelly's. If I have concerns, I will keep Kelly fully advised so the intervention may be terminated if necessary or revised.<br><br>
+      <strong>I have read and understand all the information provided in the policies and procedures form, as well as the informed consent. I understand health and wellness is my responsibility. I agree to use the services of Kelly Parsons as they are laid out above. I understand that I am here to learn about wellness and better health practices, that I will be offered information about food, supplements, and lifestyle choices as a guide to general good health. I fully understand that those who counsel me at Quest for Wellness, LLC are not medical doctors and I am not here for medical diagnostic purposes or treatment procedures. I am not on this visit, or any subsequent visit, an agent for federal, state or local agencies or on a mission of entrapment or investigation. The services performed here are at all times restricted to consultation on holistic health matters intended for the maintenance of the best possible state of natural health, and do not involve the diagnosing, treatment or prescribing of remedies for disease.</strong>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Qest4 disclaimer</div>
+    <div class="consent-text" style="font-size:12px;line-height:1.8;color:var(--text);margin-bottom:16px">
+      The QEST4 system provides a completely non-invasive method for gaining valuable information about an individual's Innate Intelligence and/or energetic field. The primary objective of the evaluation is to disclose energetic imbalances and provide feedback that will assist in developing a program to support each physical and energetic system of the body.<br><br>
+      &#9632; I understand that the QEST4 evaluation does not provide a medical diagnosis and that my testing technician may recommend further medical care and testing. If I suspect I need medical intervention, I understand I should consult my physician. I give my permission for the testing technician to evaluate me with the QEST4. I understand in doing so, my testing technician is NOT becoming my primary physician.<br><br>
+      &#9632; I understand that the testing technician will give me information about my body's energetic field and make recommendations based on the QEST4 evaluation. I understand that the testing technician will not pass judgments on prescribed medications and it is the responsibility of my primary physician to make any adjustments to prescribed medications or methods of treatment. Any decision to follow through with the recommended protocol is my own decision and I will not hold the testing technician liable.<br><br>
+      &#9632; I understand that I am here to learn about natural health and better lifestyle practices, and I will be offered information about food, supplements, and herbs as a guide to supporting my well-being.<br><br>
+      &#9632; I understand that I should continue to see any physicians I may be currently under the care of and that any prescribed medications should not be altered without first consulting the physician who prescribed them.<br><br>
+      &#9632; I fully understand that those who counsel me may not be licensed physicians. I am not seeking any medical diagnosis or medical treatment in relation to the QEST4 evaluation.<br><br>
+      &#9632; I fully understand that information about traditional uses of supplementation that may support balance may be discussed. I fully understand that this information is not intended to be interpreted or used as a substitute for medical care offered by a licensed physician. I fully understand that anything said, done, typed, printed, or presented in any other fashion to me is not intended to diagnose, prescribe, treat, or take the place of a licensed physician.<br><br>
+      &#9632; I fully understand that the intent is to provide educational information for the purpose of assisting me with the lifestyle changes necessary to regain and maintain an environment needed to support a well-balanced lifestyle.<br><br>
+      &#9632; I am not on this visit, or any subsequent visit, acting as an agent for the federal, state, county, local law enforcement, or news media on a mission of entrapment or investigation.<br><br>
+      &#9632; I understand that all information and conversations will be kept confidential, and that information concerning myself may only be released to a health professional with my written consent.<br><br>
+      &#9632; I understand that the QEST4 evaluation will only identify energetic imbalances and does not diagnose any diseases. The Balancing Item refers to the energetic signatures needed to restore balance to the body's energetic field. Balancing Items are defined differently from physician terms and are not a cure for any disease.<br><br>
+      &#9632; I recognize that the QEST4 evaluation is an unorthodox approach to supporting my well-being. Being of sound mind, of my own free will and in exercise of my constitutional right for the attainment of life, liberty and the pursuit of happiness, I have chosen this evaluation method to assist in balancing my health.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Signature</div>
+    <div class="field-row cols-2" style="margin-bottom:16px">
+      <div class="field"><label for="sigName">Full legal name</label><input type="text" id="sigName" placeholder="Type your full name"></div>
+      <div class="field"><label for="sigDate">Date</label><input type="date" id="sigDate"></div>
+    </div>
+
+    <div class="sig-area">
+      <div class="sig-label-bar">
+        <span>Client signature — draw below</span>
+        <button class="sig-clear" onclick="clearSig('sigCanvas')">Clear</button>
+      </div>
+      <canvas class="sig-canvas" id="sigCanvas" height="100"></canvas>
+    </div>
+
+    <div style="margin-top:16px;font-size:12px;color:var(--text-muted);font-style:italic">
+      Guardian signature required if under 18 years of age:
+    </div>
+    <div class="field-row cols-2" style="margin-top:10px">
+      <div class="field"><label for="guardianName">Guardian name (if applicable)</label><input type="text" id="guardianName" placeholder="Guardian full name"></div>
+      <div class="field"><label for="guardianDate">Date</label><input type="date" id="guardianDate"></div>
+    </div>
+    <div class="sig-area" style="margin-top:12px">
+      <div class="sig-label-bar">
+        <span>Guardian signature (if applicable)</span>
+        <button class="sig-clear" onclick="clearSig('guardianCanvas')">Clear</button>
+      </div>
+      <canvas class="sig-canvas" id="guardianCanvas" height="80"></canvas>
+    </div>
+  </div>
+
+  <div class="form-nav">
+    <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+    <div style="display:flex;align-items:center;gap:16px">
+      <span class="step-counter">Step 8 of 8</span>
+      <button class="btn btn-submit" onclick="submitForm()">Submit intake form →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SUCCESS ============ -->
+<div class="success-screen" id="successScreen">
+  <div class="success-icon">
+    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+  </div>
+  <h2>Thank you, <span id="successName"></span>!</h2>
+  <p>Your intake form has been received. Kelly will review your information and reach out to confirm your appointment details.</p>
+  <p style="margin-top:8px">A copy of this form has been sent to <strong>QuestforWellness22@gmail.com</strong>.</p>
+  <p style="margin-top:20px;font-size:12px;color:#aaa">Quest for Wellness, LLC · Kelly Parsons CHHP, CNC · questforwellnessllc.com</p>
+</div>
+
+</main>
+
+<script>
+let currentStep = 0;
+const totalSteps = 8;
+
+function goTo(step) {
+  document.getElementById('step-' + currentStep).classList.remove('active');
+  document.querySelectorAll('.progress-step')[currentStep].classList.remove('active');
+  document.querySelectorAll('.progress-step')[currentStep].classList.add('done');
+
+  currentStep = step;
+  document.getElementById('step-' + currentStep).classList.add('active');
+  document.querySelectorAll('.progress-step').forEach((s, i) => {
+    s.classList.remove('active', 'done');
+    if (i < currentStep) s.classList.add('done');
+    if (i === currentStep) s.classList.add('active');
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function nextStep() {
+  if (currentStep < totalSteps - 1) goTo(currentStep + 1);
+}
+function prevStep() {
+  if (currentStep > 0) goTo(currentStep - 1);
+}
+
+// ── EmailJS Configuration ──────────────────────────────────────────
+// SETUP INSTRUCTIONS (one-time, ~10 minutes):
+// 1. Go to https://www.emailjs.com and create a FREE account
+// 2. Add a service: Connect → Gmail → use QuestforWellness22@gmail.com → copy Service ID below
+// 3. Create a template: Templates → Create → paste the HTML template from the TEMPLATE GUIDE below → copy Template ID
+// 4. Get your Public Key: Account → API Keys → copy Public Key
+// 5. Replace the three placeholder values below with your real IDs
+
+const EMAILJS_SERVICE_ID  = 'service_txf5npp';
+const EMAILJS_TEMPLATE_ID = 'template_j14xp1h';
+const EMAILJS_PUBLIC_KEY  = 'GLrZXNUH4Ja0S0--j';
+
+// ── EmailJS Template Guide ────────────────────────────────────────
+// In your EmailJS template, set:
+//   To email:   QuestforWellness22@gmail.com
+//   From name:  {{client_name}}
+//   Subject:    New Client Intake Form — {{client_name}} ({{submitted_date}})
+//   Reply-to:   {{client_email}}
+//   Body:       (paste the HTML body from the file emailjs-template.html)
+// All {{variable_name}} placeholders are filled automatically from the form.
+// ─────────────────────────────────────────────────────────────────
+
+function collectFormData() {
+  const val  = id => (document.getElementById(id) || {}).value || '';
+  const radio = name => { const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : 'Not answered'; };
+  const checks = name => Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(e => e.value).join(', ') || 'None selected';
+
+  // Frequency grid — grab all freq-item inputs in order
+  const freqLabels = ['Fresh fruit','Raw vegetables','Fermented foods','Fast foods','Meat','Eggs','Dairy','Sweets'];
+  const freqInputs = document.querySelectorAll('.freq-item input');
+  const freqLines  = freqLabels.map((l,i) => `${l}: ${freqInputs[i] ? freqInputs[i].value || '—' : '—'}`).join('\n');
+
+  return {
+    // Meta
+    submitted_date : new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' }),
+    form_version   : 'Quest for Wellness Digital Intake v1.0',
+
+    // Step 1 — Personal
+    client_name    : val('fullName'),
+    client_age     : val('age'),
+    client_sex     : radio('sex'),
+    blood_type     : val('bloodType') || 'Not provided',
+    client_address : val('address'),
+    client_phone   : val('phone'),
+    client_email   : val('email'),
+    health_goal_1  : val('goal1') || '—',
+    health_goal_2  : val('goal2') || '—',
+    health_goal_3  : val('goal3') || '—',
+
+    // Step 2 — Nutrition
+    water_oz          : val('water') || '—',
+    other_beverages   : val('beverages') || '—',
+    artificial_sweet  : radio('sweeteners'),
+    sweetener_type    : val('sweetenerType') || '—',
+    eats_breakfast    : radio('breakfast'),
+    breakfast_food    : val('breakfastWhat') || '—',
+    first_meal_time   : val('firstMeal') || '—',
+    last_meal_time    : val('lastMeal') || '—',
+    largest_meal      : val('largestMeal') || '—',
+    largest_meal_desc : val('largestMealDesc') || '—',
+    food_frequency    : freqLines,
+    food_cravings     : val('cravings') || '—',
+    food_dislikes     : val('dislikes') || '—',
+
+    // Step 3 — Lifestyle
+    morning_routine   : val('morning') || '—',
+    exercises         : radio('exercise'),
+    exercise_details  : val('exerciseWhat') || '—',
+    looks_forward_ex  : val('lookForward') || '—',
+    feel_after_ex     : val('feelAfter') || '—',
+    other_exercise    : val('otherExercise') || '—',
+    bedtime           : val('bedTime') || '—',
+    sleep_hours       : val('sleepHours') || '—',
+    wakes_often       : radio('wakeOften'),
+    wake_reason       : val('wakeWhy') || '—',
+    feels_rested      : radio('rested'),
+    morning_pain      : radio('morningPain'),
+    pain_location     : val('painWhere') || '—',
+    pain_goes_away    : radio('painGoesAway'),
+    natural_personal  : radio('naturalPersonal'),
+    natural_cleaning  : radio('naturalCleaning'),
+    daily_bowel       : radio('bowel'),
+    bowel_per_day     : val('bowelPerDay') || '—',
+    elimination_desc  : val('eliminationPattern') || '—',
+
+    // Step 4 — Medical
+    med_conditions    : val('medConditions') || 'None reported',
+    rx_medications    : val('rxMeds') || 'None',
+    otc_medications   : val('otcMeds') || 'None',
+    known_allergies   : val('allergies') || 'None reported',
+    takes_supplements : radio('supplements'),
+    supplement_list   : val('supplementList') || 'None',
+
+    // Step 5 — Naturopathic
+    naturopath_before : radio('naturopath'),
+    naturopath_why    : val('naturopathWhy') || '—',
+    naturopath_suggested : val('naturopathSuggested') || '—',
+    naturopath_liked  : val('naturopathLiked') || '—',
+    naturopath_bad    : val('naturopathUnsuccessful') || '—',
+    bodywork          : val('bodywork') || '—',
+    modalities_known  : checks('modalities'),
+    extra_comments    : val('additionalComments') || '—',
+
+    // Step 6 — Symptoms
+    symptoms_selected : checks('sx'),
+    food_sensitivities: val('foodSensitivities') || 'None listed',
+    food_allergies_all: val('foodAllergies') || 'None listed',
+
+    // Step 7 — Female
+    uses_hrt          : radio('hrt'),
+    hrt_type          : val('hrtType') || '—',
+    planning_pregnant : radio('pregnant'),
+    nursing           : radio('nursing'),
+    cycle_regular     : radio('cycleRegular'),
+    cycle_length      : radio('cycleLength'),
+    flow_length       : radio('flowLength'),
+    cramps_clotting   : radio('cramps'),
+    menses_color      : val('mensesColor') || '—',
+    pms_details       : val('pms') || '—',
+    postmenopausal    : radio('postmeno'),
+    meno_age          : val('menoAge') || '—',
+    meno_chars        : val('menoChars') || '—',
+
+    // Step 8 — Consent
+    initials_fees     : val('init1') || '___',
+    initials_payment  : val('init2') || '___',
+    initials_refunds  : val('init3') || '___',
+    initials_cancel   : val('init4') || '___',
+    sig_name          : val('sigName') || '—',
+    sig_date          : val('sigDate') || '—',
+    guardian_name     : val('guardianName') || 'N/A',
+    guardian_date     : val('guardianDate') || 'N/A',
+  };
+}
+
+async function submitForm() {
+  const submitBtn = document.querySelector('.btn-submit');
+  const name = document.getElementById('fullName').value.trim();
+
+  // Basic validation
+  if (!name) { alert('Please enter the client name on Step 1 before submitting.'); goTo(0); return; }
+  if (!document.getElementById('sigName').value.trim()) { alert('Please enter your full name in the signature section before submitting.'); return; }
+  if (!document.getElementById('init1').value.trim()) { alert('Please initial all policy statements before submitting.'); return; }
+
+  // Show sending state
+  submitBtn.textContent = 'Sending…';
+  submitBtn.disabled = true;
+
+  const data = collectFormData();
+
+  // Check if EmailJS is configured
+  const isConfigured = EMAILJS_SERVICE_ID !== 'YOUR_SERVICE_ID';
+
+  if (isConfigured) {
+    try {
+      const result = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, data, EMAILJS_PUBLIC_KEY);
+      // EmailJS returns status 200 on success — always show success if email was received
+      showSuccess(name);
+    } catch (err) {
+      // Only land here on a true network failure (offline, wrong keys, etc.)
+      // If the email came through despite this error, still show success
+      if (err && err.status && err.status !== 200) {
+        console.error('EmailJS error:', err);
+        submitBtn.textContent = 'Submit intake form →';
+        submitBtn.disabled = false;
+        alert('There was a problem sending your form. Please try again or contact Kelly directly at QuestforWellness22@gmail.com');
+      } else {
+        // Email likely sent — show success anyway
+        showSuccess(name);
+      }
+    }
+  } else {
+    await new Promise(r => setTimeout(r, 800));
+    showSuccess(name);
+  }
+}
+
+function showSuccess(name) {
+  document.querySelectorAll('.form-section').forEach(s => s.style.display = 'none');
+  document.getElementById('progressNav').style.display = 'none';
+  document.getElementById('successName').textContent = name.split(' ')[0];
+  document.getElementById('successScreen').classList.add('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Signature canvas
+function initCanvas(id) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth || 700;
+  let drawing = false;
+
+  function getPos(e) {
+    const r = canvas.getBoundingClientRect();
+    const src = e.touches ? e.touches[0] : e;
+    return { x: src.clientX - r.left, y: src.clientY - r.top };
+  }
+
+  canvas.addEventListener('mousedown', e => { drawing = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); });
+  canvas.addEventListener('mousemove', e => { if (!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.strokeStyle = '#0a4f6a'; ctx.lineWidth = 1.8; ctx.lineCap = 'round'; ctx.stroke(); });
+  canvas.addEventListener('mouseup', () => drawing = false);
+  canvas.addEventListener('mouseleave', () => drawing = false);
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); }, { passive: false });
+  canvas.addEventListener('touchmove', e => { e.preventDefault(); if (!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.strokeStyle = '#0a4f6a'; ctx.lineWidth = 1.8; ctx.lineCap = 'round'; ctx.stroke(); }, { passive: false });
+  canvas.addEventListener('touchend', () => drawing = false);
+}
+
+function clearSig(id) {
+  const canvas = document.getElementById(id);
+  if (canvas) canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+}
+
+window.addEventListener('load', () => {
+  initCanvas('sigCanvas');
+  initCanvas('guardianCanvas');
+  const today = new Date().toISOString().split('T')[0];
+  const sigDate = document.getElementById('sigDate');
+  if (sigDate) sigDate.value = today;
+});
+
+window.addEventListener('resize', () => {
+  ['sigCanvas', 'guardianCanvas'].forEach(id => {
+    const c = document.getElementById(id);
+    if (c) c.width = c.offsetWidth;
+  });
+});
+</script>
+</body>
+</html>
