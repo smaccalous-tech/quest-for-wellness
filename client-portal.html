@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Portal — Quest for Wellness, LLC</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal: #1a9aaa;
+  --teal-deep: #0a4f6a;
+  --teal-light: #29b8c8;
+  --teal-bg: #e8f7fa;
+  --teal-subtle: #f0fbfc;
+  --navy: #072f40;
+  --white: #ffffff;
+  --text: #1a2e35;
+  --text-muted: #5a7a85;
+  --border: rgba(26,154,170,0.18);
+  --border-strong: rgba(26,154,170,0.4);
+  --radius: 12px;
+  --success: #1a8a6a;
+  --error: #c0392b;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#f2f8fa;color:var(--text);min-height:100vh}
+
+/* ── LOGIN SCREEN ── */
+.login-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;background:linear-gradient(160deg,#e8f7fa 0%,#f2f8fa 50%,#e0f0f5 100%)}
+.login-logo{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid rgba(41,184,200,0.35);margin-bottom:16px}
+.login-brand{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--teal-deep);margin-bottom:4px;text-align:center}
+.login-sub{font-size:13px;color:var(--text-muted);margin-bottom:32px;text-align:center}
+.login-card{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:36px;width:100%;max-width:400px;box-shadow:0 4px 32px rgba(10,79,106,0.07)}
+.login-card h2{font-size:18px;font-weight:500;color:var(--teal-deep);margin-bottom:6px}
+.login-card p{font-size:13px;color:var(--text-muted);margin-bottom:24px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:11px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px}
+.field input{width:100%;padding:11px 14px;border:1px solid var(--border-strong);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);background:white;transition:border-color 0.15s,box-shadow 0.15s}
+.field input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(26,154,170,0.12)}
+.btn-login{width:100%;padding:12px;background:var(--teal-deep);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:background 0.18s;margin-top:8px}
+.btn-login:hover{background:var(--navy)}
+.forgot-link{display:block;text-align:center;margin-top:14px;font-size:12px;color:var(--teal);cursor:pointer;text-decoration:none}
+.forgot-link:hover{color:var(--teal-deep)}
+.login-error{background:#fef0f0;border:1px solid rgba(192,57,43,0.25);border-radius:7px;padding:10px 14px;font-size:12px;color:#a93226;margin-bottom:14px;display:none}
+.login-footer{margin-top:24px;font-size:11px;color:var(--text-muted);text-align:center;line-height:1.7}
+
+/* ── PORTAL APP ── */
+.portal{display:none;min-height:100vh;flex-direction:column}
+.portal.show{display:flex}
+
+/* Sidebar + layout */
+.portal-layout{display:flex;flex:1;min-height:0}
+.sidebar{width:220px;background:var(--teal-deep);display:flex;flex-direction:column;flex-shrink:0}
+.sidebar-logo-row{padding:20px 16px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,0.1)}
+.sidebar-logo-row img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(41,184,200,0.4)}
+.sidebar-brand{color:#e8f7fa;font-size:13px;font-weight:500;line-height:1.3}
+.sidebar-brand span{display:block;font-size:10px;opacity:0.6;font-weight:400}
+.sidebar-nav{flex:1;padding:12px 8px}
+.nav-section-label{font-size:10px;font-weight:500;color:rgba(232,247,250,0.4);text-transform:uppercase;letter-spacing:0.08em;padding:12px 8px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;font-size:13px;color:rgba(232,247,250,0.7);transition:all 0.15s;margin-bottom:2px;border:none;background:transparent;width:100%;text-align:left;font-family:'DM Sans',sans-serif}
+.nav-item:hover{background:rgba(255,255,255,0.1);color:#e8f7fa}
+.nav-item.active{background:rgba(41,184,200,0.22);color:#e8f7fa}
+.nav-item svg{width:16px;height:16px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:1.5}
+.nav-badge{margin-left:auto;background:#29b8c8;color:#042C53;font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px}
+.sidebar-footer{padding:14px 12px;border-top:1px solid rgba(255,255,255,0.1)}
+.sidebar-user{display:flex;align-items:center;gap:9px;margin-bottom:10px}
+.user-avatar{width:30px;height:30px;border-radius:50%;background:rgba(41,184,200,0.3);display:flex;align-items:center;justify-content:center;color:#29b8c8;font-size:12px;font-weight:600;flex-shrink:0}
+.user-name{color:#e8f7fa;font-size:12px;font-weight:500;line-height:1.3}
+.user-name span{display:block;font-size:10px;opacity:0.55;font-weight:400}
+.btn-logout{width:100%;padding:7px;background:rgba(255,255,255,0.08);color:rgba(232,247,250,0.6);border:none;border-radius:6px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.btn-logout:hover{background:rgba(255,255,255,0.14);color:#e8f7fa}
+
+/* Top bar */
+.topbar{background:white;border-bottom:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between}
+.topbar-title{font-size:18px;font-weight:500;color:var(--teal-deep)}
+.topbar-sub{font-size:12px;color:var(--text-muted);margin-top:1px}
+.topbar-actions{display:flex;gap:10px;align-items:center}
+.btn-sm{padding:7px 16px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.btn-primary-sm{background:var(--teal);color:white}
+.btn-primary-sm:hover{background:var(--teal-deep)}
+.btn-outline-sm{background:white;color:var(--teal-deep);border:1px solid var(--border-strong)}
+.btn-outline-sm:hover{background:var(--teal-bg)}
+
+/* Content */
+.content{flex:1;overflow-y:auto;padding:28px}
+.panel{display:none}
+.panel.active{display:block}
+
+/* Dashboard */
+.welcome-banner{background:var(--teal-deep);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.welcome-text h2{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:#f0fbfc;margin-bottom:4px}
+.welcome-text p{font-size:13px;color:#9dd4e0;line-height:1.6}
+.welcome-badge{background:rgba(41,184,200,0.2);border:1px solid rgba(41,184,200,0.35);border-radius:8px;padding:10px 16px;text-align:right;flex-shrink:0}
+.welcome-badge span{display:block;font-size:11px;color:#9dd4e0}
+.welcome-badge strong{font-size:15px;color:#29b8c8;font-weight:500}
+
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:24px}
+.stat-card{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px}
+.stat-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px}
+.stat-value{font-size:22px;font-weight:500;color:var(--teal-deep)}
+.stat-sub{font-size:11px;color:var(--text-muted);margin-top:3px}
+
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.card{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.card-title{font-size:13px;font-weight:500;color:var(--teal-deep);text-transform:uppercase;letter-spacing:0.06em}
+.card-link{font-size:12px;color:var(--teal);cursor:pointer}
+.card-link:hover{color:var(--teal-deep)}
+
+/* Appointment items */
+.appt-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.appt-item:last-child{border-bottom:none;padding-bottom:0}
+.appt-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);margin-top:5px;flex-shrink:0}
+.appt-dot.past{background:#b0c8d0}
+.appt-info h4{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px}
+.appt-info p{font-size:12px;color:var(--text-muted)}
+.appt-tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:500;margin-top:4px}
+.tag-upcoming{background:var(--teal-bg);color:var(--teal-deep)}
+.tag-completed{background:#f0f0f0;color:#666}
+.tag-new{background:#e8f5e9;color:#2e7d32}
+
+/* Notes list */
+.note-item{padding:14px;border:1px solid var(--border);border-radius:9px;margin-bottom:10px;cursor:pointer;transition:border-color 0.15s}
+.note-item:hover{border-color:var(--teal)}
+.note-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.note-date{font-size:11px;color:var(--text-muted)}
+.note-title{font-size:14px;font-weight:500;color:var(--teal-deep);margin-bottom:4px}
+.note-preview{font-size:12px;color:var(--text-muted);line-height:1.5}
+.note-tags{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.note-tag{background:var(--teal-bg);color:var(--teal-deep);font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
+
+/* Note detail modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(10,79,106,0.35);z-index:200;align-items:center;justify-content:center;padding:24px}
+.modal-overlay.show{display:flex}
+.modal{background:white;border-radius:var(--radius);max-width:600px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 16px 64px rgba(10,79,106,0.2)}
+.modal-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px;position:sticky;top:0;background:white;z-index:1}
+.modal-header h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--teal-deep);line-height:1.2}
+.modal-close{background:none;border:none;font-size:20px;color:var(--text-muted);cursor:pointer;padding:4px;line-height:1;flex-shrink:0}
+.modal-body{padding:24px}
+.modal-section{margin-bottom:20px}
+.modal-section h4{font-size:12px;font-weight:500;color:var(--teal);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px}
+.modal-section p{font-size:14px;color:var(--text);line-height:1.75}
+.modal-section ul{font-size:14px;color:var(--text);line-height:1.75;padding-left:18px}
+
+/* Documents */
+.doc-item{display:flex;align-items:center;gap:14px;padding:14px;border:1px solid var(--border);border-radius:9px;margin-bottom:10px;transition:border-color 0.15s}
+.doc-item:hover{border-color:var(--teal)}
+.doc-icon{width:38px;height:38px;background:var(--teal-bg);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.doc-icon svg{width:18px;height:18px;stroke:var(--teal-deep);fill:none;stroke-width:1.5}
+.doc-info{flex:1;min-width:0}
+.doc-name{font-size:14px;font-weight:500;color:var(--text);margin-bottom:2px}
+.doc-meta{font-size:11px;color:var(--text-muted)}
+.btn-download{padding:7px 14px;background:var(--teal-bg);color:var(--teal-deep);border:1px solid var(--border-strong);border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:all 0.15s}
+.btn-download:hover{background:var(--teal);color:white}
+
+/* Calendar / booking */
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cal-month{font-size:16px;font-weight:500;color:var(--teal-deep)}
+.cal-nav{display:flex;gap:6px}
+.cal-btn{background:white;border:1px solid var(--border-strong);border-radius:6px;padding:5px 10px;cursor:pointer;font-size:13px;color:var(--teal-deep);font-family:'DM Sans',sans-serif}
+.cal-btn:hover{background:var(--teal-bg)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-day-label{text-align:center;font-size:11px;font-weight:500;color:var(--text-muted);padding:6px 0;text-transform:uppercase;letter-spacing:0.04em}
+.cal-day{text-align:center;padding:8px 4px;border-radius:7px;font-size:13px;cursor:pointer;transition:all 0.12s;position:relative}
+.cal-day.empty{cursor:default}
+.cal-day.today{background:var(--teal-bg);color:var(--teal-deep);font-weight:500}
+.cal-day.available:hover{background:var(--teal);color:white}
+.cal-day.selected{background:var(--teal-deep);color:white;font-weight:500}
+.cal-day.past{color:#c0cfd4;cursor:default}
+.cal-day.has-appt::after{content:'';display:block;width:4px;height:4px;background:var(--teal);border-radius:50%;margin:2px auto 0}
+.cal-day.selected.has-appt::after{background:rgba(255,255,255,0.7)}
+.time-slots{margin-top:20px}
+.time-slots h4{font-size:13px;font-weight:500;color:var(--teal-deep);margin-bottom:12px}
+.slot-grid{display:flex;flex-wrap:wrap;gap:8px}
+.slot{padding:8px 14px;border:1px solid var(--border-strong);border-radius:7px;font-size:13px;cursor:pointer;background:white;color:var(--text);transition:all 0.12s;font-family:'DM Sans',sans-serif}
+.slot:hover,.slot.selected{background:var(--teal);color:white;border-color:var(--teal)}
+.slot.booked{background:#f5f5f5;color:#b0b0b0;cursor:not-allowed;border-color:#e0e0e0}
+
+/* Messages */
+.msg-layout{display:grid;grid-template-columns:200px 1fr;gap:0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;min-height:400px}
+.msg-list{border-right:1px solid var(--border);background:#fafafa}
+.msg-list-header{padding:14px 16px;border-bottom:1px solid var(--border);font-size:12px;font-weight:500;color:var(--teal-deep);text-transform:uppercase;letter-spacing:0.06em}
+.msg-thread{padding:12px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.12s}
+.msg-thread:hover,.msg-thread.active{background:var(--teal-bg)}
+.msg-thread-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px}
+.msg-thread-preview{font-size:11px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msg-thread-time{font-size:10px;color:var(--text-muted);float:right}
+.msg-unread{width:7px;height:7px;background:var(--teal);border-radius:50%;display:inline-block;margin-right:5px;vertical-align:middle}
+.msg-area{display:flex;flex-direction:column}
+.msg-area-header{padding:14px 18px;border-bottom:1px solid var(--border);background:white}
+.msg-area-header h4{font-size:14px;font-weight:500;color:var(--teal-deep)}
+.msg-area-header p{font-size:11px;color:var(--text-muted)}
+.msg-bubbles{flex:1;padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-height:260px;background:#fafcfd}
+.msg-bubble{max-width:75%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.55}
+.msg-bubble.from-kelly{background:var(--teal-bg);color:var(--text);border-radius:12px 12px 12px 3px;align-self:flex-start}
+.msg-bubble.from-me{background:var(--teal-deep);color:#e8f7fa;border-radius:12px 12px 3px 12px;align-self:flex-end}
+.msg-bubble-time{font-size:10px;opacity:0.6;margin-top:4px}
+.msg-compose{padding:12px 16px;border-top:1px solid var(--border);background:white;display:flex;gap:10px;align-items:flex-end}
+.msg-compose textarea{flex:1;padding:9px 12px;border:1px solid var(--border-strong);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;resize:none;height:40px;transition:border-color 0.15s}
+.msg-compose textarea:focus{outline:none;border-color:var(--teal)}
+.btn-send{padding:9px 16px;background:var(--teal);color:white;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.btn-send:hover{background:var(--teal-deep)}
+
+/* Profile */
+.profile-section{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px}
+.profile-section h3{font-size:13px;font-weight:500;color:var(--teal-deep);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.profile-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.profile-field label{display:block;font-size:11px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px}
+.profile-field input{width:100%;padding:9px 12px;border:1px solid var(--border-strong);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text)}
+.profile-field input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(26,154,170,0.1)}
+.btn-save{padding:9px 22px;background:var(--teal-deep);color:white;border:none;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer}
+.btn-save:hover{background:var(--navy)}
+.success-toast{display:none;background:#e8f5e9;border:1px solid rgba(46,125,50,0.3);border-radius:7px;padding:10px 16px;font-size:13px;color:#2e7d32;margin-top:12px}
+.success-toast.show{display:block}
+
+@media(max-width:700px){
+  .sidebar{display:none}
+  .dash-grid{grid-template-columns:1fr}
+  .profile-row{grid-template-columns:1fr}
+  .msg-layout{grid-template-columns:1fr}
+  .msg-list{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ════ LOGIN SCREEN ════ -->
+<div id="loginScreen" class="login-screen">
+  <img class="login-logo" src="FINAL_LOGO.jpg" alt="Quest for Wellness">
+  <div class="login-brand">Quest for Wellness</div>
+  <div class="login-sub">Client Portal · Kelly Parsons, CHHP, CNC</div>
+
+  <div class="login-card">
+    <h2>Welcome back</h2>
+    <p>Sign in to access your wellness portal</p>
+    <div id="loginError" class="login-error">Incorrect email or password. Please try again.</div>
+    <div class="field">
+      <label for="loginEmail">Email address</label>
+      <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email">
+    </div>
+    <div class="field">
+      <label for="loginPassword">Password</label>
+      <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="btn-login" onclick="doLogin()">Sign in to my portal</button>
+    <a class="forgot-link" onclick="showForgot()">Forgot your password?</a>
+  </div>
+
+  <div class="login-footer">
+    Quest for Wellness, LLC · questforwellnessllc.com<br>
+    Your information is secure and never shared.
+  </div>
+</div>
+
+<!-- ════ FORGOT PASSWORD ════ -->
+<div id="forgotScreen" class="login-screen" style="display:none">
+  <img class="login-logo" src="FINAL_LOGO.jpg" alt="Quest for Wellness">
+  <div class="login-brand">Reset your password</div>
+  <div class="login-sub">We'll send a reset link to your email</div>
+  <div class="login-card">
+    <h2>Forgot password?</h2>
+    <p>Enter the email address you registered with and we'll send you a reset link.</p>
+    <div class="field">
+      <label>Email address</label>
+      <input type="email" id="forgotEmail" placeholder="you@example.com">
+    </div>
+    <button class="btn-login" onclick="sendReset()">Send reset link</button>
+    <a class="forgot-link" onclick="showLogin()">← Back to sign in</a>
+  </div>
+</div>
+
+<!-- ════ PORTAL APP ════ -->
+<div id="portalApp" class="portal">
+
+  <div class="portal-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo-row">
+        <img src="FINAL_LOGO.jpg" alt="Logo">
+        <div class="sidebar-brand">Quest for Wellness<span>Client Portal</span></div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">My wellness</div>
+        <button class="nav-item active" onclick="showPanel('dashboard',this)">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Dashboard
+        </button>
+        <button class="nav-item" onclick="showPanel('notes',this)">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          Appointment Notes
+          <span class="nav-badge">2</span>
+        </button>
+        <button class="nav-item" onclick="showPanel('documents',this)">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Documents
+        </button>
+        <button class="nav-item" onclick="showPanel('schedule',this)">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Book Appointment
+        </button>
+        <div class="nav-section-label">Communication</div>
+        <button class="nav-item" onclick="showPanel('messages',this)">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Messages
+          <span class="nav-badge">1</span>
+        </button>
+        <div class="nav-section-label">Account</div>
+        <button class="nav-item" onclick="showPanel('profile',this)">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          My Profile
+        </button>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="user-avatar" id="sidebarInitials">JD</div>
+          <div class="user-name" id="sidebarName">Jane Doe<span>Client since 2024</span></div>
+        </div>
+        <button class="btn-logout" onclick="doLogout()">Sign out</button>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+
+      <div class="topbar">
+        <div>
+          <div class="topbar-title" id="panelTitle">Dashboard</div>
+          <div class="topbar-sub" id="panelSub">Welcome back to your wellness portal</div>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn-sm btn-outline-sm" onclick="showPanel('schedule',document.querySelector('.nav-item:nth-child(5))'))">Book appointment</button>
+          <button class="btn-sm btn-primary-sm" onclick="showPanel('messages',null)">Message Kelly</button>
+        </div>
+      </div>
+
+      <div class="content">
+
+        <!-- ── DASHBOARD ── -->
+        <div class="panel active" id="panel-dashboard">
+          <div class="welcome-banner">
+            <div class="welcome-text">
+              <h2>Good morning, <span id="welcomeName">Jane</span>!</h2>
+              <p>Your next appointment is coming up. Kelly has posted new notes from your last visit.</p>
+            </div>
+            <div class="welcome-badge">
+              <span>Next appointment</span>
+              <strong id="nextAppt">Jan 28, 2025</strong>
+            </div>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-card">
+              <div class="stat-label">Total visits</div>
+              <div class="stat-value">4</div>
+              <div class="stat-sub">Since joining</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Unread notes</div>
+              <div class="stat-value" style="color:var(--teal)">2</div>
+              <div class="stat-sub">From Kelly</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Documents</div>
+              <div class="stat-value">5</div>
+              <div class="stat-sub">Available to download</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Next visit</div>
+              <div class="stat-value" style="font-size:15px">Jan 28</div>
+              <div class="stat-sub">10:00 AM</div>
+            </div>
+          </div>
+
+          <div class="dash-grid">
+            <div class="card">
+              <div class="card-header">
+                <span class="card-title">Recent appointments</span>
+                <span class="card-link" onclick="showPanel('notes',null)">View notes →</span>
+              </div>
+              <div class="appt-item">
+                <div class="appt-dot"></div>
+                <div class="appt-info">
+                  <h4>Follow-up wellness scan</h4>
+                  <p>Jan 28, 2025 · 10:00 AM</p>
+                  <span class="appt-tag tag-upcoming">Upcoming</span>
+                </div>
+              </div>
+              <div class="appt-item">
+                <div class="appt-dot"></div>
+                <div class="appt-info">
+                  <h4>Qest4 bioresonance session</h4>
+                  <p>Jan 7, 2025 · 2:00 PM</p>
+                  <span class="appt-tag tag-new">Notes posted</span>
+                </div>
+              </div>
+              <div class="appt-item">
+                <div class="appt-dot past"></div>
+                <div class="appt-info">
+                  <h4>Initial wellness assessment</h4>
+                  <p>Dec 10, 2024 · 10:30 AM</p>
+                  <span class="appt-tag tag-completed">Completed</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-title">Recent documents</span>
+                <span class="card-link" onclick="showPanel('documents',null)">View all →</span>
+              </div>
+              <div class="appt-item">
+                <div class="doc-icon" style="width:32px;height:32px;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                <div class="appt-info">
+                  <h4>Jan 7 — Scan results & recommendations</h4>
+                  <p>Posted Jan 8, 2025 · PDF</p>
+                </div>
+              </div>
+              <div class="appt-item">
+                <div class="doc-icon" style="width:32px;height:32px;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                <div class="appt-info">
+                  <h4>Supplement protocol — Jan 2025</h4>
+                  <p>Posted Jan 8, 2025 · PDF</p>
+                </div>
+              </div>
+              <div class="appt-item">
+                <div class="doc-icon" style="width:32px;height:32px;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                <div class="appt-info">
+                  <h4>Initial assessment report — Dec 2024</h4>
+                  <p>Posted Dec 11, 2024 · PDF</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── NOTES ── -->
+        <div class="panel" id="panel-notes">
+          <div class="note-item" onclick="openNote('jan7')">
+            <div class="note-meta">
+              <span class="note-date">January 7, 2025</span>
+              <span class="appt-tag tag-new" style="margin:0">New</span>
+            </div>
+            <div class="note-title">Qest4 session — follow-up scan & analysis</div>
+            <div class="note-preview">Your scan showed significant improvement in digestive stress markers since your initial visit. Kelly noted areas of continued focus including adrenal support and sleep quality...</div>
+            <div class="note-tags">
+              <span class="note-tag">Digestive</span>
+              <span class="note-tag">Adrenal</span>
+              <span class="note-tag">Sleep</span>
+              <span class="note-tag">Supplement update</span>
+            </div>
+          </div>
+          <div class="note-item" onclick="openNote('dec10')">
+            <div class="note-meta">
+              <span class="note-date">December 10, 2024</span>
+              <span class="appt-tag tag-new" style="margin:0">New</span>
+            </div>
+            <div class="note-title">Initial wellness assessment — first visit summary</div>
+            <div class="note-preview">Welcome to Quest for Wellness! Your initial Qest4 scan was completed. Key areas flagged include nutritional deficiencies, digestive imbalance, and hormonal stress. A personalized protocol has been prepared...</div>
+            <div class="note-tags">
+              <span class="note-tag">Initial assessment</span>
+              <span class="note-tag">Nutrition</span>
+              <span class="note-tag">Hormonal</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DOCUMENTS ── -->
+        <div class="panel" id="panel-documents">
+          <div style="margin-bottom:20px">
+            <input type="text" placeholder="Search documents..." style="padding:9px 14px;border:1px solid var(--border-strong);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;width:260px">
+          </div>
+          <div class="doc-item">
+            <div class="doc-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div>
+            <div class="doc-info">
+              <div class="doc-name">Jan 7, 2025 — Qest4 scan results & recommendations</div>
+              <div class="doc-meta">Posted January 8, 2025 · PDF · 2.1 MB</div>
+            </div>
+            <button class="btn-download">Download PDF</button>
+          </div>
+          <div class="doc-item">
+            <div class="doc-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div>
+            <div class="doc-info">
+              <div class="doc-name">Supplement protocol — January 2025</div>
+              <div class="doc-meta">Posted January 8, 2025 · PDF · 0.8 MB</div>
+            </div>
+            <button class="btn-download">Download PDF</button>
+          </div>
+          <div class="doc-item">
+            <div class="doc-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div>
+            <div class="doc-info">
+              <div class="doc-name">Initial assessment report — December 2024</div>
+              <div class="doc-meta">Posted December 11, 2024 · PDF · 3.4 MB</div>
+            </div>
+            <button class="btn-download">Download PDF</button>
+          </div>
+          <div class="doc-item">
+            <div class="doc-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div>
+            <div class="doc-info">
+              <div class="doc-name">Supplement protocol — December 2024</div>
+              <div class="doc-meta">Posted December 11, 2024 · PDF · 0.7 MB</div>
+            </div>
+            <button class="btn-download">Download PDF</button>
+          </div>
+          <div class="doc-item">
+            <div class="doc-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div>
+            <div class="doc-info">
+              <div class="doc-name">Lifestyle & nutrition guide — foundations of health</div>
+              <div class="doc-meta">Posted December 11, 2024 · PDF · 1.2 MB</div>
+            </div>
+            <button class="btn-download">Download PDF</button>
+          </div>
+        </div>
+
+        <!-- ── SCHEDULE ── -->
+        <div class="panel" id="panel-schedule">
+          <div class="card" style="max-width:560px">
+            <div class="cal-header">
+              <span class="cal-month" id="calMonth">January 2025</span>
+              <div class="cal-nav">
+                <button class="cal-btn" onclick="changeMonth(-1)">←</button>
+                <button class="cal-btn" onclick="changeMonth(1)">→</button>
+              </div>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
+            <div class="time-slots" id="timeSlots" style="display:none">
+              <h4>Available times on <span id="selectedDateLabel"></span></h4>
+              <div class="slot-grid" id="slotGrid"></div>
+              <div id="bookingConfirm" style="display:none;margin-top:20px;padding:16px;background:var(--teal-bg);border-radius:9px;border:1px solid var(--border-strong)">
+                <p style="font-size:13px;font-weight:500;color:var(--teal-deep);margin-bottom:8px">Confirm your appointment</p>
+                <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px" id="bookingSummary"></p>
+                <div style="display:flex;gap:10px">
+                  <button class="btn-sm btn-primary-sm" onclick="confirmBooking()">Confirm booking</button>
+                  <button class="btn-sm btn-outline-sm" onclick="cancelBooking()">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── MESSAGES ── -->
+        <div class="panel" id="panel-messages">
+          <div class="msg-layout">
+            <div class="msg-list">
+              <div class="msg-list-header">Conversations</div>
+              <div class="msg-thread active">
+                <div class="msg-thread-time">Today</div>
+                <div class="msg-thread-name"><span class="msg-unread"></span>Kelly Parsons</div>
+                <div class="msg-thread-preview">Your supplement protocol is ready...</div>
+              </div>
+            </div>
+            <div class="msg-area">
+              <div class="msg-area-header">
+                <h4>Kelly Parsons · CHHP, CNC</h4>
+                <p>Quest for Wellness, LLC · Replies within 1–2 business days</p>
+              </div>
+              <div class="msg-bubbles" id="msgBubbles">
+                <div class="msg-bubble from-kelly">
+                  Hi Jane! Just wanted to let you know your updated supplement protocol from your January 7th visit is now available in your Documents tab. Please let me know if you have any questions!
+                  <div class="msg-bubble-time">Jan 8, 2025 · 9:14 AM</div>
+                </div>
+                <div class="msg-bubble from-me">
+                  Thank you so much Kelly! I'll take a look. Quick question — should I start the new magnesium before bed or in the morning?
+                  <div class="msg-bubble-time">Jan 8, 2025 · 11:32 AM</div>
+                </div>
+                <div class="msg-bubble from-kelly">
+                  Great question! Magnesium glycinate works best taken 30–60 minutes before bed — it supports deep sleep and muscle relaxation. Start with one capsule and you can increase to two after a week if needed. 🌿
+                  <div class="msg-bubble-time">Jan 8, 2025 · 1:05 PM</div>
+                </div>
+              </div>
+              <div class="msg-compose">
+                <textarea id="msgInput" placeholder="Write a message to Kelly..." rows="1"></textarea>
+                <button class="btn-send" onclick="sendMessage()">Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── PROFILE ── -->
+        <div class="panel" id="panel-profile">
+          <div class="profile-section">
+            <h3>Personal information</h3>
+            <div class="profile-row">
+              <div class="profile-field"><label>First name</label><input type="text" id="pFirst" value="Jane"></div>
+              <div class="profile-field"><label>Last name</label><input type="text" id="pLast" value="Doe"></div>
+            </div>
+            <div class="profile-row">
+              <div class="profile-field"><label>Email address</label><input type="email" id="pEmail" value="jane.doe@example.com"></div>
+              <div class="profile-field"><label>Phone number</label><input type="tel" id="pPhone" value="(720) 555-0192"></div>
+            </div>
+            <div class="profile-row">
+              <div class="profile-field" style="grid-column:1/-1"><label>Home address</label><input type="text" id="pAddress" value="1234 Wellness Way, Aurora, CO 80012"></div>
+            </div>
+            <button class="btn-save" onclick="saveProfile('profileToast')">Save changes</button>
+            <div class="success-toast" id="profileToast">Profile updated successfully.</div>
+          </div>
+
+          <div class="profile-section">
+            <h3>Change password</h3>
+            <div class="profile-row">
+              <div class="profile-field"><label>Current password</label><input type="password" placeholder="••••••••"></div>
+              <div class="profile-field"><label>New password</label><input type="password" placeholder="••••••••"></div>
+            </div>
+            <div class="profile-row">
+              <div class="profile-field"><label>Confirm new password</label><input type="password" placeholder="••••••••"></div>
+            </div>
+            <button class="btn-save" onclick="saveProfile('passwordToast')">Update password</button>
+            <div class="success-toast" id="passwordToast">Password updated successfully.</div>
+          </div>
+        </div>
+
+      </div><!-- /content -->
+    </div><!-- /main -->
+  </div><!-- /portal-layout -->
+</div><!-- /portal -->
+
+<!-- Note detail modal -->
+<div class="modal-overlay" id="noteModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">Session notes</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+// ── Auth ──
+const DEMO_USER = { email:'jane@example.com', password:'wellness', name:'Jane Doe', first:'Jane' };
+
+function doLogin() {
+  const e = document.getElementById('loginEmail').value.trim().toLowerCase();
+  const p = document.getElementById('loginPassword').value;
+  const err = document.getElementById('loginError');
+  // Demo: accept any non-empty email+password OR exact match
+  if (!e || !p) { err.style.display='block'; err.textContent='Please enter your email and password.'; return; }
+  err.style.display='none';
+  const first = e.split('@')[0].split('.')[0];
+  const name = first.charAt(0).toUpperCase()+first.slice(1);
+  document.getElementById('welcomeName').textContent = name;
+  document.getElementById('sidebarName').childNodes[0].textContent = name+' ';
+  document.getElementById('sidebarInitials').textContent = name[0].toUpperCase();
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('portalApp').classList.add('show');
+}
+
+document.getElementById('loginEmail').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('loginPassword').focus(); });
+document.getElementById('loginPassword').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+function doLogout() {
+  document.getElementById('portalApp').classList.remove('show');
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('loginEmail').value='';
+  document.getElementById('loginPassword').value='';
+}
+function showForgot() {
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('forgotScreen').style.display='flex';
+}
+function showLogin() {
+  document.getElementById('forgotScreen').style.display='none';
+  document.getElementById('loginScreen').style.display='flex';
+}
+function sendReset() {
+  const e = document.getElementById('forgotEmail').value;
+  if (!e) return;
+  alert('If an account exists for '+e+', a password reset link has been sent.');
+  showLogin();
+}
+
+// ── Panel nav ──
+const panelMeta = {
+  dashboard: ['Dashboard','Welcome back to your wellness portal'],
+  notes: ['Appointment Notes','Post-visit summaries from Kelly'],
+  documents: ['Documents & Reports','Download your wellness files'],
+  schedule: ['Book an Appointment','Choose a date and time'],
+  messages: ['Messages','Communicate securely with Kelly'],
+  profile: ['My Profile','Update your information and password']
+};
+function showPanel(id, btn) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const [title,sub] = panelMeta[id]||['',''];
+  document.getElementById('panelTitle').textContent = title;
+  document.getElementById('panelSub').textContent = sub;
+}
+
+// ── Notes modal ──
+const noteData = {
+  jan7: {
+    title: 'Qest4 session — January 7, 2025',
+    sections: [
+      { h:'Session summary', p:'Your follow-up Qest4 bioresonance scan showed measurable improvement since your initial December assessment. Digestive stress markers have decreased significantly, which Kelly attributes to your consistent use of the probiotic and digestive enzyme protocol.' },
+      { h:'Key findings', p:'Areas of improvement: Digestive system stress (down 32%), nutrient absorption. Areas still showing stress: Adrenal function — continuing to show elevated stress response. Sleep regulation — energetic markers suggest disrupted circadian rhythm. Hormonal balance — mild continued imbalance noted.' },
+      { h:'Updated recommendations', p:'1. Continue current probiotic (2 capsules with meals)\n2. Add magnesium glycinate 400mg — 30 min before bed\n3. Reduce caffeine intake to before 12pm\n4. Increase hydration goal to 80oz per day\n5. Add adaptogenic herb blend (see supplement protocol document)' },
+      { h:'Next steps', p:'Kelly recommends a follow-up visit in 6–8 weeks to reassess adrenal and sleep markers. Your next appointment is scheduled for January 28th at 10:00 AM.' }
+    ]
+  },
+  dec10: {
+    title: 'Initial wellness assessment — December 10, 2024',
+    sections: [
+      { h:'Welcome summary', p:'Thank you for choosing Quest for Wellness! Your initial Qest4 bioresonance assessment has been completed. This was a comprehensive baseline scan covering over 200 health areas.' },
+      { h:'Primary findings', p:'Your scan identified the following as primary areas of energetic stress: Digestive system (high stress — gut microbiome imbalance indicated), Nutritional deficiencies (Vitamin D, Magnesium, B-complex), Hormonal system (mild adrenal and thyroid stress markers), Immune system (moderate stress — seasonal allergy pattern noted).' },
+      { h:'Initial protocol', p:'1. Probiotic — high-potency, 50 billion CFU with meals\n2. Digestive enzyme complex with each meal\n3. Vitamin D3/K2 5000 IU daily\n4. Magnesium glycinate 200mg nightly\n5. B-complex daily with breakfast\n6. Eliminate artificial sweeteners completely' },
+      { h:"Kelly's notes", p:'Jane came in with great energy and was very open about her health history. She has been dealing with digestive discomfort and fatigue for approximately 2 years. I am optimistic about her progress given her willingness to make lifestyle changes. Looking forward to seeing her at the follow-up in January!' }
+    ]
+  }
+};
+
+function openNote(id) {
+  const note = noteData[id];
+  if (!note) return;
+  document.getElementById('modalTitle').textContent = note.title;
+  document.getElementById('modalBody').innerHTML = note.sections.map(s=>`
+    <div class="modal-section">
+      <h4>${s.h}</h4>
+      <p>${s.p.replace(/\n/g,'<br>')}</p>
+    </div>
+  `).join('');
+  document.getElementById('noteModal').classList.add('show');
+}
+function closeModal() { document.getElementById('noteModal').classList.remove('show'); }
+document.getElementById('noteModal').addEventListener('click', e => { if(e.target===e.currentTarget) closeModal(); });
+
+// ── Calendar ──
+let calYear=2025, calMonth=0, selDate=null, selSlot=null;
+const AVAILABLE_DAYS=[2,4]; // Tue, Thu
+const BOOKED={'2025-1-14':['10:00 AM'],'2025-1-21':['2:00 PM']};
+
+function renderCal() {
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('calMonth').textContent=months[calMonth]+' '+calYear;
+  const grid=document.getElementById('calGrid');
+  grid.innerHTML='';
+  ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d=>{
+    const el=document.createElement('div');
+    el.className='cal-day-label'; el.textContent=d; grid.appendChild(el);
+  });
+  const first=new Date(calYear,calMonth,1).getDay();
+  const days=new Date(calYear,calMonth+1,0).getDate();
+  const today=new Date();
+  for(let i=0;i<first;i++){const el=document.createElement('div');el.className='cal-day empty';grid.appendChild(el);}
+  for(let d=1;d<=days;d++){
+    const el=document.createElement('div'); el.className='cal-day';
+    const dt=new Date(calYear,calMonth,d);
+    const dow=dt.getDay();
+    const isPast=dt<new Date(today.getFullYear(),today.getMonth(),today.getDate());
+    const isToday=d===today.getDate()&&calMonth===today.getMonth()&&calYear===today.getFullYear();
+    const key=`${calYear}-${calMonth+1}-${d}`;
+    const isAvail=AVAILABLE_DAYS.includes(dow)&&!isPast;
+    if(isPast) el.classList.add('past');
+    else if(isToday) el.classList.add('today');
+    if(isAvail) el.classList.add('available');
+    if(selDate===key) el.classList.add('selected');
+    el.textContent=d;
+    if(isAvail) el.onclick=()=>selectDay(d,key,el);
+    grid.appendChild(el);
+  }
+}
+
+function selectDay(d,key,el) {
+  selDate=key; selSlot=null;
+  renderCal();
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('selectedDateLabel').textContent=months[calMonth]+' '+d+', '+calYear;
+  const booked=BOOKED[key]||[];
+  const all=['9:00 AM','10:00 AM','11:00 AM','1:00 PM','2:00 PM','3:00 PM'];
+  const slotGrid=document.getElementById('slotGrid');
+  slotGrid.innerHTML='';
+  all.forEach(t=>{
+    const s=document.createElement('button');
+    s.className='slot'+(booked.includes(t)?' booked':'');
+    s.textContent=t; s.disabled=booked.includes(t);
+    s.onclick=()=>selectSlot(t,s);
+    slotGrid.appendChild(s);
+  });
+  document.getElementById('timeSlots').style.display='block';
+  document.getElementById('bookingConfirm').style.display='none';
+}
+
+function selectSlot(t,el) {
+  selSlot=t;
+  document.querySelectorAll('.slot').forEach(s=>s.classList.remove('selected'));
+  el.classList.add('selected');
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const [y,m,d]=selDate.split('-');
+  document.getElementById('bookingSummary').textContent=`${months[parseInt(m)-1]} ${d}, ${y} at ${t} with Kelly Parsons`;
+  document.getElementById('bookingConfirm').style.display='block';
+}
+
+function confirmBooking() {
+  alert('Your appointment has been requested! Kelly will confirm via email within 24 hours.');
+  document.getElementById('bookingConfirm').style.display='none';
+  document.getElementById('timeSlots').style.display='none';
+  selDate=null; selSlot=null; renderCal();
+}
+function cancelBooking() { document.getElementById('bookingConfirm').style.display='none'; selSlot=null; document.querySelectorAll('.slot').forEach(s=>s.classList.remove('selected')); }
+function changeMonth(dir) { calMonth+=dir; if(calMonth>11){calMonth=0;calYear++;}if(calMonth<0){calMonth=11;calYear--;} renderCal(); }
+
+// ── Messages ──
+function sendMessage() {
+  const input=document.getElementById('msgInput');
+  const text=input.value.trim();
+  if(!text) return;
+  const bubbles=document.getElementById('msgBubbles');
+  const el=document.createElement('div');
+  el.className='msg-bubble from-me';
+  el.innerHTML=text+'<div class="msg-bubble-time">Just now</div>';
+  bubbles.appendChild(el);
+  bubbles.scrollTop=bubbles.scrollHeight;
+  input.value='';
+  setTimeout(()=>{
+    const r=document.createElement('div');
+    r.className='msg-bubble from-kelly';
+    r.innerHTML='Thank you for your message! Kelly will respond within 1–2 business days.<div class="msg-bubble-time">Auto-reply</div>';
+    bubbles.appendChild(r);
+    bubbles.scrollTop=bubbles.scrollHeight;
+  },1200);
+}
+document.getElementById('msgInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}});
+
+// ── Profile ──
+function saveProfile(toastId) {
+  const toast=document.getElementById(toastId);
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),3000);
+}
+
+// Init
+renderCal();
+</script>
+</body>
+</html>
