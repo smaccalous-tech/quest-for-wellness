@@ -1406,8 +1406,11 @@ async function submitForm() {
 
   if (isConfigured) {
     try {
+      // Send intake form to Kelly
       const result = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, data, EMAILJS_PUBLIC_KEY);
-      // EmailJS returns status 200 on success — always show success if email was received
+      // Send auto-reply confirmation to client
+      await emailjs.send(EMAILJS_SERVICE_ID, 'template_3n5673o', data, EMAILJS_PUBLIC_KEY);
+      // Show success screen
       showSuccess(name);
     } catch (err) {
       // Only land here on a true network failure (offline, wrong keys, etc.)
