@@ -1,10 +1,22 @@
 {
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
   "hosting": {
     "public": ".",
     "ignore": [
       "firebase.json",
       ".firebaserc",
       "vercel.json",
+      "package.json",
+      "package-lock.json",
+      "*.rules",
+      "*.md",
+      "api/**",
+      "lib/**",
       "**/.*",
       "**/node_modules/**"
     ],

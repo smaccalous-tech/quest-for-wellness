@@ -3,160 +3,223 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
 <title>Admin Panel — Quest for Wellness, LLC</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="report-ui.css">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
 :root{
   --teal:#1a9aaa;--teal-deep:#0a4f6a;--teal-light:#29b8c8;
   --teal-bg:#e8f7fa;--navy:#072f40;
   --white:#fff;--text:#1a2e35;--text-muted:#5a7a85;
   --border:rgba(26,154,170,0.18);--border-strong:rgba(26,154,170,0.4);
-  --radius:10px;--error:#c0392b;--warning:#d4850a;--success:#1a8a6a;
+  --radius:10px;--error:#c0392b;--warning:#d4850a;--success:#1a8a6a;--orange:#e07a2e;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:#f2f8fa;color:var(--text);min-height:100vh}
+[hidden]{display:none!important}
 
-/* Login */
+/* Login & verify */
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(160deg,#0a4f6a,#072f40)}
-.login-box{background:white;border-radius:14px;padding:40px;width:100%;max-width:380px}
+.login-box{background:white;border-radius:14px;padding:40px;width:100%;max-width:400px}
 .login-logo-row{display:flex;align-items:center;gap:12px;margin-bottom:24px}
 .login-logo-row img{width:44px;height:44px;border-radius:50%;object-fit:cover}
 .login-logo-row div strong{display:block;font-size:15px;font-weight:500;color:var(--teal-deep)}
 .login-logo-row div span{font-size:11px;color:var(--text-muted)}
 .login-badge{display:inline-flex;align-items:center;gap:6px;background:#fff3cd;border:1px solid #ffc107;border-radius:20px;padding:4px 12px;font-size:11px;color:#856404;margin-bottom:18px}
+.login-box h2{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--teal-deep);margin-bottom:8px}
+.login-box p{font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:16px}
+.login-error{display:none;background:#fef0f0;border:1px solid rgba(192,57,43,0.25);border-radius:7px;padding:10px 14px;font-size:12px;color:#a93226;margin-bottom:14px}
 .field{margin-bottom:14px}
 .field label{display:block;font-size:11px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px}
-.field input{width:100%;padding:10px 13px;border:1px solid var(--border-strong);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text)}
-.field input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(26,154,170,0.12)}
+.field input,.field select,.field textarea{width:100%;padding:10px 13px;border:1px solid var(--border-strong);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);background:white}
+.field textarea{resize:vertical;min-height:80px;line-height:1.6}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(26,154,170,0.12)}
 .btn-login{width:100%;padding:12px;background:var(--teal-deep);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-top:6px}
 .btn-login:hover{background:var(--navy)}
+.link-btn{background:none;border:none;color:var(--teal);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;margin-top:12px;text-decoration:underline}
 
 /* App shell */
-.app{display:none;min-height:100vh;flex-direction:column}
-.app.show{display:flex}
-.app-layout{display:flex;flex:1}
-
-/* Sidebar */
-.sidebar{width:230px;background:var(--navy);display:flex;flex-direction:column;flex-shrink:0}
+.app-layout{display:flex;min-height:100vh}
+.sidebar{width:236px;background:var(--navy);display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh}
 .sb-logo{padding:18px 16px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:10px}
 .sb-logo img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(41,184,200,0.35)}
 .sb-logo-text strong{display:block;font-size:13px;color:#e8f7fa;font-weight:500}
 .sb-logo-text span{font-size:10px;color:rgba(232,247,250,0.45)}
-.sb-section{font-size:10px;font-weight:500;color:rgba(232,247,250,0.35);text-transform:uppercase;letter-spacing:0.09em;padding:14px 14px 5px}
-.sb-btn{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:rgba(232,247,250,0.65);border:none;background:transparent;width:100%;text-align:left;font-family:'DM Sans',sans-serif;margin-bottom:1px;transition:all 0.14s}
+.sb-nav{padding:10px;overflow-y:auto;flex:1}
+.sb-section{font-size:10px;font-weight:500;color:rgba(232,247,250,0.35);text-transform:uppercase;letter-spacing:0.09em;padding:12px 6px 5px}
+.sb-btn{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:rgba(232,247,250,0.7);border:none;background:transparent;width:100%;text-align:left;font-family:'DM Sans',sans-serif;margin-bottom:1px;transition:all 0.14s}
 .sb-btn:hover{background:rgba(255,255,255,0.08);color:#e8f7fa}
-.sb-btn.active{background:rgba(41,184,200,0.2);color:#e8f7fa}
-.sb-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.5;flex-shrink:0}
-.sb-badge{margin-left:auto;background:#29b8c8;color:#042C53;font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px}
-.sb-footer{margin-top:auto;padding:14px;border-top:1px solid rgba(255,255,255,0.07)}
+.sb-btn.active{background:rgba(41,184,200,0.22);color:#fff}
+.sb-btn.feature{color:#fff}
+.sb-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6;flex-shrink:0}
+.sb-badge{margin-left:auto;background:var(--orange);color:#fff;font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px}
+.sb-badge.teal{background:#29b8c8;color:#042C53}
+.sb-footer{padding:14px;border-top:1px solid rgba(255,255,255,0.07)}
 .sb-user{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .sb-avatar{width:28px;height:28px;border-radius:50%;background:rgba(41,184,200,0.25);color:#29b8c8;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center}
 .sb-user-text strong{display:block;font-size:12px;color:#e8f7fa;font-weight:500}
 .sb-user-text span{font-size:10px;color:rgba(232,247,250,0.45)}
-.sb-logout{width:100%;padding:6px;background:rgba(255,255,255,0.06);border:none;color:rgba(232,247,250,0.5);border-radius:6px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.sb-logout{width:100%;padding:7px;background:rgba(255,255,255,0.06);border:none;color:rgba(232,247,250,0.55);border-radius:6px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif}
 .sb-logout:hover{background:rgba(255,255,255,0.12);color:#e8f7fa}
 
-/* Main */
 .main{flex:1;display:flex;flex-direction:column;min-width:0}
-.topbar{background:white;border-bottom:1px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between}
-.topbar-title{font-size:17px;font-weight:500;color:var(--teal-deep)}
-.topbar-sub{font-size:11px;color:var(--text-muted);margin-top:1px}
-.topbar-actions{display:flex;gap:8px}
-.btn{padding:8px 16px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all 0.15s}
-.btn-primary{background:var(--teal);color:white}.btn-primary:hover{background:var(--teal-deep)}
-.btn-outline{background:white;color:var(--teal-deep);border:1px solid var(--border-strong)}.btn-outline:hover{background:var(--teal-bg)}
-.btn-danger{background:white;color:var(--error);border:1px solid rgba(192,57,43,0.3)}.btn-danger:hover{background:#fef0f0}
-.btn-warn{background:white;color:var(--warning);border:1px solid rgba(212,133,10,0.3)}.btn-warn:hover{background:#fff8f0}
+.topbar{background:white;border-bottom:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:20}
+.topbar-title{font-size:18px;font-weight:500;color:var(--teal-deep)}
+.topbar-sub{font-size:12px;color:var(--text-muted);margin-top:1px}
+.content{flex:1;padding:24px 28px 60px;max-width:1180px;width:100%}
+.panel{display:none;animation:fadeIn .25s ease}.panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.btn{padding:9px 16px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all 0.15s;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.btn:disabled{opacity:.55;cursor:default}
+.btn-primary{background:var(--teal);color:white}.btn-primary:hover:not(:disabled){background:var(--teal-deep)}
+.btn-dark{background:var(--teal-deep);color:white}.btn-dark:hover:not(:disabled){background:var(--navy)}
+.btn-outline{background:white;color:var(--teal-deep);border:1px solid var(--border-strong)}.btn-outline:hover:not(:disabled){background:var(--teal-bg)}
+.btn-danger{background:white;color:var(--error);border:1px solid rgba(192,57,43,0.3)}.btn-danger:hover:not(:disabled){background:#fef0f0}
+.btn-approve{background:#1f9d6a;color:white;padding:12px 22px;font-size:14px;box-shadow:0 6px 18px rgba(31,157,106,.3)}.btn-approve:hover:not(:disabled){background:#178257}
 .btn-sm{padding:6px 12px;font-size:12px}
 
-.content{flex:1;overflow-y:auto;padding:24px}
-.panel{display:none}.panel.active{display:block}
-
-/* Stat row */
-.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:24px}
-.stat{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px}
+/* Stats & cards */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}
+.stat{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.stat:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(10,79,106,.08)}
 .stat-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px}
-.stat-value{font-size:24px;font-weight:500;color:var(--teal-deep)}
-.stat-sub{font-size:11px;color:var(--text-muted);margin-top:2px}
-
-/* Cards */
+.stat-value{font-size:28px;font-weight:500;color:var(--teal-deep)}
+.stat-value.orange{color:var(--orange)}
 .card{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
-.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap}
 .card-title{font-size:12px;font-weight:500;color:var(--teal-deep);text-transform:uppercase;letter-spacing:0.07em}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.empty{font-size:13px;color:var(--text-muted);padding:18px;text-align:center;background:#fafcfd;border-radius:8px}
 
-/* Table */
 table{width:100%;border-collapse:collapse}
 th{font-size:11px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;padding:0 12px 10px;text-align:left;border-bottom:1px solid var(--border)}
 td{padding:12px;font-size:13px;color:var(--text);border-bottom:1px solid var(--border);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:#fafcfd}
 .td-actions{display:flex;gap:6px;flex-wrap:wrap}
+.table-wrap{overflow-x:auto}
+td select,td input[type=date]{padding:6px 8px;border:1px solid var(--border-strong);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:12px;background:white}
 
-/* Status badges */
-.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:10px;font-size:11px;font-weight:500}
-.badge-active{background:#e8f5e9;color:#2e7d32}
-.badge-inactive{background:#f5f5f5;color:#888}
-.badge-new{background:var(--teal-bg);color:var(--teal-deep)}
-.badge-upcoming{background:#e3f2fd;color:#1565c0}
-.badge-completed{background:#f5f5f5;color:#666}
-.badge-pending{background:#fff8f0;color:#d4850a}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:10px;font-size:11px;font-weight:500;white-space:nowrap}
+.badge-draft{background:#fdefe4;color:#b45a17}
+.badge-published{background:#e6f6ef;color:#16774f}
+.badge-test{background:#f0f0f0;color:#777}
+.badge-requested{background:#fff8f0;color:#b36b00}
+.badge-confirmed{background:#e3f2fd;color:#1565c0}
+.badge-completed,.badge-fulfilled{background:#e6f6ef;color:#16774f}
+.badge-declined{background:#fbeaea;color:#a33}
+.score-pill{display:inline-flex;align-items:center;justify-content:center;min-width:38px;padding:3px 8px;border-radius:12px;font-size:12px;font-weight:600;color:var(--qr-c);background:var(--qr-bg)}
 
-/* Search & filter bar */
-.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.toolbar input{padding:8px 12px;border:1px solid var(--border-strong);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);min-width:200px}
-.toolbar input:focus{outline:none;border-color:var(--teal)}
-.toolbar select{padding:8px 12px;border:1px solid var(--border-strong);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:white}
+.alert{border-radius:8px;padding:12px 16px;font-size:13px;margin-bottom:16px;line-height:1.55}
+.alert-warn{background:#fff8f0;border:1px solid rgba(212,133,10,0.3);color:#8a5200}
+.alert-info{background:var(--teal-bg);border:1px solid rgba(26,154,170,0.25);color:var(--teal-deep)}
+.alert-error{background:#fef0f0;border:1px solid rgba(192,57,43,0.25);color:#a93226}
+
+/* Upload & Analyze */
+.analyze-setup{display:grid;grid-template-columns:320px 1fr;gap:16px;align-items:start}
+.drop-zone{border:2px dashed var(--border-strong);border-radius:12px;padding:36px 20px;text-align:center;cursor:pointer;transition:all 0.15s;background:#fafdfe}
+.drop-zone:hover,.drop-zone.over{border-color:var(--teal);background:var(--teal-bg)}
+.drop-zone svg{width:42px;height:42px;stroke:var(--teal);fill:none;stroke-width:1.4;margin-bottom:10px}
+.drop-zone strong{display:block;font-size:15px;color:var(--teal-deep);font-weight:500;margin-bottom:4px}
+.drop-zone p{font-size:12px;color:var(--text-muted)}
+.file-chip{display:flex;align-items:center;gap:10px;background:var(--teal-bg);border:1px solid var(--border-strong);border-radius:10px;padding:12px 14px;margin-top:12px;font-size:13px;color:var(--teal-deep)}
+.file-chip svg{width:22px;height:22px;stroke:var(--teal-deep);fill:none;stroke-width:1.5;flex-shrink:0}
+.file-chip span{flex:1;word-break:break-all}
+.file-chip button{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:18px;line-height:1}
+.analyze-btn{width:100%;justify-content:center;margin-top:14px;padding:13px;font-size:15px}
+.loading{display:flex;flex-direction:column;align-items:center;text-align:center;padding:48px 24px}
+.spinner{width:54px;height:54px;border-radius:50%;border:4px solid var(--teal-bg);border-top-color:var(--teal);animation:spin 1s linear infinite;margin-bottom:18px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading h3{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--teal-deep);font-weight:600;margin-bottom:6px}
+.loading p{font-size:13px;color:var(--text-muted)}
+.progress{width:280px;max-width:100%;height:6px;background:var(--teal-bg);border-radius:4px;overflow:hidden;margin-top:18px}
+.progress div{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--teal-light));border-radius:4px}
+.progress.run div{animation:prog 15s cubic-bezier(.2,.6,.4,1) forwards}
+@keyframes prog{to{width:94%}}
+
+/* Editor */
+.draft-banner{display:flex;align-items:center;gap:10px;background:var(--orange);color:white;font-weight:600;font-size:13px;letter-spacing:.06em;padding:12px 18px;border-radius:10px;margin-bottom:16px}
+.draft-banner.live{background:#1f9d6a}
+.draft-banner svg{width:18px;height:18px;stroke:white;fill:none;stroke-width:2}
+.editor-meta{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;font-size:13px;color:var(--text-muted);margin-bottom:16px}
+.editor-meta strong{color:var(--teal-deep);font-weight:500}
+.editor-meta input{padding:6px 8px;border:1px solid var(--border-strong);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px}
+.slider-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px 26px}
+.slider-row label{display:flex;justify-content:space-between;font-size:12px;font-weight:500;color:var(--text-muted);margin-bottom:6px}
+.slider-row label b{color:var(--teal-deep)}
+.slider-row input[type=range]{width:100%;accent-color:var(--teal)}
+.inline-edit{width:100%;border:1px dashed transparent;border-radius:8px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.75;color:var(--text);background:transparent;resize:vertical;transition:border-color .15s,background .15s}
+.inline-edit:hover{border-color:var(--border-strong);background:#fbfeff}
+.inline-edit:focus{outline:none;border-color:var(--teal);border-style:solid;background:white;box-shadow:0 0 0 3px rgba(26,154,170,0.12)}
+.edit-hint{font-size:11px;color:var(--text-muted);font-weight:400;text-transform:none;letter-spacing:0;margin-left:8px}
+.finding-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
+.finding-row .num{width:24px;height:24px;border-radius:50%;background:var(--teal-bg);color:var(--teal-deep);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:8px}
+.finding-row textarea{flex:1;font-size:14px;min-height:44px}
+.icon-btn{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:18px;padding:6px;line-height:1}
+.icon-btn:hover{color:var(--error)}
+.supp-edit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.supp-edit{border:1px solid var(--border);border-radius:12px;padding:16px;background:#fbfeff;display:flex;flex-direction:column;gap:10px}
+.supp-edit-head{display:flex;justify-content:space-between;align-items:center}
+.supp-edit .field{margin:0}
+.supp-edit .field input,.supp-edit .field select,.supp-edit .field textarea{font-size:13px;padding:8px 10px}
+.supp-edit .field textarea{min-height:64px}
+.action-bar{position:sticky;bottom:0;z-index:15;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border:1px solid var(--border);border-radius:12px;padding:14px 18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;box-shadow:0 -6px 24px rgba(10,79,106,.08);margin-top:8px}
+.action-bar .spacer{flex:1}
+.check-row{display:flex;align-items:center;gap:8px;font-size:13px;margin-top:10px}
+.check-row input{accent-color:var(--teal);width:16px;height:16px}
+
+/* Messages */
+.msg-layout{display:grid;grid-template-columns:280px 1fr;gap:16px;min-height:520px}
+.thread-list{background:white;border:1px solid var(--border);border-radius:var(--radius);overflow-y:auto;max-height:640px}
+.thread{padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s}
+.thread:hover{background:#fafcfd}.thread.active{background:var(--teal-bg)}
+.thread-name{font-size:13px;font-weight:500;color:var(--teal-deep);display:flex;align-items:center;gap:6px}
+.thread-preview{font-size:12px;color:var(--text-muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.thread-time{font-size:10px;color:var(--text-muted);margin-top:3px}
+.unread-dot{width:8px;height:8px;border-radius:50%;background:var(--orange);display:inline-block}
+.convo{background:white;border:1px solid var(--border);border-radius:var(--radius);display:flex;flex-direction:column;max-height:640px}
+.convo-head{padding:14px 18px;border-bottom:1px solid var(--border);font-weight:500;color:var(--teal-deep)}
+.convo-body{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:10px;background:#fafcfd;min-height:300px}
+.bubble{max-width:72%;padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.55;white-space:pre-wrap;word-wrap:break-word}
+.bubble.client{background:white;border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px}
+.bubble.admin{background:var(--teal-deep);color:white;align-self:flex-end;border-bottom-right-radius:4px}
+.bubble time{display:block;font-size:10px;opacity:.65;margin-top:4px}
+.convo-form{display:flex;gap:10px;padding:12px;border-top:1px solid var(--border)}
+.convo-form textarea{flex:1;padding:10px 12px;border:1px solid var(--border-strong);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;resize:none;min-height:46px}
 
 /* Modal */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(7,47,64,0.45);z-index:300;align-items:center;justify-content:center;padding:20px}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(7,47,64,0.5);z-index:300;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto}
 .modal-overlay.show{display:flex}
-.modal{background:white;border-radius:12px;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;box-shadow:0 16px 64px rgba(7,47,64,0.25)}
-.modal-head{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;position:sticky;top:0;background:white;z-index:1}
-.modal-head h3{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--teal-deep)}
-.modal-close{background:none;border:none;font-size:20px;color:var(--text-muted);cursor:pointer;padding:2px 6px;line-height:1}
+.modal{background:#f6fafb;border-radius:14px;width:100%;max-width:900px;box-shadow:0 16px 64px rgba(7,47,64,0.3)}
+.modal-head{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:white;border-radius:14px 14px 0 0;position:sticky;top:0;z-index:2}
+.modal-head h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--teal-deep)}
+.modal-close{background:none;border:none;font-size:24px;color:var(--text-muted);cursor:pointer;padding:2px 8px;line-height:1}
 .modal-body{padding:22px}
-.modal-field{margin-bottom:14px}
-.modal-field label{display:block;font-size:11px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px}
-.modal-field input,.modal-field select,.modal-field textarea{width:100%;padding:9px 12px;border:1px solid var(--border-strong);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text)}
-.modal-field textarea{resize:vertical;min-height:80px}
-.modal-field input:focus,.modal-field select:focus,.modal-field textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(26,154,170,0.1)}
-.modal-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.modal-footer{padding:16px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;position:sticky;bottom:0;background:white}
 
-/* Upload zone */
-.upload-zone{border:2px dashed var(--border-strong);border-radius:9px;padding:24px;text-align:center;cursor:pointer;transition:all 0.15s;margin-bottom:12px}
-.upload-zone:hover{border-color:var(--teal);background:var(--teal-bg)}
-.upload-zone p{font-size:13px;color:var(--text-muted)}
-.upload-zone span{color:var(--teal);font-weight:500}
+.checklist{list-style:none;display:flex;flex-direction:column;gap:10px}
+.checklist li{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.55}
+.checklist .dot{width:20px;height:20px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;margin-top:1px}
+.dot.ok{background:#1f9d6a}.dot.no{background:var(--orange)}.dot.unk{background:#9bb}
 
-/* Calendar grid (admin view) */
-.admin-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:20px}
-.admin-cal-label{text-align:center;font-size:10px;font-weight:500;color:var(--text-muted);padding:5px 0;text-transform:uppercase}
-.admin-cal-day{min-height:70px;border:1px solid var(--border);border-radius:6px;padding:5px;background:white;font-size:11px;cursor:pointer;transition:border-color 0.12s;position:relative}
-.admin-cal-day:hover{border-color:var(--teal)}
-.admin-cal-day.today{border-color:var(--teal);background:var(--teal-bg)}
-.admin-cal-day.empty{background:transparent;border-color:transparent;cursor:default}
-.admin-day-num{font-size:12px;font-weight:500;color:var(--teal-deep);margin-bottom:3px}
-.admin-day-appt{background:var(--teal-deep);color:white;border-radius:3px;padding:2px 5px;font-size:10px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.admin-day-appt.pending{background:var(--warning)}
+.toast{position:fixed;bottom:28px;right:28px;background:var(--teal-deep);color:white;padding:13px 20px;border-radius:10px;font-size:13px;font-weight:500;z-index:999;box-shadow:0 6px 24px rgba(7,47,64,0.3);transform:translateY(120px);opacity:0;transition:all .3s;max-width:420px}
+.toast.show{transform:none;opacity:1}
+.toast.error{background:var(--error)}
 
-/* Availability toggles */
-.avail-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
-.avail-day{text-align:center}
-.avail-day label{display:block;font-size:11px;font-weight:500;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.04em}
-.avail-toggle{width:36px;height:20px;background:#e0e0e0;border-radius:10px;position:relative;cursor:pointer;transition:background 0.15s;margin:0 auto;border:none}
-.avail-toggle.on{background:var(--teal)}
-.avail-toggle::after{content:'';position:absolute;width:14px;height:14px;background:white;border-radius:50%;top:3px;left:3px;transition:transform 0.15s}
-.avail-toggle.on::after{transform:translateX(16px)}
-
-/* Alert box */
-.alert{border-radius:8px;padding:12px 16px;font-size:13px;margin-bottom:16px;display:flex;align-items:flex-start;gap:10px}
-.alert-warn{background:#fff8f0;border:1px solid rgba(212,133,10,0.3);color:#a65f00}
-.alert-info{background:var(--teal-bg);border:1px solid rgba(26,154,170,0.25);color:var(--teal-deep)}
-
-/* Toast */
-.toast{position:fixed;bottom:28px;right:28px;background:var(--teal-deep);color:white;padding:12px 20px;border-radius:9px;font-size:13px;font-weight:500;z-index:999;display:none;box-shadow:0 4px 20px rgba(7,47,64,0.3)}
-.toast.show{display:block}
+@media(max-width:900px){
+  .app-layout{flex-direction:column}
+  .sidebar{width:100%;height:auto;position:static}
+  .sb-nav{display:flex;overflow-x:auto;padding:8px;gap:4px}
+  .sb-section,.sb-footer .sb-user{display:none}
+  .sb-btn{white-space:nowrap;width:auto}
+  .sb-footer{padding:8px 10px}
+  .analyze-setup,.grid-2,.msg-layout{grid-template-columns:1fr}
+  .supp-edit-grid{grid-template-columns:1fr}
+  .content{padding:18px 14px 60px}
+  .topbar{padding:12px 14px;position:static}
+}
 </style>
 </head>
 <body>
@@ -172,568 +235,886 @@ tr:hover td{background:#fafcfd}
       <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#856404" stroke-width="1.5"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/></svg>
       Practitioner access only
     </div>
-    <div class="field"><label>Email</label><input type="email" id="adminEmail" placeholder="kelly@questforwellnessllc.com"></div>
-    <div class="field"><label>Password</label><input type="password" id="adminPass" placeholder="••••••••"></div>
-    <button class="btn-login" onclick="adminLogin()">Sign in to admin panel</button>
+    <div id="loginError" class="login-error"></div>
+    <div class="field"><label for="adminEmail">Email</label><input type="email" id="adminEmail" autocomplete="username" placeholder="QuestforWellness22@gmail.com"></div>
+    <div class="field"><label for="adminPass">Password</label><input type="password" id="adminPass" autocomplete="current-password" placeholder="••••••••"></div>
+    <button class="btn-login" id="loginBtn">Sign in to admin panel</button>
+  </div>
+</div>
+
+<!-- VERIFY EMAIL -->
+<div id="verifyWrap" class="login-wrap" hidden>
+  <div class="login-box">
+    <h2>Verify your email first</h2>
+    <p>To protect client data, the admin panel requires a verified email address. Send yourself a verification link, click it, then come back and press Continue.</p>
+    <div id="verifyMsg" class="alert alert-info" hidden></div>
+    <button class="btn-login" id="sendVerifyBtn">Send verification email</button>
+    <button class="btn-login" id="verifiedBtn" style="background:var(--teal)">I've verified — continue</button>
+    <button class="link-btn" id="verifySignOut">Sign out</button>
   </div>
 </div>
 
 <!-- APP -->
-<div id="adminApp" class="app">
-<div class="app-layout">
-
-  <!-- Sidebar -->
+<div id="adminApp" class="app-layout" hidden>
   <aside class="sidebar">
     <div class="sb-logo">
       <img src="FINAL_LOGO.jpg" alt="Logo">
       <div class="sb-logo-text"><strong>Admin Panel</strong><span>Quest for Wellness</span></div>
     </div>
-    <nav style="padding:10px 8px;flex:1">
+    <nav class="sb-nav">
       <div class="sb-section">Overview</div>
-      <button class="sb-btn active" onclick="showP('dashboard',this)">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard
-      </button>
-      <div class="sb-section">Appointments</div>
-      <button class="sb-btn" onclick="showP('calendar',this)">
-        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Calendar
-        <span class="sb-badge">3</span>
-      </button>
-      <button class="sb-btn" onclick="showP('availability',this)">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Availability
-      </button>
-      <div class="sb-section">Clients</div>
-      <button class="sb-btn" onclick="showP('clients',this)">
-        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clients
-      </button>
-      <button class="sb-btn" onclick="showP('intakes',this)">
-        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Intake Forms
-        <span class="sb-badge">2</span>
-      </button>
-      <div class="sb-section">Portal</div>
-      <button class="sb-btn" onclick="showP('notes',this)">
-        <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Post Notes
-      </button>
-      <button class="sb-btn" onclick="showP('documents',this)">
-        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Upload Documents
-      </button>
-      <button class="sb-btn" onclick="showP('messages',this)">
-        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Messages
-        <span class="sb-badge">4</span>
-      </button>
-      <div class="sb-section">Settings</div>
-      <button class="sb-btn" onclick="showP('passwords',this)">
-        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Password Reset
-      </button>
+      <button class="sb-btn active" data-panel="dashboard"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</button>
+      <div class="sb-section">Reports</div>
+      <button class="sb-btn feature" data-panel="analyze"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 15v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/></svg>Upload &amp; Analyze</button>
+      <button class="sb-btn" data-panel="pending"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Pending Approval<span class="sb-badge" id="pendingBadge" hidden>0</span></button>
+      <button class="sb-btn" data-panel="published"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15l2 2 4-4"/></svg>Published Reports</button>
+      <div class="sb-section">Practice</div>
+      <button class="sb-btn" data-panel="clients"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clients</button>
+      <button class="sb-btn" data-panel="appointments"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Appointments<span class="sb-badge teal" id="apptBadge" hidden>0</span></button>
+      <button class="sb-btn" data-panel="messages"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Messages<span class="sb-badge teal" id="msgBadge" hidden>0</span></button>
+      <button class="sb-btn" data-panel="settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</button>
     </nav>
     <div class="sb-footer">
       <div class="sb-user">
         <div class="sb-avatar">KP</div>
-        <div class="sb-user-text"><strong>Kelly Parsons</strong><span>CHHP · CNC · Admin</span></div>
+        <div class="sb-user-text"><strong>Kelly Parsons</strong><span>CHHP, CNC</span></div>
       </div>
-      <button class="sb-logout" onclick="adminLogout()">Sign out</button>
+      <button class="sb-logout" id="logoutBtn">Sign out</button>
     </div>
   </aside>
 
-  <!-- Main -->
   <div class="main">
     <div class="topbar">
-      <div>
-        <div class="topbar-title" id="pTitle">Dashboard</div>
-        <div class="topbar-sub" id="pSub">Quest for Wellness, LLC — Admin Panel</div>
-      </div>
-      <div class="topbar-actions" id="topbarActions"></div>
+      <div><div class="topbar-title" id="pageTitle">Dashboard</div><div class="topbar-sub" id="pageSub">Overview of your practice</div></div>
+      <button class="btn btn-primary" data-goto="analyze">+ New analysis</button>
     </div>
 
     <div class="content">
+      <div id="dataError" class="alert alert-error" hidden></div>
 
-      <!-- ── DASHBOARD ── -->
-      <div class="panel active" id="p-dashboard">
+      <!-- DASHBOARD -->
+      <section class="panel active" id="p-dashboard">
         <div class="stat-row">
-          <div class="stat"><div class="stat-label">Total clients</div><div class="stat-value">24</div><div class="stat-sub">3 new this month</div></div>
-          <div class="stat"><div class="stat-label">This week</div><div class="stat-value">5</div><div class="stat-sub">Appointments</div></div>
-          <div class="stat"><div class="stat-label">Pending</div><div class="stat-value" style="color:var(--warning)">3</div><div class="stat-sub">New booking requests</div></div>
-          <div class="stat"><div class="stat-label">New intakes</div><div class="stat-value" style="color:var(--teal)">2</div><div class="stat-sub">Awaiting review</div></div>
-          <div class="stat"><div class="stat-label">Unread messages</div><div class="stat-value">4</div><div class="stat-sub">From clients</div></div>
+          <div class="stat" data-goto="pending"><div class="stat-label">Pending approval</div><div class="stat-value orange" id="statPending">0</div></div>
+          <div class="stat" data-goto="published"><div class="stat-label">Published reports</div><div class="stat-value" id="statPublished">0</div></div>
+          <div class="stat" data-goto="clients"><div class="stat-label">Clients</div><div class="stat-value" id="statClients">0</div></div>
+          <div class="stat" data-goto="appointments"><div class="stat-label">Appointment requests</div><div class="stat-value" id="statAppts">0</div></div>
+          <div class="stat" data-goto="messages"><div class="stat-label">Unread messages</div><div class="stat-value" id="statMsgs">0</div></div>
         </div>
+        <div class="grid-2">
+          <div class="card"><div class="card-head"><div class="card-title">Drafts waiting for you</div><button class="btn btn-outline btn-sm" data-goto="pending">View all</button></div><div id="dashPending"></div></div>
+          <div class="card"><div class="card-head"><div class="card-title">New appointment requests</div><button class="btn btn-outline btn-sm" data-goto="appointments">View all</button></div><div id="dashAppts"></div></div>
+        </div>
+        <div class="card"><div class="card-head"><div class="card-title">Supplement requests</div></div><div class="table-wrap" id="dashSupps"></div></div>
+      </section>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <!-- UPLOAD & ANALYZE -->
+      <section class="panel" id="p-analyze">
+        <div id="analyzeSetup" class="analyze-setup">
           <div class="card">
-            <div class="card-head"><span class="card-title">Today's appointments</span><button class="btn btn-sm btn-primary" onclick="openModal('newApptModal')">+ New</button></div>
-            <table>
-              <tr><th>Time</th><th>Client</th><th>Type</th><th>Status</th></tr>
-              <tr><td>10:00 AM</td><td>Jane Doe</td><td>Follow-up scan</td><td><span class="badge badge-upcoming">Upcoming</span></td></tr>
-              <tr><td>1:00 PM</td><td>Mark Chen</td><td>Initial assessment</td><td><span class="badge badge-upcoming">Upcoming</span></td></tr>
-              <tr><td>3:00 PM</td><td>Susan Park</td><td>Quick scan (30 min)</td><td><span class="badge badge-upcoming">Upcoming</span></td></tr>
-            </table>
+            <div class="card-title" style="margin-bottom:14px">1. Choose client</div>
+            <div class="field"><label for="clientSelect">Client</label><select id="clientSelect"></select></div>
+            <p style="font-size:12px;color:var(--text-muted);line-height:1.6">Clients appear here once they've signed in to the portal. Test clients are marked "(test)".</p>
           </div>
           <div class="card">
-            <div class="card-head"><span class="card-title">Pending booking requests</span></div>
-            <table>
-              <tr><th>Client</th><th>Requested</th><th>Action</th></tr>
-              <tr>
-                <td>Lisa Torres</td><td>Jan 30 · 2:00 PM</td>
-                <td><div class="td-actions"><button class="btn btn-sm btn-primary" onclick="toast('Confirmed Lisa Torres for Jan 30')">Confirm</button><button class="btn btn-sm btn-danger" onclick="toast('Declined')">Decline</button></div></td>
-              </tr>
-              <tr>
-                <td>Tom Walsh</td><td>Feb 3 · 10:00 AM</td>
-                <td><div class="td-actions"><button class="btn btn-sm btn-primary" onclick="toast('Confirmed Tom Walsh for Feb 3')">Confirm</button><button class="btn btn-sm btn-danger" onclick="toast('Declined')">Decline</button></div></td>
-              </tr>
-              <tr>
-                <td>Amy Li</td><td>Feb 5 · 11:00 AM</td>
-                <td><div class="td-actions"><button class="btn btn-sm btn-primary" onclick="toast('Confirmed Amy Li for Feb 5')">Confirm</button><button class="btn btn-sm btn-danger" onclick="toast('Declined')">Decline</button></div></td>
-              </tr>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── CALENDAR ── -->
-      <div class="panel" id="p-calendar">
-        <div class="card-head" style="margin-bottom:16px">
-          <div style="display:flex;align-items:center;gap:12px">
-            <button class="btn btn-outline" onclick="adminChangeMonth(-1)">←</button>
-            <span style="font-size:16px;font-weight:500;color:var(--teal-deep)" id="adminCalMonth">January 2025</span>
-            <button class="btn btn-outline" onclick="adminChangeMonth(1)">→</button>
-          </div>
-          <button class="btn btn-primary" onclick="openModal('newApptModal')">+ Schedule appointment</button>
-        </div>
-        <div class="admin-cal" id="adminCalGrid"></div>
-      </div>
-
-      <!-- ── AVAILABILITY ── -->
-      <div class="panel" id="p-availability">
-        <div class="alert alert-info" style="margin-bottom:20px">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0;margin-top:1px"><circle cx="8" cy="8" r="6"/><line x1="8" y1="5" x2="8" y2="8"/><line x1="8" y1="11" x2="8.01" y2="11"/></svg>
-          Toggle which days of the week you are available for client bookings.
-        </div>
-        <div class="card">
-          <div class="card-title" style="margin-bottom:20px">Weekly availability</div>
-          <div class="avail-grid" id="availGrid"></div>
-          <hr style="border:none;border-top:1px solid var(--border);margin:24px 0">
-          <div class="card-title" style="margin-bottom:14px">Available time range</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:320px">
-            <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.06em">First slot</div><input type="time" value="09:00" style="padding:8px 10px;border:1px solid var(--border-strong);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;width:100%"></div>
-            <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.06em">Last slot</div><input type="time" value="16:00" style="padding:8px 10px;border:1px solid var(--border-strong);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;width:100%"></div>
-          </div>
-          <br>
-          <div class="card-title" style="margin-bottom:14px">Appointment duration</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="radio" name="dur" checked> 60 min (standard — $150)</label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="radio" name="dur"> 30 min (quick scan — $75)</label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="radio" name="dur"> 90 min (extended)</label>
-          </div>
-          <br>
-          <button class="btn btn-primary" onclick="toast('Availability saved!')">Save availability</button>
-        </div>
-      </div>
-
-      <!-- ── CLIENTS ── -->
-      <div class="panel" id="p-clients">
-        <div class="toolbar">
-          <input type="text" placeholder="Search clients..." id="clientSearch" oninput="filterClients()">
-          <select id="clientFilter" onchange="filterClients()">
-            <option value="all">All clients</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
-          <button class="btn btn-primary" onclick="openModal('newClientModal')">+ Add client</button>
-        </div>
-        <div class="card" style="padding:0;overflow:hidden">
-          <table id="clientTable">
-            <thead><tr><th>Client</th><th>Email</th><th>Phone</th><th>Last visit</th><th>Status</th><th>Actions</th></tr></thead>
-            <tbody id="clientBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- ── INTAKE FORMS ── -->
-      <div class="panel" id="p-intakes">
-        <div class="alert alert-warn">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0;margin-top:1px"><path d="M8 2l6 12H2L8 2z"/><line x1="8" y1="7" x2="8" y2="10"/><line x1="8" y1="12" x2="8.01" y2="12"/></svg>
-          2 new intake forms have been submitted and are awaiting your review.
-        </div>
-        <div class="card" style="padding:0;overflow:hidden">
-          <table>
-            <thead><tr><th>Name</th><th>Email</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead>
-            <tbody>
-              <tr>
-                <td><strong>Lisa Torres</strong></td>
-                <td>lisa.torres@email.com</td>
-                <td>Jan 20, 2025</td>
-                <td><span class="badge badge-new">New</span></td>
-                <td><div class="td-actions">
-                  <button class="btn btn-sm btn-outline" onclick="toast('Opening Lisa Torres intake form...')">Review</button>
-                  <button class="btn btn-sm btn-primary" onclick="toast('Lisa Torres added as client')">Add as client</button>
-                </div></td>
-              </tr>
-              <tr>
-                <td><strong>Tom Walsh</strong></td>
-                <td>tom.walsh@email.com</td>
-                <td>Jan 22, 2025</td>
-                <td><span class="badge badge-new">New</span></td>
-                <td><div class="td-actions">
-                  <button class="btn btn-sm btn-outline" onclick="toast('Opening Tom Walsh intake form...')">Review</button>
-                  <button class="btn btn-sm btn-primary" onclick="toast('Tom Walsh added as client')">Add as client</button>
-                </div></td>
-              </tr>
-              <tr>
-                <td>Jane Doe</td><td>jane@example.com</td><td>Dec 5, 2024</td>
-                <td><span class="badge badge-active">Client</span></td>
-                <td><button class="btn btn-sm btn-outline" onclick="toast('Opening Jane Doe intake form...')">View</button></td>
-              </tr>
-              <tr>
-                <td>Mark Chen</td><td>mark.chen@email.com</td><td>Dec 18, 2024</td>
-                <td><span class="badge badge-active">Client</span></td>
-                <td><button class="btn btn-sm btn-outline" onclick="toast('Opening Mark Chen intake form...')">View</button></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- ── POST NOTES ── -->
-      <div class="panel" id="p-notes">
-        <div class="card">
-          <div class="card-title" style="margin-bottom:18px">Post appointment notes to client portal</div>
-          <div class="modal-field"><label>Select client</label>
-            <select><option>Jane Doe</option><option>Mark Chen</option><option>Susan Park</option><option>Amy Li</option></select>
-          </div>
-          <div class="modal-field"><label>Appointment date</label><input type="date"></div>
-          <div class="modal-field"><label>Note title</label><input type="text" placeholder="e.g. Follow-up scan — January 2025"></div>
-          <div class="modal-field"><label>Session summary</label><textarea rows="4" placeholder="Overall session summary for the client..."></textarea></div>
-          <div class="modal-field"><label>Key findings</label><textarea rows="3" placeholder="Areas of improvement, areas of concern..."></textarea></div>
-          <div class="modal-field"><label>Recommendations</label><textarea rows="4" placeholder="Supplement changes, lifestyle recommendations..."></textarea></div>
-          <div class="modal-field"><label>Next steps</label><textarea rows="2" placeholder="Follow-up timeline, next appointment recommendation..."></textarea></div>
-          <div style="display:flex;gap:10px;margin-top:8px">
-            <button class="btn btn-primary" onclick="toast('Notes posted to client portal!')">Post to client portal</button>
-            <button class="btn btn-outline" onclick="toast('Saved as draft')">Save draft</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── DOCUMENTS ── -->
-      <div class="panel" id="p-documents">
-        <div class="card">
-          <div class="card-title" style="margin-bottom:18px">Upload documents to client portal</div>
-          <div class="modal-field"><label>Select client</label>
-            <select><option>Jane Doe</option><option>Mark Chen</option><option>Susan Park</option></select>
-          </div>
-          <div class="modal-field"><label>Document type</label>
-            <select><option>Qest4 scan results</option><option>Supplement protocol</option><option>Lifestyle guide</option><option>Lab report</option><option>Other</option></select>
-          </div>
-          <div class="modal-field"><label>Document name</label><input type="text" placeholder="e.g. Jan 2025 — Scan results & recommendations"></div>
-          <div class="upload-zone" onclick="toast('File picker would open here')">
-            <p>Drag & drop your PDF here, or <span>browse files</span></p>
-            <p style="font-size:11px;margin-top:4px;color:#aaa">PDF files only · Max 20 MB</p>
-          </div>
-          <button class="btn btn-primary" onclick="toast('Document uploaded to client portal!')">Upload to portal</button>
-        </div>
-
-        <div class="card">
-          <div class="card-head"><span class="card-title">Recently uploaded</span></div>
-          <table>
-            <thead><tr><th>Client</th><th>Document</th><th>Uploaded</th><th>Action</th></tr></thead>
-            <tbody>
-              <tr><td>Jane Doe</td><td>Jan 7 scan results</td><td>Jan 8, 2025</td><td><button class="btn btn-sm btn-danger" onclick="toast('Document removed')">Remove</button></td></tr>
-              <tr><td>Jane Doe</td><td>Supplement protocol Jan 2025</td><td>Jan 8, 2025</td><td><button class="btn btn-sm btn-danger" onclick="toast('Document removed')">Remove</button></td></tr>
-              <tr><td>Mark Chen</td><td>Initial assessment Dec 2024</td><td>Dec 19, 2024</td><td><button class="btn btn-sm btn-danger" onclick="toast('Document removed')">Remove</button></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- ── MESSAGES (ADMIN) ── -->
-      <div class="panel" id="p-messages">
-        <div class="card" style="padding:0;overflow:hidden">
-          <div style="display:grid;grid-template-columns:200px 1fr">
-            <div style="border-right:1px solid var(--border)">
-              <div style="padding:12px 14px;border-bottom:1px solid var(--border);font-size:11px;font-weight:500;color:var(--teal-deep);text-transform:uppercase;letter-spacing:0.06em">Client messages</div>
-              <div id="adminMsgList"></div>
+            <div class="card-title" style="margin-bottom:14px">2. Upload Qest4 report</div>
+            <div class="drop-zone" id="dropZone" tabindex="0" role="button" aria-label="Upload Qest4 PDF">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6M9 15l3-3 3 3"/></svg>
+              <strong>Drag &amp; drop the Qest4 PDF here</strong>
+              <p>or click to choose a file · PDF only · up to 3 MB</p>
             </div>
-            <div style="display:flex;flex-direction:column;min-height:420px">
-              <div style="padding:14px 18px;border-bottom:1px solid var(--border)">
-                <div style="font-size:14px;font-weight:500;color:var(--teal-deep)" id="adminMsgClient">Jane Doe</div>
-                <div style="font-size:11px;color:var(--text-muted)">jane@example.com</div>
-              </div>
-              <div id="adminMsgBubbles" style="flex:1;padding:16px;display:flex;flex-direction:column;gap:10px;background:#fafcfd;min-height:260px"></div>
-              <div style="padding:12px 16px;border-top:1px solid var(--border);background:white;display:flex;gap:10px">
-                <textarea id="adminMsgInput" style="flex:1;padding:8px 12px;border:1px solid var(--border-strong);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;resize:none;height:38px" placeholder="Reply to client..."></textarea>
-                <button class="btn btn-primary" onclick="adminSendMsg()">Send</button>
-              </div>
-            </div>
+            <input type="file" id="fileInput" accept="application/pdf,.pdf" hidden>
+            <div id="fileChip"></div>
+            <div id="analyzeError" class="alert alert-error" style="margin-top:12px" hidden></div>
+            <button class="btn btn-dark analyze-btn" id="analyzeBtn" disabled>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>
+              Analyze with AI
+            </button>
           </div>
         </div>
-      </div>
+        <div id="analyzeLoading" class="card" hidden>
+          <div class="loading">
+            <div class="spinner"></div>
+            <h3>Kelly, I'm analyzing the report...</h3>
+            <p>this takes about 15 seconds</p>
+            <div class="progress" id="analyzeProgress"><div></div></div>
+          </div>
+        </div>
+        <div id="editor" hidden></div>
+      </section>
 
-      <!-- ── PASSWORDS ── -->
-      <div class="panel" id="p-passwords">
+      <!-- PENDING -->
+      <section class="panel" id="p-pending">
+        <div class="alert alert-info">Drafts are never visible to clients. Review each one, make any edits, then approve to publish it to the client's portal.</div>
+        <div class="card"><div class="table-wrap" id="pendingList"></div></div>
+      </section>
+
+      <!-- PUBLISHED -->
+      <section class="panel" id="p-published">
+        <div class="card"><div class="table-wrap" id="publishedList"></div></div>
+      </section>
+
+      <!-- CLIENTS -->
+      <section class="panel" id="p-clients">
+        <div class="alert alert-info">Clients are added in Firebase → Authentication → Users. They appear here after their first portal sign-in.</div>
+        <div class="card"><div class="table-wrap" id="clientList"></div></div>
+      </section>
+
+      <!-- APPOINTMENTS -->
+      <section class="panel" id="p-appointments">
+        <div class="card"><div class="table-wrap" id="apptList"></div></div>
+      </section>
+
+      <!-- MESSAGES -->
+      <section class="panel" id="p-messages">
+        <div class="msg-layout">
+          <div class="thread-list" id="threadList"></div>
+          <div class="convo" id="convo"><div class="empty" style="margin:auto">Select a conversation</div></div>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="panel" id="p-settings">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title" style="margin-bottom:14px">Account</div>
+            <p style="font-size:13px;line-height:1.9" id="accountInfo"></p>
+          </div>
+          <div class="card">
+            <div class="card-title" style="margin-bottom:14px">Setup checklist</div>
+            <ul class="checklist" id="setupChecklist"></ul>
+          </div>
+        </div>
         <div class="card">
-          <div class="card-title" style="margin-bottom:18px">Reset client password</div>
-          <div class="alert alert-info" style="margin-bottom:18px">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0;margin-top:1px"><circle cx="8" cy="8" r="6"/><line x1="8" y1="5" x2="8" y2="8"/></svg>
-            The client will receive an email with a secure link to set a new password.
-          </div>
-          <div class="modal-field"><label>Select client</label>
-            <select id="pwClient">
-              <option>Jane Doe — jane@example.com</option>
-              <option>Mark Chen — mark.chen@email.com</option>
-              <option>Susan Park — susan.p@email.com</option>
-              <option>Amy Li — amy.li@email.com</option>
-            </select>
-          </div>
-          <button class="btn btn-warn" onclick="toast('Password reset email sent!')">Send password reset email</button>
+          <div class="card-title" style="margin-bottom:10px">Approved supplement brands</div>
+          <p style="font-size:13px;color:var(--text-muted);line-height:1.7" id="brandList"></p>
         </div>
-
         <div class="card">
-          <div class="card-title" style="margin-bottom:18px">Revoke client portal access</div>
-          <div class="alert alert-warn" style="margin-bottom:18px">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0;margin-top:1px"><path d="M8 2l6 12H2L8 2z"/><line x1="8" y1="7" x2="8" y2="10"/></svg>
-            Revoking access will immediately prevent the client from logging in. Their data is preserved and access can be restored.
-          </div>
-          <div class="modal-field"><label>Select client</label>
-            <select id="revokeClient">
-              <option>Jane Doe — jane@example.com</option>
-              <option>Mark Chen — mark.chen@email.com</option>
-              <option>Susan Park — susan.p@email.com</option>
-            </select>
-          </div>
-          <button class="btn btn-danger" onclick="confirmRevoke()">Revoke portal access</button>
+          <div class="card-title" style="margin-bottom:10px">Privacy reminders</div>
+          <p style="font-size:13px;color:var(--text-muted);line-height:1.7">Only the PDF is sent to the AI — never the client's name. Notification emails never include health details. Read <strong>hipaa-notes.md</strong> in the project before storing real client data.</p>
         </div>
-      </div>
-
-    </div><!-- /content -->
-  </div><!-- /main -->
-</div><!-- /app-layout -->
-</div><!-- /app -->
-
-<!-- Modals -->
-<div class="modal-overlay" id="newApptModal">
-  <div class="modal">
-    <div class="modal-head"><h3>Schedule appointment</h3><button class="modal-close" onclick="closeModal('newApptModal')">×</button></div>
-    <div class="modal-body">
-      <div class="modal-field"><label>Client</label><select><option>Jane Doe</option><option>Mark Chen</option><option>Susan Park</option><option>New client...</option></select></div>
-      <div class="modal-row">
-        <div class="modal-field"><label>Date</label><input type="date"></div>
-        <div class="modal-field"><label>Time</label><input type="time" value="10:00"></div>
-      </div>
-      <div class="modal-field"><label>Appointment type</label>
-        <select><option>Initial wellness assessment (60 min — $150)</option><option>Follow-up Qest4 scan (60 min — $150)</option><option>Quick scan (30 min — $75)</option></select>
-      </div>
-      <div class="modal-field"><label>Notes (optional)</label><textarea placeholder="Internal notes for this appointment..."></textarea></div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('newApptModal')">Cancel</button>
-      <button class="btn btn-primary" onclick="closeModal('newApptModal');toast('Appointment scheduled!')">Schedule</button>
+      </section>
     </div>
   </div>
 </div>
 
-<div class="modal-overlay" id="newClientModal">
+<!-- REPORT VIEW MODAL -->
+<div class="modal-overlay" id="viewModal">
   <div class="modal">
-    <div class="modal-head"><h3>Add new client</h3><button class="modal-close" onclick="closeModal('newClientModal')">×</button></div>
-    <div class="modal-body">
-      <div class="modal-row">
-        <div class="modal-field"><label>First name</label><input type="text" placeholder="First"></div>
-        <div class="modal-field"><label>Last name</label><input type="text" placeholder="Last"></div>
-      </div>
-      <div class="modal-field"><label>Email</label><input type="email" placeholder="client@example.com"></div>
-      <div class="modal-field"><label>Phone</label><input type="tel" placeholder="(720) 555-0000"></div>
-      <div class="modal-field"><label>Portal access</label>
-        <select><option>Send invitation email</option><option>Create manually</option><option>No portal access yet</option></select>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('newClientModal')">Cancel</button>
-      <button class="btn btn-primary" onclick="closeModal('newClientModal');toast('Client added successfully!')">Add client</button>
-    </div>
+    <div class="modal-head"><h3 id="viewTitle">Report</h3><button class="modal-close" id="viewClose" aria-label="Close">×</button></div>
+    <div class="modal-body" id="viewBody"></div>
   </div>
 </div>
 
-<div class="toast" id="toastEl"></div>
+<div class="toast" id="toast"></div>
 
 <script type="module">
-// ── Auth (Firebase) — only ADMIN_EMAIL may enter ──
-import { auth, ADMIN_EMAIL } from './firebase-config.js';
-import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import { auth, db, storage, ADMIN_EMAIL } from './firebase-config.js';
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import { collection, doc, setDoc, updateDoc, deleteDoc, addDoc, onSnapshot, serverTimestamp, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import { ref, uploadBytes, deleteObject } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
+import { APPROVED_BRANDS, WELLNESS_AREAS, DISCLAIMER, esc, scoreLevel, formatDate, toDate, gaugeHtml, barsHtml, animateGauges, updateScoresInPlace, reportHtml } from './report-ui.js';
+import { sendNotification, notificationsConfigured, PORTAL_URL } from './notify.js';
 
-let adminReady=false;
+const $ = id => document.getElementById(id);
+const MAX_PDF_BYTES = 3 * 1024 * 1024;
 
-window.adminLogin=async function(){
-  const e=document.getElementById('adminEmail').value.trim();
-  const p=document.getElementById('adminPass').value;
-  if(!e||!p){alert('Please enter credentials.');return;}
-  if(e.toLowerCase()!==ADMIN_EMAIL){alert('Access denied. This account is not authorized for the admin panel.');return;}
-  try{
-    await signInWithEmailAndPassword(auth,e,p);
-    // onAuthStateChanged shows the panel
-  }catch(err){
-    console.error('Admin sign-in error:',err);
-    if(err.code==='auth/too-many-requests')alert('Too many attempts. Please wait a few minutes and try again.');
-    else alert('Incorrect email or password.');
-  }
+// Test clients for trying the workflow before real clients sign in.
+// To see a test report in the portal, create a Firebase user with the same email.
+const TEST_CLIENTS = [
+  { id: null, name: 'Jane Doe', email: 'jane.test@questforwellnessllc.com', test: true },
+  { id: null, name: 'Sam Rivera', email: 'sam.test@questforwellnessllc.com', test: true },
+  { id: null, name: 'Morgan Lee', email: 'morgan.test@questforwellnessllc.com', test: true },
+];
+
+const state = {
+  users: [], reports: [], appointments: [], threads: [], supps: [],
+  file: null, editor: null, thread: null, threadUnsub: null, unsubs: [],
+  firestoreOk: null, storageOk: null,
 };
-
-window.adminLogout=function(){signOut(auth);};
-
-onAuthStateChanged(auth,user=>{
-  if(user&&user.email&&user.email.toLowerCase()===ADMIN_EMAIL){
-    document.getElementById('loginWrap').style.display='none';
-    document.getElementById('adminApp').classList.add('show');
-    if(!adminReady){adminReady=true;initAll();}
-  }else{
-    // Signed in as someone else (e.g. a client) — deny and sign them out
-    if(user){signOut(auth);alert('Access denied. This account is not authorized for the admin panel.');}
-    document.getElementById('adminApp').classList.remove('show');
-    document.getElementById('loginWrap').style.display='flex';
-    document.getElementById('adminPass').value='';
-  }
-});
-</script>
-<script>
-document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('loginWrap').style.display!=='none')adminLogin();});
-
-// ── Panel nav ──
-const pMeta={
-  dashboard:['Dashboard','Overview of your practice'],
-  calendar:['Calendar','Schedule & manage appointments'],
-  availability:['Availability','Set your available days and hours'],
-  clients:['Clients','Manage your client roster'],
-  intakes:['Intake Forms','Review new client intake submissions'],
-  notes:['Post Appointment Notes','Write and publish session notes to the client portal'],
-  documents:['Upload Documents','Send files to client portals'],
-  messages:['Messages','Reply to client messages'],
-  passwords:['Password & Access','Reset passwords and manage portal access']
-};
-function showP(id,btn){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('p-'+id).classList.add('active');
-  document.querySelectorAll('.sb-btn').forEach(b=>b.classList.remove('active'));
-  if(btn)btn.classList.add('active');
-  const [t,s]=pMeta[id]||['',''];
-  document.getElementById('pTitle').textContent=t;
-  document.getElementById('pSub').textContent=s;
-}
 
 // ── Toast ──
 let toastTimer;
-function toast(msg){
-  const el=document.getElementById('toastEl');
-  el.textContent=msg; el.classList.add('show');
+function toast(msg, isError = false) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.toggle('error', isError);
+  t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>el.classList.remove('show'),3000);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 4200);
 }
 
-// ── Modals ──
-function openModal(id){document.getElementById(id).classList.add('show');}
-function closeModal(id){document.getElementById(id).classList.remove('show');}
-document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('show');}));
-
-// ── Clients data ──
-const clients=[
-  {name:'Jane Doe',email:'jane@example.com',phone:'(720)555-0192',last:'Jan 7, 2025',status:'active'},
-  {name:'Mark Chen',email:'mark.chen@email.com',phone:'(720)555-0284',last:'Dec 18, 2024',status:'active'},
-  {name:'Susan Park',email:'susan.p@email.com',phone:'(303)555-0119',last:'Dec 3, 2024',status:'active'},
-  {name:'Amy Li',email:'amy.li@email.com',phone:'(720)555-0341',last:'Nov 20, 2024',status:'active'},
-  {name:'Robert James',email:'rjames@email.com',phone:'(303)555-0457',last:'Oct 15, 2024',status:'inactive'},
-  {name:'Carla Mendez',email:'carla.m@email.com',phone:'(720)555-0562',last:'Sep 8, 2024',status:'inactive'},
-];
-function renderClients(data){
-  document.getElementById('clientBody').innerHTML=data.map(c=>`
-    <tr>
-      <td><strong>${c.name}</strong></td>
-      <td>${c.email}</td>
-      <td>${c.phone}</td>
-      <td>${c.last}</td>
-      <td><span class="badge badge-${c.status}">${c.status}</span></td>
-      <td><div class="td-actions">
-        <button class="btn btn-sm btn-outline" onclick="toast('Opening ${c.name} profile...')">View</button>
-        <button class="btn btn-sm btn-warn" onclick="toast('Password reset sent to ${c.email}')">Reset pw</button>
-        <button class="btn btn-sm btn-danger" onclick="toast('${c.name} access revoked')">Revoke</button>
-      </div></td>
-    </tr>`).join('');
+// ── Auth ──
+function showOnly(id) {
+  ['loginWrap', 'verifyWrap', 'adminApp'].forEach(x => $(x).hidden = x !== id);
 }
-function filterClients(){
-  const q=document.getElementById('clientSearch').value.toLowerCase();
-  const f=document.getElementById('clientFilter').value;
-  renderClients(clients.filter(c=>(f==='all'||c.status===f)&&(c.name.toLowerCase().includes(q)||c.email.toLowerCase().includes(q))));
+function loginError(msg) { const e = $('loginError'); e.textContent = msg; e.style.display = msg ? 'block' : 'none'; }
+
+$('loginBtn').addEventListener('click', async () => {
+  const email = $('adminEmail').value.trim();
+  const pass = $('adminPass').value;
+  if (!email || !pass) return loginError('Please enter your email and password.');
+  if (email.toLowerCase() !== ADMIN_EMAIL) return loginError('Access denied. This account is not authorized for the admin panel.');
+  loginError('');
+  $('loginBtn').disabled = true;
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch (err) {
+    loginError(err.code === 'auth/too-many-requests' ? 'Too many attempts. Please wait a few minutes.' : 'Incorrect email or password.');
+  } finally {
+    $('loginBtn').disabled = false;
+  }
+});
+[$('adminEmail'), $('adminPass')].forEach(i => i.addEventListener('keydown', e => { if (e.key === 'Enter') $('loginBtn').click(); }));
+
+$('sendVerifyBtn').addEventListener('click', async () => {
+  try {
+    await sendEmailVerification(auth.currentUser);
+    $('verifyMsg').textContent = 'Verification email sent to ' + auth.currentUser.email + '. Check your inbox (and spam folder).';
+  } catch (err) {
+    $('verifyMsg').textContent = err.code === 'auth/too-many-requests' ? 'Please wait a minute before sending another email.' : 'Could not send the email. Please try again.';
+  }
+  $('verifyMsg').hidden = false;
+});
+$('verifiedBtn').addEventListener('click', async () => {
+  await auth.currentUser.reload();
+  if (auth.currentUser.emailVerified) {
+    await auth.currentUser.getIdToken(true); // refresh so security rules see the verified email
+    startApp();
+  } else {
+    $('verifyMsg').textContent = "Your email isn't verified yet. Click the link in the email, then try again.";
+    $('verifyMsg').hidden = false;
+  }
+});
+$('verifySignOut').addEventListener('click', () => signOut(auth));
+$('logoutBtn').addEventListener('click', () => {
+  if (state.editor?.dirty && !confirm('You have unsaved changes. Sign out anyway?')) return;
+  state.editor = null;
+  signOut(auth);
+});
+
+onAuthStateChanged(auth, user => {
+  stopListeners();
+  if (!user) { showOnly('loginWrap'); $('adminPass').value = ''; return; }
+  if ((user.email || '').toLowerCase() !== ADMIN_EMAIL) {
+    signOut(auth);
+    loginError('Access denied. This account is not authorized for the admin panel.');
+    return;
+  }
+  if (!user.emailVerified) { showOnly('verifyWrap'); return; }
+  startApp();
+});
+
+// ── Data listeners ──
+function stopListeners() {
+  state.unsubs.forEach(u => u());
+  state.unsubs = [];
+  if (state.threadUnsub) { state.threadUnsub(); state.threadUnsub = null; }
+}
+function dataError(err) {
+  console.error('Firestore error:', err);
+  state.firestoreOk = false;
+  const box = $('dataError');
+  box.innerHTML = err.code === 'permission-denied'
+    ? '<strong>Firestore blocked the request.</strong> Make sure Firestore is enabled and the rules from <code>firestore.rules</code> are published, and that your email is verified.'
+    : `<strong>Couldn't load data from Firebase</strong> (${esc(err.code || err.message)}). Check that Firestore is enabled for this project.`;
+  box.hidden = false;
+  renderSettings();
+}
+function listen(name, q, key) {
+  state.unsubs.push(onSnapshot(q, snap => {
+    state.firestoreOk = true;
+    $('dataError').hidden = true;
+    state[key] = snap.docs.map(d => ({ id: d.id, ...d.data({ serverTimestamps: 'estimate' }) }));
+    renderAll();
+  }, dataError));
+}
+function startApp() {
+  showOnly('adminApp');
+  stopListeners();
+  listen('users', collection(db, 'users'), 'users');
+  listen('reports', collection(db, 'reports'), 'reports');
+  listen('appointments', collection(db, 'appointments'), 'appointments');
+  listen('threads', collection(db, 'messages'), 'threads');
+  listen('supps', collection(db, 'supplementRequests'), 'supps');
+  renderAll();
+  checkApi();
 }
 
-// ── Availability ──
-const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-const defaultOn=[false,false,true,false,true,false,false];
-function renderAvail(){
-  const grid=document.getElementById('availGrid');
-  grid.innerHTML=days.map((d,i)=>`
-    <div class="avail-day">
-      <label>${d}</label>
-      <button class="avail-toggle${defaultOn[i]?' on':''}" onclick="toggleAvail(this)">${''}</button>
-    </div>`).join('');
+// ── Navigation ──
+const pageMeta = {
+  dashboard: ['Dashboard', 'Overview of your practice'],
+  analyze: ['Upload & Analyze', 'Turn a Qest4 report into a client-friendly summary'],
+  pending: ['Pending Approval', 'AI drafts waiting for your review'],
+  published: ['Published Reports', 'Reports your clients can see in their portal'],
+  clients: ['Clients', 'Everyone with a portal account'],
+  appointments: ['Appointments', 'Requests from the client portal'],
+  messages: ['Messages', 'Secure conversations with clients'],
+  settings: ['Settings', 'Account and setup'],
+};
+function goto(panel) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'p-' + panel));
+  document.querySelectorAll('.sb-btn').forEach(b => b.classList.toggle('active', b.dataset.panel === panel));
+  $('pageTitle').textContent = pageMeta[panel][0];
+  $('pageSub').textContent = pageMeta[panel][1];
+  window.scrollTo({ top: 0 });
 }
-function toggleAvail(btn){btn.classList.toggle('on');}
+document.addEventListener('click', e => {
+  const nav = e.target.closest('[data-panel],[data-goto]');
+  if (nav) goto(nav.dataset.panel || nav.dataset.goto);
+});
 
-// ── Admin calendar ──
-let aYear=2025,aMon=0;
-const appts={'2025-1-14':[{t:'10:00',n:'Jane Doe',type:'Follow-up'}],'2025-1-21':[{t:'2:00',n:'Mark Chen',type:'Initial'}],'2025-1-28':[{t:'10:00',n:'Jane Doe',type:'Follow-up'},{t:'1:00',n:'Mark Chen',type:'Initial'},{t:'3:00',n:'Susan Park',type:'Quick scan'}]};
-function renderAdminCal(){
-  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  document.getElementById('adminCalMonth').textContent=months[aMon]+' '+aYear;
-  const grid=document.getElementById('adminCalGrid');
-  grid.innerHTML=days.map(d=>`<div class="admin-cal-label">${d}</div>`).join('');
-  const first=new Date(aYear,aMon,1).getDay();
-  const total=new Date(aYear,aMon+1,0).getDate();
-  const today=new Date();
-  for(let i=0;i<first;i++) grid.innerHTML+=`<div class="admin-cal-day empty"></div>`;
-  for(let d=1;d<=total;d++){
-    const key=`${aYear}-${aMon+1}-${d}`;
-    const dayAppts=appts[key]||[];
-    const isToday=d===today.getDate()&&aMon===today.getMonth()&&aYear===today.getFullYear();
-    grid.innerHTML+=`<div class="admin-cal-day${isToday?' today':''}">
-      <div class="admin-day-num">${d}</div>
-      ${dayAppts.map(a=>`<div class="admin-day-appt">${a.t} ${a.n}</div>`).join('')}
+// ── Helpers ──
+const sortByDate = (arr, field) => [...arr].sort((a, b) => (toDate(b[field])?.getTime() || 0) - (toDate(a[field])?.getTime() || 0));
+const scorePill = s => `<span class="score-pill qr-${scoreLevel(s)}">${esc(s ?? '—')}</span>`;
+const firstName = name => String(name || '').trim().split(/\s+/)[0] || 'there';
+
+function allClients() {
+  const real = state.users
+    .filter(u => (u.email || '').toLowerCase() !== ADMIN_EMAIL)
+    .map(u => ({ id: u.id, name: u.name || u.email, email: (u.email || '').toLowerCase(), phone: u.phone, intakeSubmittedAt: u.intakeSubmittedAt, test: false }));
+  const realEmails = new Set(real.map(c => c.email));
+  return [...real.sort((a, b) => a.name.localeCompare(b.name)), ...TEST_CLIENTS.filter(t => !realEmails.has(t.email))];
+}
+const clientByEmail = email => allClients().find(c => c.email === email);
+
+// ── Render everything ──
+function renderAll() {
+  const drafts = state.reports.filter(r => r.status === 'draft');
+  const published = state.reports.filter(r => r.status === 'published');
+  const newAppts = state.appointments.filter(a => a.status === 'requested');
+  const unread = state.threads.filter(t => t.unreadByAdmin);
+
+  const setBadge = (el, n) => { $(el).textContent = n; $(el).hidden = !n; };
+  setBadge('pendingBadge', drafts.length);
+  setBadge('apptBadge', newAppts.length);
+  setBadge('msgBadge', unread.length);
+  $('statPending').textContent = drafts.length;
+  $('statPublished').textContent = published.length;
+  $('statClients').textContent = allClients().filter(c => !c.test).length;
+  $('statAppts').textContent = newAppts.length;
+  $('statMsgs').textContent = unread.length;
+
+  renderDashboard(drafts, newAppts);
+  renderClientSelect();
+  renderPending(drafts);
+  renderPublished(published);
+  renderClients();
+  renderAppointments();
+  renderThreads();
+  renderSettings();
+}
+
+function renderDashboard(drafts, newAppts) {
+  $('dashPending').innerHTML = drafts.length ? `<table><tbody>${sortByDate(drafts, 'updatedAt').slice(0, 5).map(r => `
+    <tr><td><strong>${esc(r.clientName)}</strong><br><span style="font-size:11px;color:var(--text-muted)">${formatDate(r.updatedAt)}</span></td>
+    <td>${scorePill(r.analysisData?.overallScore)}</td>
+    <td style="text-align:right"><button class="btn btn-primary btn-sm" data-review="${r.id}">Review</button></td></tr>`).join('')}</tbody></table>`
+    : '<div class="empty">No drafts waiting. Nice work!</div>';
+
+  $('dashAppts').innerHTML = newAppts.length ? `<table><tbody>${sortByDate(newAppts, 'createdAt').slice(0, 5).map(a => `
+    <tr><td><strong>${esc(a.clientName)}</strong><br><span style="font-size:11px;color:var(--text-muted)">${esc(a.type)} · ${esc(a.preferredDate)} ${esc(a.preferredTime)}</span></td>
+    <td style="text-align:right"><button class="btn btn-outline btn-sm" data-goto="appointments">Respond</button></td></tr>`).join('')}</tbody></table>`
+    : '<div class="empty">No new requests.</div>';
+
+  const supps = sortByDate(state.supps, 'createdAt');
+  $('dashSupps').innerHTML = supps.length ? `<table><thead><tr><th>Client</th><th>Supplement</th><th>Qty</th><th>Notes</th><th>Requested</th><th>Status</th><th></th></tr></thead><tbody>${supps.map(s => `
+    <tr><td>${esc(s.clientName)}</td><td><strong>${esc(s.supplementName)}</strong><br><span style="font-size:11px;color:var(--text-muted)">${esc(s.brand)}</span></td>
+    <td>${esc(s.quantity)}</td><td style="max-width:220px">${esc(s.notes || '—')}</td><td>${formatDate(s.createdAt)}</td>
+    <td><span class="badge badge-${esc(s.status)}">${esc(s.status)}</span></td>
+    <td>${s.status === 'requested' ? `<button class="btn btn-outline btn-sm" data-fulfill="${s.id}">Mark fulfilled</button>` : ''}</td></tr>`).join('')}</tbody></table>`
+    : '<div class="empty">No supplement requests yet.</div>';
+}
+
+function renderClientSelect() {
+  const sel = $('clientSelect');
+  const current = sel.value;
+  const clients = allClients();
+  sel.innerHTML = '<option value="">Select a client…</option>' + clients.map(c =>
+    `<option value="${esc(c.email)}">${esc(c.name)}${c.test ? ' (test)' : ''} — ${esc(c.email)}</option>`).join('');
+  if (clients.some(c => c.email === current)) sel.value = current;
+  updateAnalyzeBtn();
+}
+
+function renderPending(drafts) {
+  $('pendingList').innerHTML = drafts.length ? `<table><thead><tr><th>Client</th><th>Scan date</th><th>Last edited</th><th>Overall</th><th></th></tr></thead><tbody>${sortByDate(drafts, 'updatedAt').map(r => `
+    <tr><td><strong>${esc(r.clientName)}</strong><br><span style="font-size:11px;color:var(--text-muted)">${esc(r.clientEmail)}</span></td>
+    <td>${esc(r.scanDate ? formatDate(r.scanDate + 'T12:00') : '—')}</td><td>${formatDate(r.updatedAt)}</td>
+    <td>${scorePill(r.analysisData?.overallScore)}</td>
+    <td><div class="td-actions"><button class="btn btn-primary btn-sm" data-review="${r.id}">Review &amp; approve</button><button class="btn btn-danger btn-sm" data-delete="${r.id}">Delete</button></div></td></tr>`).join('')}</tbody></table>`
+    : '<div class="empty">No drafts pending approval.</div>';
+}
+
+function renderPublished(published) {
+  $('publishedList').innerHTML = published.length ? `<table><thead><tr><th>Client</th><th>Scan date</th><th>Published</th><th>Overall</th><th></th></tr></thead><tbody>${sortByDate(published, 'publishedAt').map(r => `
+    <tr><td><strong>${esc(r.clientName)}</strong><br><span style="font-size:11px;color:var(--text-muted)">${esc(r.clientEmail)}</span></td>
+    <td>${esc(r.scanDate ? formatDate(r.scanDate + 'T12:00') : '—')}</td><td>${formatDate(r.publishedAt)}</td>
+    <td>${scorePill(r.analysisData?.overallScore)}</td>
+    <td><div class="td-actions"><button class="btn btn-outline btn-sm" data-view="${r.id}">View</button><button class="btn btn-outline btn-sm" data-review="${r.id}">Edit</button><button class="btn btn-danger btn-sm" data-unpublish="${r.id}">Unpublish</button></div></td></tr>`).join('')}</tbody></table>`
+    : '<div class="empty">No published reports yet.</div>';
+}
+
+function renderClients() {
+  const clients = allClients();
+  $('clientList').innerHTML = `<table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Reports</th><th>Last scan</th><th>Intake form on file</th></tr></thead><tbody>${clients.map(c => {
+    const reports = state.reports.filter(r => r.clientEmail === c.email);
+    const last = sortByDate(reports.filter(r => r.scanDate).map(r => ({ ...r, d: r.scanDate + 'T12:00' })), 'd')[0];
+    const intake = toDate(c.intakeSubmittedAt);
+    return `<tr><td><strong>${esc(c.name)}</strong> ${c.test ? '<span class="badge badge-test">test</span>' : ''}</td>
+      <td>${esc(c.email)}</td><td>${esc(c.phone || '—')}</td>
+      <td>${reports.filter(r => r.status === 'published').length} published${reports.some(r => r.status === 'draft') ? ` · <span style="color:var(--orange)">${reports.filter(r => r.status === 'draft').length} draft</span>` : ''}</td>
+      <td>${last ? formatDate(last.d) : '—'}</td>
+      <td>${c.test ? '—' : `<input type="date" data-intake="${esc(c.id)}" value="${intake ? intake.toISOString().slice(0, 10) : ''}">`}</td></tr>`;
+  }).join('')}</tbody></table>`;
+}
+
+function renderAppointments() {
+  const appts = sortByDate(state.appointments, 'createdAt');
+  $('apptList').innerHTML = appts.length ? `<table><thead><tr><th>Client</th><th>Type</th><th>Preferred</th><th>Notes</th><th>Requested</th><th>Status</th></tr></thead><tbody>${appts.map(a => `
+    <tr><td><strong>${esc(a.clientName)}</strong><br><span style="font-size:11px;color:var(--text-muted)">${esc(a.clientEmail)}</span></td>
+    <td>${esc(a.type)}</td><td>${esc(a.preferredDate ? formatDate(a.preferredDate + 'T12:00') : '—')}<br><span style="font-size:11px;color:var(--text-muted)">${esc(a.preferredTime)}</span></td>
+    <td style="max-width:240px">${esc(a.notes || '—')}</td><td>${formatDate(a.createdAt)}</td>
+    <td><select data-appt="${a.id}">${['requested', 'confirmed', 'declined', 'completed'].map(s => `<option value="${s}" ${a.status === s ? 'selected' : ''}>${s[0].toUpperCase() + s.slice(1)}</option>`).join('')}</select></td></tr>`).join('')}</tbody></table>`
+    : '<div class="empty">No appointment requests yet.</div>';
+}
+
+// ── Messages ──
+function renderThreads() {
+  const threads = sortByDate(state.threads, 'lastMessageAt');
+  $('threadList').innerHTML = threads.length ? threads.map(t => `
+    <div class="thread ${state.thread === t.id ? 'active' : ''}" data-thread="${t.id}">
+      <div class="thread-name">${t.unreadByAdmin ? '<span class="unread-dot"></span>' : ''}${esc(t.clientName || t.clientEmail)}</div>
+      <div class="thread-preview">${t.lastSender === 'admin' ? 'You: ' : ''}${esc(t.lastMessagePreview || '')}</div>
+      <div class="thread-time">${formatDate(t.lastMessageAt, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</div>
+    </div>`).join('') : '<div class="empty" style="margin:12px">No messages yet.</div>';
+}
+function openThread(id) {
+  state.thread = id;
+  const t = state.threads.find(x => x.id === id);
+  if (!t) return;
+  if (state.threadUnsub) state.threadUnsub();
+  $('convo').innerHTML = `
+    <div class="convo-head">${esc(t.clientName || t.clientEmail)}</div>
+    <div class="convo-body" id="convoBody"><div class="empty">Loading…</div></div>
+    <form class="convo-form" id="replyForm"><textarea id="replyText" placeholder="Write a reply…" maxlength="4000"></textarea><button class="btn btn-dark">Send</button></form>`;
+  state.threadUnsub = onSnapshot(query(collection(db, 'messages', id, 'messages'), orderBy('createdAt')), snap => {
+    const body = $('convoBody');
+    if (!body) return;
+    body.innerHTML = snap.docs.map(d => {
+      const m = d.data({ serverTimestamps: 'estimate' });
+      return `<div class="bubble ${m.sender === 'admin' ? 'admin' : 'client'}">${esc(m.text)}<time>${formatDate(m.createdAt, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</time></div>`;
+    }).join('') || '<div class="empty">No messages in this thread.</div>';
+    body.scrollTop = body.scrollHeight;
+  }, dataError);
+  if (t.unreadByAdmin) updateDoc(doc(db, 'messages', id), { unreadByAdmin: false }).catch(dataError);
+  $('replyForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const text = $('replyText').value.trim();
+    if (!text) return;
+    $('replyText').value = '';
+    try {
+      await addDoc(collection(db, 'messages', id, 'messages'), { sender: 'admin', text, createdAt: serverTimestamp() });
+      await updateDoc(doc(db, 'messages', id), {
+        lastMessageAt: serverTimestamp(), lastSender: 'admin', lastMessagePreview: text.slice(0, 80),
+        unreadByClient: true, unreadByAdmin: false,
+      });
+      sendNotification({
+        to_email: t.clientEmail,
+        subject: 'New message from Kelly — Quest for Wellness',
+        message: `Hi ${firstName(t.clientName)},\n\nKelly sent you a new message. Sign in to your client portal to read it:\n${PORTAL_URL}\n\nQuest for Wellness, LLC`,
+      });
+    } catch (err) {
+      toast('Message failed to send. Please try again.', true);
+      $('replyText').value = text;
+    }
+  });
+  renderThreads();
+}
+
+// ── Settings ──
+function renderSettings() {
+  const u = auth.currentUser;
+  if (!u) return;
+  $('accountInfo').innerHTML = `Signed in as <strong>${esc(u.email)}</strong><br>Email verified: <strong>${u.emailVerified ? 'Yes' : 'No'}</strong>`;
+  $('brandList').textContent = APPROVED_BRANDS.join(' · ');
+  const item = (ok, text) => `<li><span class="dot ${ok === true ? 'ok' : ok === false ? 'no' : 'unk'}">${ok === true ? '✓' : ok === false ? '!' : '?'}</span><span>${text}</span></li>`;
+  $('setupChecklist').innerHTML = [
+    item(state.firestoreOk, state.firestoreOk === false ? 'Firestore: <strong>not reachable</strong> — enable Firestore and publish <code>firestore.rules</code>.' : 'Firestore database connected.'),
+    item(state.apiOk, state.apiOk ? 'AI analysis service is deployed.' : state.apiOk === false ? 'AI analysis service <strong>not reachable</strong> — it only runs on the deployed Vercel site with ANTHROPIC_API_KEY set.' : 'Checking AI analysis service…'),
+    item(state.storageOk, state.storageOk === false ? 'Storage: last PDF upload failed — enable Cloud Storage and publish <code>storage.rules</code>.' : state.storageOk ? 'Storage working (PDFs saved).' : 'Storage: not tested yet (tested on your first save).'),
+    item(notificationsConfigured(), notificationsConfigured() ? 'Notification emails configured.' : 'Notification emails <strong>off</strong> — create the EmailJS notify template (see <code>notify.js</code>).'),
+  ].join('');
+}
+async function checkApi() {
+  try {
+    const r = await fetch('/api/analyze-report', { method: 'OPTIONS' });
+    state.apiOk = r.status === 204;
+  } catch { state.apiOk = false; }
+  renderSettings();
+}
+
+// ── Upload & Analyze ──
+function updateAnalyzeBtn() {
+  $('analyzeBtn').disabled = !($('clientSelect').value && state.file);
+}
+function setFile(file) {
+  $('analyzeError').hidden = true;
+  if (!file) { state.file = null; $('fileChip').innerHTML = ''; updateAnalyzeBtn(); return; }
+  if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) return showAnalyzeError('Please choose a PDF file.');
+  if (file.size > MAX_PDF_BYTES) return showAnalyzeError(`That PDF is ${(file.size / 1048576).toFixed(1)} MB. Please use a file under 3 MB (try exporting the Qest4 report with smaller images).`);
+  state.file = file;
+  $('fileChip').innerHTML = `<div class="file-chip"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>${esc(file.name)} · ${(file.size / 1024).toFixed(0)} KB</span><button id="clearFile" aria-label="Remove file">×</button></div>`;
+  $('clearFile').addEventListener('click', () => setFile(null));
+  updateAnalyzeBtn();
+}
+function showAnalyzeError(msg) { $('analyzeError').textContent = msg; $('analyzeError').hidden = false; }
+
+const dz = $('dropZone');
+dz.addEventListener('click', () => $('fileInput').click());
+dz.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('fileInput').click(); } });
+$('fileInput').addEventListener('change', e => { setFile(e.target.files[0]); e.target.value = ''; });
+['dragenter', 'dragover'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.add('over'); }));
+['dragleave', 'drop'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.remove('over'); }));
+dz.addEventListener('drop', e => setFile(e.dataTransfer.files[0]));
+$('clientSelect').addEventListener('change', updateAnalyzeBtn);
+
+const fileToBase64 = file => new Promise((resolve, reject) => {
+  const r = new FileReader();
+  r.onload = () => resolve(String(r.result).split(',')[1]);
+  r.onerror = () => reject(r.error);
+  r.readAsDataURL(file);
+});
+
+$('analyzeBtn').addEventListener('click', async () => {
+  if (state.editor?.dirty && !confirm('Start a new analysis? Your unsaved edits to the current report will be lost.')) return;
+  const client = clientByEmail($('clientSelect').value);
+  if (!client || !state.file) return;
+  $('analyzeError').hidden = true;
+  $('analyzeSetup').hidden = true;
+  $('editor').hidden = true;
+  $('analyzeLoading').hidden = false;
+  const prog = $('analyzeProgress');
+  prog.classList.remove('run'); void prog.offsetWidth; prog.classList.add('run');
+
+  try {
+    const pdfBase64 = await fileToBase64(state.file);
+    const token = await auth.currentUser.getIdToken();
+    const res = await fetch('/api/analyze-report', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ pdfBase64, clientName: client.name }),
+    });
+    const data = await res.json().catch(() => null);
+    if (!res.ok || !data?.analysis) {
+      throw new Error(data?.error || (res.status === 404 ? 'The AI service isn\'t available here. It only runs on the deployed website.' : `The AI service returned an error (${res.status}).`));
+    }
+    openEditor({
+      reportId: null, status: 'draft', client, file: state.file, fileName: state.file.name,
+      analysis: structuredClone(data.analysis), aiOriginal: data.analysis, model: data.model,
+      scanDate: new Date().toISOString().slice(0, 10), originalPdfPath: null, publishedAt: null,
+    });
+    setFile(null);
+  } catch (err) {
+    $('analyzeSetup').hidden = false;
+    showAnalyzeError(err.message || 'Something went wrong. Please try again.');
+  } finally {
+    $('analyzeLoading').hidden = true;
+  }
+});
+
+// ── Review & approve editor ──
+function openEditor(ed) {
+  state.editor = { ...ed, dirty: !ed.reportId };
+  goto('analyze');
+  $('analyzeSetup').hidden = true;
+  $('analyzeLoading').hidden = true;
+  renderEditor();
+}
+function closeEditor() {
+  state.editor = null;
+  $('editor').hidden = true;
+  $('editor').innerHTML = '';
+  $('analyzeSetup').hidden = false;
+}
+const markDirty = () => { if (state.editor) state.editor.dirty = true; };
+
+function renderEditor() {
+  const ed = state.editor;
+  const a = ed.analysis;
+  while (a.topSupplements.length < 3) {
+    a.topSupplements.push({ rank: a.topSupplements.length + 1, name: '', brand: APPROVED_BRANDS[0], reason: '', priority: 'Medium' });
+  }
+  const live = ed.status === 'published';
+  const sliders = [{ key: 'overall', label: 'Overall wellness' }, ...WELLNESS_AREAS].map(({ key, label }) => {
+    const v = key === 'overall' ? a.overallScore : a.wellnessScores[key];
+    return `<div class="slider-row"><label for="sl-${key}">${esc(label)} <b id="slv-${key}">${v}</b></label><input type="range" min="0" max="100" value="${v}" id="sl-${key}" data-score="${key}"></div>`;
+  }).join('');
+
+  $('editor').innerHTML = `
+    <div class="draft-banner ${live ? 'live' : ''}">
+      <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/>${live ? '<circle cx="12" cy="12" r="3"/>' : '<line x1="3" y1="3" x2="21" y2="21"/>'}</svg>
+      ${live ? 'PUBLISHED — Your client can see this report. Re-publish to update it.' : 'DRAFT — Not visible to client yet'}
+    </div>
+    <div class="editor-meta">
+      <span>Client: <strong>${esc(ed.client.name)}</strong> (${esc(ed.client.email)})</span>
+      <span>File: <strong>${esc(ed.fileName || 'stored PDF')}</strong></span>
+      <label>Scan date <input type="date" id="edScanDate" value="${esc(ed.scanDate || '')}"></label>
+    </div>
+
+    <div class="qr-scores" id="edScores">${gaugeHtml(a.overallScore)}<div class="qr-scores-bars">${barsHtml(a.wellnessScores)}</div></div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-title" style="margin-bottom:14px">Adjust wellness scores <span class="edit-hint">Drag to fine-tune what the AI suggested</span></div>
+      <div class="slider-grid">${sliders}</div>
+    </div>
+
+    <div class="card qr-summary">
+      <div class="card-title">Wellness summary <span class="edit-hint">Click to edit</span></div>
+      <textarea class="inline-edit" id="edSummary" rows="4">${esc(a.summary)}</textarea>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><div class="card-title">Key findings <span class="edit-hint">Click to edit</span></div><button class="btn btn-outline btn-sm" id="addFinding">+ Add finding</button></div>
+      <div id="edFindings">${a.keyFindings.map((f, i) => `
+        <div class="finding-row"><span class="num">${i + 1}</span><textarea class="inline-edit" data-finding="${i}" rows="2">${esc(f)}</textarea><button class="icon-btn" data-remove-finding="${i}" aria-label="Remove finding">×</button></div>`).join('')}</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px">Top 3 supplement recommendations <span class="edit-hint">Swap any supplement — brands are limited to your approved list</span></div>
+      <div class="supp-edit-grid">${a.topSupplements.slice(0, 3).map((s, i) => `
+        <div class="supp-edit">
+          <div class="supp-edit-head"><span class="qr-supp-rank">${i + 1}</span>
+            <select data-supp="${i}" data-field="priority" aria-label="Priority" style="padding:5px 8px;border:1px solid var(--border-strong);border-radius:6px;font-family:inherit;font-size:12px">
+              ${['High', 'Medium', 'Low'].map(p => `<option ${s.priority === p ? 'selected' : ''}>${p}</option>`).join('')}</select></div>
+          <div class="field"><label>Brand</label><select data-supp="${i}" data-field="brand">${APPROVED_BRANDS.map(b => `<option ${s.brand === b ? 'selected' : ''}>${esc(b)}</option>`).join('')}</select></div>
+          <div class="field"><label>Supplement name</label><input data-supp="${i}" data-field="name" value="${esc(s.name)}" placeholder="e.g. Magnesium Glycinate"></div>
+          <div class="field"><label>Why it helps</label><textarea data-supp="${i}" data-field="reason" rows="3">${esc(s.reason)}</textarea></div>
+        </div>`).join('')}</div>
+    </div>
+
+    <details class="card qr-details">
+      <summary>All recommendations (${a.allRecommendations.length}) <span class="edit-hint">one per line</span></summary>
+      <textarea class="inline-edit" id="edRecs" rows="7" style="font-size:14px">${esc(a.allRecommendations.join('\n'))}</textarea>
+    </details>
+
+    <div class="card qr-lifestyle">
+      <div class="card-title">Lifestyle notes <span class="edit-hint">Click to edit</span></div>
+      <textarea class="inline-edit" id="edLifestyle" rows="2">${esc(a.lifestyleNotes)}</textarea>
+      <label class="check-row"><input type="checkbox" id="edFollowUp" ${a.followUpRecommended ? 'checked' : ''}> Recommend a follow-up scan</label>
+    </div>
+
+    <p class="qr-disclaimer">${esc(DISCLAIMER)}</p>
+
+    <div class="action-bar">
+      <button class="btn btn-danger" id="edDiscard">Discard</button>
+      <button class="btn btn-outline" id="edPreview">Preview as client</button>
+      <span class="spacer"></span>
+      <button class="btn btn-outline" id="edSaveDraft">${live ? 'Unpublish &amp; save as draft' : 'Save as Draft'}</button>
+      <button class="btn btn-approve" id="edPublish">✓ Approve &amp; Publish to Client Portal</button>
     </div>`;
+  $('editor').hidden = false;
+  animateGauges($('edScores'));
+  bindEditor();
+}
+
+function bindEditor() {
+  const ed = state.editor, a = ed.analysis, root = $('editor');
+  root.querySelectorAll('input[data-score]').forEach(sl => sl.addEventListener('input', () => {
+    const v = Number(sl.value);
+    if (sl.dataset.score === 'overall') a.overallScore = v; else a.wellnessScores[sl.dataset.score] = v;
+    $('slv-' + sl.dataset.score).textContent = v;
+    updateScoresInPlace($('edScores'), a);
+    markDirty();
+  }));
+  $('edSummary').addEventListener('input', e => { a.summary = e.target.value; markDirty(); });
+  $('edLifestyle').addEventListener('input', e => { a.lifestyleNotes = e.target.value; markDirty(); });
+  $('edRecs').addEventListener('input', e => { a.allRecommendations = e.target.value.split('\n'); markDirty(); });
+  $('edFollowUp').addEventListener('change', e => { a.followUpRecommended = e.target.checked; markDirty(); });
+  $('edScanDate').addEventListener('change', e => { ed.scanDate = e.target.value; markDirty(); });
+  root.querySelectorAll('[data-finding]').forEach(t => t.addEventListener('input', () => { a.keyFindings[Number(t.dataset.finding)] = t.value; markDirty(); }));
+  root.querySelectorAll('[data-remove-finding]').forEach(b => b.addEventListener('click', () => { a.keyFindings.splice(Number(b.dataset.removeFinding), 1); markDirty(); renderEditor(); }));
+  $('addFinding').addEventListener('click', () => { a.keyFindings.push(''); markDirty(); renderEditor(); });
+  root.querySelectorAll('[data-supp]').forEach(el => el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', () => {
+    a.topSupplements[Number(el.dataset.supp)][el.dataset.field] = el.value;
+    markDirty();
+  }));
+  $('edPreview').addEventListener('click', () => openView(`Client preview — ${ed.client.name}`, cleanedAnalysis(a)));
+  $('edSaveDraft').addEventListener('click', () => saveReport('draft'));
+  $('edPublish').addEventListener('click', () => saveReport('published'));
+  $('edDiscard').addEventListener('click', discardEditor);
+}
+
+function cleanedAnalysis(a) {
+  return {
+    ...a,
+    summary: a.summary.trim(),
+    lifestyleNotes: a.lifestyleNotes.trim(),
+    keyFindings: a.keyFindings.map(f => f.trim()).filter(Boolean),
+    allRecommendations: a.allRecommendations.map(r => r.trim()).filter(Boolean),
+    topSupplements: a.topSupplements.filter(s => s.name.trim()).slice(0, 3)
+      .map((s, i) => ({ ...s, rank: i + 1, name: s.name.trim(), reason: s.reason.trim() })),
+    disclaimer: DISCLAIMER,
+  };
+}
+
+async function saveReport(status) {
+  const ed = state.editor;
+  const analysisData = cleanedAnalysis(ed.analysis);
+  if (!analysisData.summary) return toast('Please add a summary before saving.', true);
+  if (analysisData.topSupplements.some(s => !APPROVED_BRANDS.includes(s.brand))) return toast('Supplements must use an approved brand.', true);
+  if (status === 'published' && !confirm(`Publish this report to ${ed.client.name}'s portal? They'll be able to see it right away.`)) return;
+
+  const bar = $('editor').querySelectorAll('.action-bar button');
+  bar.forEach(b => b.disabled = true);
+  const id = ed.reportId || doc(collection(db, 'reports')).id;
+  let pdfPath = ed.originalPdfPath || null;
+  let pdfFailed = false;
+  try {
+    if (ed.file && !pdfPath) {
+      try {
+        const pdfRef = ref(storage, `reports/${id}/original.pdf`);
+        await uploadBytes(pdfRef, ed.file, { contentType: 'application/pdf' });
+        pdfPath = pdfRef.fullPath;
+        state.storageOk = true;
+      } catch (err) {
+        console.error('PDF upload failed:', err);
+        state.storageOk = false;
+        pdfFailed = true;
+      }
+    }
+    const data = {
+      clientId: ed.client.id || null,
+      clientEmail: ed.client.email,
+      clientName: ed.client.name,
+      status,
+      analysisData,
+      originalPdfPath: pdfPath,
+      originalFileName: ed.fileName || null,
+      scanDate: ed.scanDate || null,
+      updatedAt: serverTimestamp(),
+    };
+    if (!ed.reportId) Object.assign(data, { createdAt: serverTimestamp(), aiOriginal: ed.aiOriginal || null, model: ed.model || null });
+    if (status === 'published') {
+      data.approvedAt = serverTimestamp();
+      if (!ed.publishedAt) data.publishedAt = serverTimestamp();
+    }
+    await setDoc(doc(db, 'reports', id), data, { merge: true });
+
+    if (status === 'published') {
+      const sent = await sendNotification({
+        to_email: ed.client.email,
+        subject: 'Your new wellness report is ready — Quest for Wellness',
+        message: `Hi ${firstName(ed.client.name)},\n\nKelly has published a new wellness report for you. Sign in to your client portal to view it:\n${PORTAL_URL}\n\nQuest for Wellness, LLC`,
+      });
+      toast(`Published to ${ed.client.name}'s portal.${sent ? ' Notification email sent.' : ''}${pdfFailed ? ' (Original PDF could not be saved — check Storage setup.)' : ''}`, pdfFailed);
+      closeEditor();
+      goto('published');
+    } else {
+      Object.assign(ed, { reportId: id, status: 'draft', originalPdfPath: pdfPath, file: pdfPath ? null : ed.file, dirty: false });
+      toast(`Draft saved.${pdfFailed ? ' (Original PDF could not be saved — check Storage setup.)' : ''}`, pdfFailed);
+      renderEditor();
+    }
+  } catch (err) {
+    console.error('Save failed:', err);
+    toast(err.code === 'permission-denied' ? 'Save blocked by Firestore rules. Check Settings → Setup checklist.' : 'Save failed. Please try again.', true);
+  } finally {
+    bar.forEach(b => b.disabled = false);
+    renderSettings();
   }
 }
-function adminChangeMonth(d){aMon+=d;if(aMon>11){aMon=0;aYear++;}if(aMon<0){aMon=11;aYear--;}renderAdminCal();}
 
-// ── Admin messages ──
-const msgClients=[
-  {name:'Jane Doe',preview:'When should I take magnesium?',msgs:[{from:'client',text:'Hi Kelly, quick question — when should I take the magnesium glycinate?'},{from:'kelly',text:'Great question! Best taken 30–60 min before bed for sleep support.'},{from:'client',text:'Perfect, thank you!'}]},
-  {name:'Mark Chen',preview:'Can I reschedule Jan 28?',msgs:[{from:'client',text:'Hi Kelly, is it possible to reschedule my January 28 appointment?'},{from:'kelly',text:'Of course! What dates work for you?'}]},
-  {name:'Susan Park',preview:'Feeling much better!',msgs:[{from:'client',text:'Just wanted to update you — the protocol is working amazingly. I feel so much better!'},{from:'kelly',text:'That is so wonderful to hear Susan, thank you for sharing!'}]},
-  {name:'Amy Li',preview:'Question about supplements',msgs:[{from:'client',text:'Should I take the probiotic with or without food?'},{from:'kelly',text:'With food is best — it helps protect the live cultures.'}]},
-];
-let activeMsgIdx=0;
-function renderMsgList(){
-  document.getElementById('adminMsgList').innerHTML=msgClients.map((c,i)=>`
-    <div class="msg-thread${i===activeMsgIdx?' active':''}" onclick="selectMsg(${i})" style="padding:12px 14px;border-bottom:1px solid var(--border);cursor:pointer">
-      <div style="font-size:13px;font-weight:500;color:var(--text)">${i<4?'<span style="width:7px;height:7px;background:var(--teal);border-radius:50%;display:inline-block;margin-right:5px;vertical-align:middle"></span>':''}${c.name}</div>
-      <div style="font-size:11px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.preview}</div>
-    </div>`).join('');
-}
-function selectMsg(i){
-  activeMsgIdx=i;
-  const c=msgClients[i];
-  document.getElementById('adminMsgClient').textContent=c.name;
-  document.getElementById('adminMsgBubbles').innerHTML=c.msgs.map(m=>`
-    <div style="max-width:75%;padding:9px 13px;border-radius:10px;font-size:13px;line-height:1.5;${m.from==='client'?'background:var(--teal-bg);align-self:flex-start;border-radius:10px 10px 10px 3px':'background:var(--teal-deep);color:#e8f7fa;align-self:flex-end;border-radius:10px 10px 3px 10px'}">${m.text}</div>`).join('');
-  renderMsgList();
-}
-function adminSendMsg(){
-  const input=document.getElementById('adminMsgInput');
-  const text=input.value.trim();
-  if(!text)return;
-  msgClients[activeMsgIdx].msgs.push({from:'kelly',text});
-  input.value='';
-  selectMsg(activeMsgIdx);
-  toast('Reply sent to '+msgClients[activeMsgIdx].name);
+async function deleteReport(id) {
+  const r = state.reports.find(x => x.id === id);
+  await deleteDoc(doc(db, 'reports', id));
+  if (r?.originalPdfPath) deleteObject(ref(storage, r.originalPdfPath)).catch(() => {});
 }
 
-function confirmRevoke(){
-  const name=document.getElementById('revokeClient').value.split(' —')[0];
-  if(confirm('Are you sure you want to revoke portal access for '+name+'? They will not be able to log in until access is restored.')) toast(name+' portal access revoked.');
+async function discardEditor() {
+  const ed = state.editor;
+  if (ed.reportId && ed.status === 'draft') {
+    if (!confirm('Delete this draft permanently? This cannot be undone.')) return;
+    try { await deleteReport(ed.reportId); toast('Draft deleted.'); } catch { return toast('Could not delete the draft.', true); }
+  } else if (ed.dirty && !confirm('Discard your changes?')) {
+    return;
+  }
+  closeEditor();
 }
 
-function initAll(){renderClients(clients);renderAvail();renderAdminCal();renderMsgList();selectMsg(0);}
+function openReportForEditing(id) {
+  const r = state.reports.find(x => x.id === id);
+  if (!r) return;
+  if (state.editor?.dirty && !confirm('You have unsaved changes to another report. Discard them?')) return;
+  const client = clientByEmail(r.clientEmail) || { id: r.clientId, name: r.clientName, email: r.clientEmail };
+  openEditor({
+    reportId: r.id, status: r.status, client, file: null, fileName: r.originalFileName,
+    analysis: structuredClone(r.analysisData), scanDate: r.scanDate, originalPdfPath: r.originalPdfPath, publishedAt: r.publishedAt || null,
+  });
+}
+
+// ── View modal ──
+function openView(title, analysis) {
+  $('viewTitle').textContent = title;
+  $('viewBody').innerHTML = reportHtml(analysis);
+  $('viewModal').classList.add('show');
+  animateGauges($('viewBody'));
+}
+$('viewClose').addEventListener('click', () => $('viewModal').classList.remove('show'));
+$('viewModal').addEventListener('click', e => { if (e.target.id === 'viewModal') $('viewModal').classList.remove('show'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') $('viewModal').classList.remove('show'); });
+
+// ── Table actions (delegated) ──
+document.addEventListener('click', async e => {
+  const t = e.target.closest('[data-review],[data-view],[data-unpublish],[data-delete],[data-fulfill],[data-thread]');
+  if (!t) return;
+  try {
+    if (t.dataset.review) openReportForEditing(t.dataset.review);
+    else if (t.dataset.view) {
+      const r = state.reports.find(x => x.id === t.dataset.view);
+      if (r) openView(`${r.clientName} — ${r.scanDate ? formatDate(r.scanDate + 'T12:00') : formatDate(r.publishedAt)}`, r.analysisData);
+    } else if (t.dataset.unpublish) {
+      if (!confirm('Unpublish this report? It will disappear from the client\'s portal and move to Pending Approval.')) return;
+      await updateDoc(doc(db, 'reports', t.dataset.unpublish), { status: 'draft', updatedAt: serverTimestamp() });
+      toast('Report unpublished and moved to Pending Approval.');
+    } else if (t.dataset.delete) {
+      if (!confirm('Delete this draft permanently?')) return;
+      await deleteReport(t.dataset.delete);
+      toast('Draft deleted.');
+    } else if (t.dataset.fulfill) {
+      await updateDoc(doc(db, 'supplementRequests', t.dataset.fulfill), { status: 'fulfilled', updatedAt: serverTimestamp() });
+      toast('Marked as fulfilled.');
+    } else if (t.dataset.thread) openThread(t.dataset.thread);
+  } catch (err) {
+    console.error(err);
+    toast('That action failed. Please try again.', true);
+  }
+});
+document.addEventListener('change', async e => {
+  const el = e.target;
+  try {
+    if (el.dataset.appt) {
+      const a = state.appointments.find(x => x.id === el.dataset.appt);
+      await updateDoc(doc(db, 'appointments', el.dataset.appt), { status: el.value, updatedAt: serverTimestamp() });
+      toast(`Appointment marked ${el.value}.`);
+      if (a && ['confirmed', 'declined'].includes(el.value)) {
+        sendNotification({
+          to_email: a.clientEmail,
+          subject: 'Update on your appointment request — Quest for Wellness',
+          message: `Hi ${firstName(a.clientName)},\n\nKelly has responded to your appointment request. Sign in to your client portal for details:\n${PORTAL_URL}\n\nQuest for Wellness, LLC`,
+        });
+      }
+    } else if (el.dataset.intake) {
+      await updateDoc(doc(db, 'users', el.dataset.intake), { intakeSubmittedAt: el.value ? new Date(el.value + 'T12:00') : null });
+      toast('Intake date saved.');
+    }
+  } catch (err) {
+    console.error(err);
+    toast('Update failed. Please try again.', true);
+  }
+});
+
+window.addEventListener('beforeunload', e => {
+  if (state.editor?.dirty) { e.preventDefault(); e.returnValue = ''; }
+});
 </script>
 </body>
 </html>

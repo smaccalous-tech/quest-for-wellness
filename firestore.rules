@@ -1,0 +1,76 @@
+rules_version = '2';
+
+// Firestore security rules for Quest for Wellness.
+// Deploy: Firebase console → Firestore Database → Rules (paste this file), or `firebase deploy --only firestore:rules`.
+// Everyone must have a VERIFIED email. Kelly (admin) can read/write everything;
+// clients can only see their own records and only reports Kelly has published.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function verified() { return signedIn() && request.auth.token.email_verified == true; }
+    function myEmail()  { return request.auth.token.email.lower(); }
+    function isAdmin()  { return verified() && myEmail() == 'questforwellness22@gmail.com'; }
+    function isSelf(uid) { return verified() && request.auth.uid == uid; }
+
+    // Client profiles — users/{uid}
+    match /users/{uid} {
+      allow read: if isAdmin() || isSelf(uid);
+      allow create: if isSelf(uid)
+        && request.resource.data.keys().hasOnly(['name', 'email', 'phone', 'createdAt', 'updatedAt'])
+        && request.resource.data.email == myEmail();
+      // Clients may edit only their contact details; intake date etc. are Kelly's
+      allow update: if isAdmin() || (isSelf(uid)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name', 'phone', 'email', 'updatedAt'])
+        && request.resource.data.email == myEmail());
+      allow delete: if isAdmin();
+    }
+
+    // Scan reports — reports/{reportId}
+    match /reports/{reportId} {
+      allow read: if isAdmin()
+        || (verified() && resource.data.status == 'published' && resource.data.clientEmail == myEmail());
+      allow write: if isAdmin();
+    }
+
+    // Appointment requests — appointments/{appointmentId}
+    match /appointments/{appointmentId} {
+      allow read: if isAdmin() || (verified() && resource.data.clientId == request.auth.uid);
+      allow create: if verified()
+        && request.resource.data.clientId == request.auth.uid
+        && request.resource.data.clientEmail == myEmail()
+        && request.resource.data.status == 'requested';
+      allow update, delete: if isAdmin();
+    }
+
+    // Supplement requests — supplementRequests/{requestId}
+    match /supplementRequests/{requestId} {
+      allow read: if isAdmin() || (verified() && resource.data.clientId == request.auth.uid);
+      allow create: if verified()
+        && request.resource.data.clientId == request.auth.uid
+        && request.resource.data.clientEmail == myEmail()
+        && request.resource.data.status == 'requested';
+      allow update, delete: if isAdmin();
+    }
+
+    // Message threads — messages/{threadId} where threadId is the client's uid
+    match /messages/{threadId} {
+      allow read: if isAdmin() || isSelf(threadId);
+      allow create, update: if isAdmin()
+        || (isSelf(threadId) && request.resource.data.clientId == threadId);
+      allow delete: if isAdmin();
+
+      match /messages/{messageId} {
+        allow read: if isAdmin() || isSelf(threadId);
+        allow create: if (isAdmin() && request.resource.data.sender == 'admin')
+          || (isSelf(threadId) && request.resource.data.sender == 'client');
+        allow update, delete: if isAdmin();
+      }
+    }
+
+    // Everything else is closed
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

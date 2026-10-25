@@ -1,0 +1,13 @@
+{
+  "name": "quest-for-wellness",
+  "private": true,
+  "type": "module",
+  "description": "Quest for Wellness website and serverless API",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "0.133.0",
+    "jose": "6.2.12"
+  }
+}
