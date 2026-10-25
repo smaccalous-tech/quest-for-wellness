@@ -624,35 +624,72 @@ body{font-family:'DM Sans',sans-serif;background:#f2f8fa;color:var(--text);min-h
   </div>
 </div>
 
-<script>
-// ── Auth ──
-const DEMO_USER = { email:'jane@example.com', password:'wellness', name:'Jane Doe', first:'Jane' };
+<script type="module">
+// ── Auth (Firebase) ──
+import { auth } from './firebase-config.js';
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 
-function doLogin() {
-  const e = document.getElementById('loginEmail').value.trim().toLowerCase();
-  const p = document.getElementById('loginPassword').value;
+function showLoginError(msg) {
   const err = document.getElementById('loginError');
-  // Demo: accept any non-empty email+password OR exact match
-  if (!e || !p) { err.style.display='block'; err.textContent='Please enter your email and password.'; return; }
-  err.style.display='none';
-  const first = e.split('@')[0].split('.')[0];
-  const name = first.charAt(0).toUpperCase()+first.slice(1);
-  document.getElementById('welcomeName').textContent = name;
-  document.getElementById('sidebarName').childNodes[0].textContent = name+' ';
-  document.getElementById('sidebarInitials').textContent = name[0].toUpperCase();
-  document.getElementById('loginScreen').style.display='none';
-  document.getElementById('portalApp').classList.add('show');
+  err.textContent = msg;
+  err.style.display = 'block';
 }
 
+window.doLogin = async function() {
+  const e = document.getElementById('loginEmail').value.trim();
+  const p = document.getElementById('loginPassword').value;
+  if (!e || !p) { showLoginError('Please enter your email and password.'); return; }
+  document.getElementById('loginError').style.display = 'none';
+  try {
+    await signInWithEmailAndPassword(auth, e, p);
+    // onAuthStateChanged shows the portal
+  } catch (err) {
+    console.error('Sign-in error:', err);
+    if (err.code === 'auth/too-many-requests') showLoginError('Too many attempts. Please wait a few minutes and try again.');
+    else if (err.code === 'auth/network-request-failed') showLoginError('Network error. Please check your connection and try again.');
+    else showLoginError('Incorrect email or password. Please try again.');
+  }
+};
+
+window.doLogout = async function() {
+  await signOut(auth);
+  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginPassword').value = '';
+};
+
+window.sendReset = async function() {
+  const e = document.getElementById('forgotEmail').value.trim();
+  if (!e) return;
+  try {
+    await sendPasswordResetEmail(auth, e);
+  } catch (err) {
+    // Don't reveal whether the account exists
+    console.error('Password reset error:', err);
+  }
+  alert('If an account exists for '+e+', a password reset link has been sent.');
+  showLogin();
+};
+
+onAuthStateChanged(auth, user => {
+  if (user) {
+    const first = user.displayName ? user.displayName.split(' ')[0] : user.email.split('@')[0].split('.')[0];
+    const name = first.charAt(0).toUpperCase()+first.slice(1);
+    document.getElementById('welcomeName').textContent = name;
+    document.getElementById('sidebarName').childNodes[0].textContent = (user.displayName || name)+' ';
+    document.getElementById('sidebarInitials').textContent = name[0].toUpperCase();
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('forgotScreen').style.display = 'none';
+    document.getElementById('portalApp').classList.add('show');
+  } else {
+    document.getElementById('portalApp').classList.remove('show');
+    document.getElementById('loginScreen').style.display = 'flex';
+  }
+});
+</script>
+<script>
 document.getElementById('loginEmail').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('loginPassword').focus(); });
 document.getElementById('loginPassword').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
 
-function doLogout() {
-  document.getElementById('portalApp').classList.remove('show');
-  document.getElementById('loginScreen').style.display='flex';
-  document.getElementById('loginEmail').value='';
-  document.getElementById('loginPassword').value='';
-}
 function showForgot() {
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('forgotScreen').style.display='flex';
@@ -660,12 +697,6 @@ function showForgot() {
 function showLogin() {
   document.getElementById('forgotScreen').style.display='none';
   document.getElementById('loginScreen').style.display='flex';
-}
-function sendReset() {
-  const e = document.getElementById('forgotEmail').value;
-  if (!e) return;
-  alert('If an account exists for '+e+', a password reset link has been sent.');
-  showLogin();
 }
 
 // ── Panel nav ──

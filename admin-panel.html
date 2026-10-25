@@ -551,18 +551,46 @@ tr:hover td{background:#fafcfd}
 
 <div class="toast" id="toastEl"></div>
 
-<script>
-// ── Auth ──
-function adminLogin(){
-  const e=document.getElementById('adminEmail').value;
+<script type="module">
+// ── Auth (Firebase) — only ADMIN_EMAIL may enter ──
+import { auth, ADMIN_EMAIL } from './firebase-config.js';
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
+let adminReady=false;
+
+window.adminLogin=async function(){
+  const e=document.getElementById('adminEmail').value.trim();
   const p=document.getElementById('adminPass').value;
   if(!e||!p){alert('Please enter credentials.');return;}
-  document.getElementById('loginWrap').style.display='none';
-  document.getElementById('adminApp').classList.add('show');
-  initAll();
-}
+  if(e.toLowerCase()!==ADMIN_EMAIL){alert('Access denied. This account is not authorized for the admin panel.');return;}
+  try{
+    await signInWithEmailAndPassword(auth,e,p);
+    // onAuthStateChanged shows the panel
+  }catch(err){
+    console.error('Admin sign-in error:',err);
+    if(err.code==='auth/too-many-requests')alert('Too many attempts. Please wait a few minutes and try again.');
+    else alert('Incorrect email or password.');
+  }
+};
+
+window.adminLogout=function(){signOut(auth);};
+
+onAuthStateChanged(auth,user=>{
+  if(user&&user.email&&user.email.toLowerCase()===ADMIN_EMAIL){
+    document.getElementById('loginWrap').style.display='none';
+    document.getElementById('adminApp').classList.add('show');
+    if(!adminReady){adminReady=true;initAll();}
+  }else{
+    // Signed in as someone else (e.g. a client) — deny and sign them out
+    if(user){signOut(auth);alert('Access denied. This account is not authorized for the admin panel.');}
+    document.getElementById('adminApp').classList.remove('show');
+    document.getElementById('loginWrap').style.display='flex';
+    document.getElementById('adminPass').value='';
+  }
+});
+</script>
+<script>
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('loginWrap').style.display!=='none')adminLogin();});
-function adminLogout(){document.getElementById('adminApp').classList.remove('show');document.getElementById('loginWrap').style.display='flex';}
 
 // ── Panel nav ──
 const pMeta={
