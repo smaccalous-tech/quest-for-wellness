@@ -369,22 +369,16 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
   <!-- ── Sample ── -->
   <div class="card">
     <div class="card-title">Your animal's sample</div>
-    <!--
-      KELLY TO CONFIRM: the collection steps below are common practice, not Qest4's
-      official animal protocol. Check the amount, body location, and whether a nail
-      clipping is also needed, then edit this list to match.
-    -->
     <div class="sample-box">
       <h4>How to collect a hair sample</h4>
       <ol>
-        <li>Wash and dry your hands, and handle only one animal at a time.</li>
-        <li class="species-only" data-species="Horse">Pull a small pinch of hair (about 20–30 strands) from the <strong>mane or tail</strong> — pulled, not cut, so the roots are included.</li>
-        <li class="species-only" data-species="Dog">Pull or brush out a small pinch of hair (about 20–30 strands) from the <strong>base of the tail or along the back</strong>.</li>
-        <li>Place the hair in a <strong>clean paper envelope</strong> — not plastic — and seal it.</li>
-        <li>Write your animal's name, your name and the date on the envelope.</li>
+        <li class="species-only" data-species="Horse">Pull 20–30 hairs from the <strong>mane or tail</strong> with the roots attached (do not cut).</li>
+        <li class="species-only" data-species="Dog">Pull 20–30 hairs from the <strong>base of the tail or along the back</strong> with the roots attached (do not cut).</li>
+        <li>Place the hair in a <strong>labeled ziplock bag</strong> with your animal's name and your name written on it.</li>
+        <li>Place the ziplock bag inside a <strong>padded envelope</strong> for mailing.</li>
       </ol>
-      <!-- KELLY TO CONFIRM: replace this sentence with the mailing address once decided. -->
-      <p>After Kelly receives this form, she'll email you the mailing address and next steps.</p>
+      <p class="species-none">Choose horse or dog above to see where to collect the hair.</p>
+      <p>Kelly will send mailing instructions after your appointment is confirmed.</p>
     </div>
     <div class="field-row">
       <div class="field">
@@ -425,7 +419,7 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 <div class="success-screen" id="successScreen">
   <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
   <h2 id="successTitle">Thank you!</h2>
-  <p id="successMsg">Kelly will review your information and email you the next steps for <span id="successAnimal"></span>'s assessment, including where to mail the hair sample.</p>
+  <p id="successMsg">Kelly will be in touch within 1-2 business days with sample mailing instructions and to confirm your appointment details.</p>
   <p style="margin-top:20px"><a href="index" class="btn btn-secondary">Back to Quest for Wellness</a></p>
   <p style="margin-top:20px;font-size:12px;color:#aaa">Quest for Wellness, LLC · Kelly Parsons CHHP, CNC · questforwellnessllc.com</p>
 </div>
@@ -455,6 +449,7 @@ function updateSpecies() {
   document.querySelectorAll('.species-only').forEach(s => {
     s.style.display = s.dataset.species === species ? (s.tagName === 'LI' ? 'list-item' : 'block') : 'none';
   });
+  document.querySelectorAll('.species-none').forEach(s => s.style.display = species ? 'none' : 'block');
 }
 document.querySelectorAll('input[name="species"]').forEach(r => r.addEventListener('change', updateSpecies));
 
@@ -584,11 +579,11 @@ async function submitForm() {
 function showSuccess(data, viaEmailApp) {
   document.getElementById('formWrap').style.display = 'none';
   document.getElementById('successTitle').textContent = 'Thank you, ' + data.owner_name.split(' ')[0] + '!';
-  document.getElementById('successAnimal').textContent = data.animal_name;
   if (viaEmailApp) {
     document.getElementById('successMsg').innerHTML =
       'Your email app should now be open with your answers addressed to Kelly — <strong>please press Send</strong> to finish. ' +
-      'If it didn\'t open, email <a href="mailto:' + KELLY_EMAIL + '">' + KELLY_EMAIL + '</a> and Kelly will follow up.';
+      'If it didn\'t open, email <a href="mailto:' + KELLY_EMAIL + '">' + KELLY_EMAIL + '</a>. ' +
+      'Kelly will be in touch within 1-2 business days with sample mailing instructions and to confirm your appointment details.';
   }
   document.getElementById('successScreen').classList.add('show');
   window.scrollTo({ top: 0, behavior: 'smooth' });
