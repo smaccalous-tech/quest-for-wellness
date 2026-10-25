@@ -4,154 +4,224 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quest for Wellness, LLC — Holistic Health & Qest4 Bioenergetic Services</title>
-<meta name="description" content="Certified holistic health services using the Qest4 bioresonance system. Kelly Parsons CHHP, CNC — personalized, non-invasive wellness assessments.">
+<meta name="description" content="Certified holistic health services using the Qest4 bioresonance system — for people and animals. Kelly Parsons CHHP, CNC — personalized, non-invasive wellness assessments, with remote testing for horses and dogs nationwide.">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js')</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;color:#1a2e35;background:#fff}
-:root{--teal:#1a9aaa;--teal-deep:#0a4f6a;--teal-light:#29b8c8;--teal-bg:#e8f7fa;--navy:#072f40}
+:root{--teal:#1a9aaa;--teal-deep:#0a4f6a;--teal-light:#29b8c8;--teal-bg:#e8f7fa;--navy:#072f40;--ink:#1a2e35;--muted:#5a7a85}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:#fff;overflow-x:hidden}
+img{max-width:100%}
 
 /* NAV */
-nav{background:#0a4f6a;display:flex;align-items:center;justify-content:space-between;padding:10px 32px;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,0.18)}
-.nav-logo{display:flex;align-items:center;gap:10px}
-.nav-logo img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid rgba(41,184,200,0.4)}
-.nav-brand{color:#e8f7fa;font-size:15px;font-weight:500;line-height:1.2}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 32px;background:transparent;transition:background 0.35s,box-shadow 0.35s,padding 0.35s}
+nav.solid{background:#0a4f6a;box-shadow:0 2px 16px rgba(0,0,0,0.18);padding:10px 32px}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid rgba(41,184,200,0.5)}
+.nav-brand{color:#f0fbfc;font-size:15px;font-weight:500;line-height:1.2}
 .nav-brand span{display:block;font-size:11px;font-weight:400;opacity:0.7}
-.nav-links{display:flex;gap:2px;flex-wrap:wrap}
-.nav-link{color:#9dd4e0;font-size:13px;padding:6px 10px;border-radius:6px;cursor:pointer;border:none;background:transparent;font-family:'DM Sans',sans-serif}
-.nav-link:hover{background:rgba(255,255,255,0.1);color:#e8f7fa}
+.nav-right{display:flex;align-items:center;gap:18px}
+.nav-links{display:flex;gap:2px}
+.nav-link{color:#d6f0f5;font-size:13px;padding:7px 11px;border-radius:6px;text-decoration:none;transition:background 0.15s,color 0.15s}
+.nav-link:hover{background:rgba(255,255,255,0.12);color:#fff}
 .nav-actions{display:flex;gap:8px;align-items:center}
-.btn-login{color:#9dd4e0;font-size:13px;padding:6px 12px;border-radius:6px;border:0.5px solid rgba(157,212,224,0.35);cursor:pointer;background:transparent;font-family:'DM Sans',sans-serif;text-decoration:none;display:inline-block}
-.btn-login:hover{background:rgba(255,255,255,0.08);color:#e8f7fa}
-.btn-newclient{background:#29b8c8;color:#042C53;font-size:13px;font-weight:500;padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;display:inline-block}
+.btn-login{color:#d6f0f5;font-size:13px;padding:7px 13px;border-radius:6px;border:0.5px solid rgba(214,240,245,0.45);text-decoration:none;transition:background 0.15s}
+.btn-login:hover{background:rgba(255,255,255,0.1);color:#fff}
+.btn-newclient{background:#29b8c8;color:#042C53;font-size:13px;font-weight:500;padding:8px 15px;border-radius:6px;text-decoration:none;transition:background 0.15s,color 0.15s}
 .btn-newclient:hover{background:#1a9aaa;color:#e8f7fa}
+.nav-toggle{display:none;background:none;border:0;width:40px;height:40px;cursor:pointer;border-radius:8px}
+.nav-toggle span{display:block;width:22px;height:2px;background:#f0fbfc;margin:5px auto;border-radius:2px;transition:transform 0.25s,opacity 0.25s}
+nav.open .nav-toggle span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+nav.open .nav-toggle span:nth-child(2){opacity:0}
+nav.open .nav-toggle span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 
 /* HERO */
-.hero{position:relative;min-height:480px;display:flex;align-items:center;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1400&q=80');background-size:cover;background-position:center;filter:brightness(0.35)}
-.hero-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(10,79,106,0.85) 55%,rgba(10,79,106,0.2))}
-.hero-content{position:relative;z-index:2;padding:60px 48px;max-width:620px}
-.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(41,184,200,0.2);border:0.5px solid rgba(41,184,200,0.5);color:#b8e6f0;font-size:12px;padding:4px 14px;border-radius:20px;margin-bottom:18px}
-.hero-dot{width:7px;height:7px;background:#29b8c8;border-radius:50%}
-.hero h1{font-family:'Cormorant Garamond',serif;color:#f0fbfc;font-size:42px;font-weight:600;line-height:1.2;margin-bottom:14px}
+.hero{position:relative;height:100vh;height:100svh;min-height:600px;display:flex;align-items:center;justify-content:center;overflow:hidden;text-align:center;color:#f0fbfc}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=1400&q=80') center/cover no-repeat;transform:scale(1.08);animation:heroZoom 18s ease-out forwards}
+@keyframes heroZoom{to{transform:scale(1)}}
+.hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(7,47,64,0.45) 0%,rgba(7,47,64,0.75) 70%),linear-gradient(to bottom,rgba(10,79,106,0.25),rgba(7,47,64,0.85))}
+#particles{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hero-content{position:relative;z-index:2;padding:96px 24px 80px;max-width:860px}
+.hero-logo{width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid rgba(41,184,200,0.55);box-shadow:0 0 40px rgba(41,184,200,0.35);margin:0 auto 22px;display:block}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(41,184,200,0.18);border:0.5px solid rgba(41,184,200,0.55);color:#b8e6f0;font-size:12px;padding:5px 14px;border-radius:20px;margin-bottom:18px}
+.hero-dot{width:7px;height:7px;background:#29b8c8;border-radius:50%;box-shadow:0 0 8px #29b8c8}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(40px,6.4vw,76px);font-weight:600;line-height:1.08;margin-bottom:18px;text-shadow:0 2px 30px rgba(0,0,0,0.35)}
 .hero h1 em{color:#29b8c8;font-style:normal}
-.hero p{color:#9dd4e0;font-size:15px;line-height:1.75;margin-bottom:28px;max-width:460px}
-.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
-.btn-primary{background:#29b8c8;color:#042C53;font-weight:500;font-size:14px;padding:12px 24px;border-radius:8px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;display:inline-block}
-.btn-primary:hover{background:#1a9aaa;color:#e8f7fa}
-.btn-ghost{background:transparent;color:#b8e6f0;font-size:14px;padding:11px 24px;border-radius:8px;border:0.5px solid rgba(184,230,240,0.45);cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;display:inline-block}
-.btn-ghost:hover{background:rgba(255,255,255,0.07)}
+.hero-sub{font-size:clamp(15px,1.8vw,19px);color:#b8e6f0;line-height:1.6;max-width:600px;margin:0 auto 38px}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:640px;margin:0 auto}
+.choice{display:flex;align-items:center;gap:14px;text-align:left;padding:20px 22px;border-radius:14px;text-decoration:none;color:#f0fbfc;background:rgba(255,255,255,0.08);border:1px solid rgba(184,230,240,0.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:transform 0.25s,background 0.25s,border-color 0.25s,box-shadow 0.25s}
+.choice:hover{transform:translateY(-4px);background:rgba(41,184,200,0.22);border-color:#29b8c8;box-shadow:0 14px 40px rgba(0,0,0,0.3)}
+.choice.primary{background:#29b8c8;border-color:#29b8c8;color:#042C53}
+.choice.primary:hover{background:#3cc9d8}
+.choice-icon{width:46px;height:46px;min-width:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.14)}
+.choice.primary .choice-icon{background:rgba(4,44,83,0.12)}
+.choice-icon svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.6}
+.choice strong{display:block;font-size:17px;font-weight:500;line-height:1.25}
+.choice small{display:block;font-size:12px;opacity:0.75;margin-top:3px}
+.scroll-cue{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:2;color:#9dd4e0;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:6px}
+.scroll-cue svg{width:22px;height:22px;stroke:#29b8c8;fill:none;stroke-width:2;animation:bounce 1.8s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+.fade{opacity:0;transform:translateY(16px);animation:fadeUp 0.9s ease forwards}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+.d1{animation-delay:0.5s}.d2{animation-delay:0.9s}.d3{animation-delay:1.25s}.d4{animation-delay:1.6s}.d5{animation-delay:2.1s}
+
+/* SCROLL REVEAL */
+.js .reveal{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+.js .reveal.in{opacity:1;transform:none}
+.reveal-d1{transition-delay:0.1s!important}.reveal-d2{transition-delay:0.2s!important}.reveal-d3{transition-delay:0.3s!important}
+
+/* SHARED */
+.section{padding:88px 48px}
+.section-alt{background:#f4f9fa}
+.wrap{max-width:1180px;margin:0 auto}
+.section-label{font-size:11px;font-weight:500;color:#1a9aaa;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:10px}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,3.6vw,42px);font-weight:600;margin-bottom:12px;color:#0a4f6a;line-height:1.15}
+.section-sub{font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:40px;max-width:560px}
+.btn-primary{background:#29b8c8;color:#042C53;font-weight:500;font-size:14px;padding:13px 26px;border-radius:8px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;display:inline-block;transition:background 0.2s,color 0.2s,transform 0.2s,box-shadow 0.2s}
+.btn-primary:hover{background:#1a9aaa;color:#e8f7fa;transform:translateY(-2px);box-shadow:0 10px 24px rgba(10,79,106,0.25)}
+.lift{transition:transform 0.3s ease,box-shadow 0.3s ease}
+.lift:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(10,79,106,0.16)}
+
+/* ANIMALS */
+.animals{position:relative;background:radial-gradient(ellipse at 15% 0%,rgba(41,184,200,0.22),transparent 55%),linear-gradient(160deg,#0a4f6a 0%,#072f40 100%);padding:96px 48px;overflow:hidden}
+.animals-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:40px}
+.remote-badge{display:inline-flex;align-items:center;gap:9px;background:#29b8c8;color:#042C53;font-size:12px;font-weight:500;letter-spacing:0.12em;padding:9px 18px;border-radius:30px;box-shadow:0 0 0 0 rgba(41,184,200,0.6);animation:pulse 2.4s infinite}
+.remote-badge svg{width:16px;height:16px;stroke:#042C53;fill:none;stroke-width:1.8}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(41,184,200,0.55)}70%{box-shadow:0 0 0 16px rgba(41,184,200,0)}100%{box-shadow:0 0 0 0 rgba(41,184,200,0)}}
+.animals-title{font-family:'Cormorant Garamond',serif;font-size:clamp(42px,6vw,72px);font-weight:600;color:#f0fbfc;line-height:1.02;margin:12px 0 14px}
+.animals-title em{color:#29b8c8;font-style:normal}
+.animals-kicker{font-family:'Cormorant Garamond',serif;font-size:24px;color:#b8e6f0;margin-bottom:10px}
+.animals-sub{font-size:16px;color:#9dd4e0;line-height:1.75;max-width:600px}
+.animal-cards{display:grid;grid-template-columns:1.3fr 1fr;gap:26px;align-items:stretch}
+.animal-card{background:#fff;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:transform 0.35s ease,box-shadow 0.35s ease}
+.animal-card:hover{transform:translateY(-8px);box-shadow:0 30px 60px rgba(0,0,0,0.35)}
+.animal-card.featured{border-top:4px solid #29b8c8;box-shadow:0 20px 50px rgba(0,0,0,0.3)}
+.animal-photo{position:relative;height:300px;overflow:hidden}
+.animal-card.featured .animal-photo{height:400px}
+.animal-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.8s ease}
+.animal-card:hover .animal-photo img{transform:scale(1.07)}
+.animal-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(7,47,64,0.75),transparent 55%)}
+.animal-tag{position:absolute;top:16px;left:16px;z-index:2;background:rgba(10,79,106,0.92);border:0.5px solid rgba(41,184,200,0.5);color:#e8f7fa;font-size:12px;font-weight:500;padding:5px 13px;border-radius:20px;display:flex;align-items:center;gap:7px}
+.animal-photo h3{position:absolute;left:28px;bottom:20px;z-index:2;font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:600;color:#fff;line-height:1.1;text-shadow:0 2px 16px rgba(0,0,0,0.4)}
+.animal-card.featured .animal-photo h3{font-size:46px}
+.animal-body{padding:26px 28px 30px}
+.animal-body p{font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:20px}
+.animal-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:11px 18px}
+.animal-list li{display:flex;align-items:flex-start;gap:9px;font-size:14px;color:var(--ink);line-height:1.45}
+.check{width:18px;height:18px;min-width:18px;background:#29b8c8;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.check svg{width:10px;height:10px;stroke:#042C53;fill:none;stroke-width:2.5}
+.animal-callout{margin-top:28px;display:flex;align-items:center;gap:16px;background:rgba(41,184,200,0.14);border:0.5px solid rgba(41,184,200,0.5);border-left:3px solid #29b8c8;border-radius:12px;padding:18px 22px}
+.animal-callout-icon{width:42px;height:42px;min-width:42px;border-radius:50%;background:#29b8c8;display:flex;align-items:center;justify-content:center}
+.animal-callout-icon svg{width:20px;height:20px;stroke:#042C53;fill:none;stroke-width:1.6}
+.animal-callout p{color:#e8f7fa;font-size:15px;line-height:1.6}
+.animal-callout strong{color:#fff;font-weight:500}
+.animals-cta{margin-top:30px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.animals-cta .btn-primary{font-size:15px;padding:15px 30px}
+.animals-disclaimer{margin-top:20px;font-size:12px;color:#6ab0c0;line-height:1.6;max-width:640px}
 
 /* TRUST BAR */
-.trust-bar{background:#e8f7fa;border-bottom:0.5px solid rgba(41,184,200,0.25);padding:13px 32px;display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap}
+.trust-bar{background:#e8f7fa;border-bottom:0.5px solid rgba(41,184,200,0.25);padding:16px 32px;display:flex;align-items:center;justify-content:center;gap:30px;flex-wrap:wrap}
 .trust-item{display:flex;align-items:center;gap:7px;font-size:12px;color:#0a4f6a;font-weight:500}
 .trust-item svg{width:14px;height:14px;stroke:#1a9aaa;fill:none;stroke-width:1.5}
 
-/* SECTIONS */
-.section{padding:56px 48px}
-.section-alt{background:#f4f9fa}
-.section-label{font-size:11px;font-weight:500;color:#1a9aaa;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:8px}
-.section-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;margin-bottom:10px;color:#0a4f6a;line-height:1.2}
-.section-sub{font-size:15px;color:#5a7a85;line-height:1.7;margin-bottom:36px;max-width:520px}
+/* SERVICES */
+.service-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;perspective:1000px}
+.service-card{position:relative;border-radius:14px;overflow:hidden;min-height:340px;display:block;text-decoration:none;transition:transform 0.4s ease,box-shadow 0.4s ease;transform-style:preserve-3d}
+.service-card:hover{transform:rotateX(4deg) rotateY(-5deg) translateY(-6px);box-shadow:0 24px 48px rgba(10,79,106,0.28)}
+.service-card:nth-child(even):hover{transform:rotateX(4deg) rotateY(5deg) translateY(-6px)}
+.service-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 0.6s ease}
+.service-card:hover img{transform:scale(1.06)}
+.service-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,79,106,0.95) 0%,rgba(10,79,106,0.15) 65%);display:flex;align-items:flex-end;padding:24px}
+.service-overlay h3{color:#f0fbfc;font-size:17px;font-weight:500;margin-bottom:6px}
+.service-overlay p{color:#b8e6f0;font-size:13px;line-height:1.55}
+.service-num{position:absolute;top:18px;right:20px;font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;color:rgba(255,255,255,0.75)}
 
-/* PHOTO SERVICES */
-.photo-services{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0}
-.photo-service{position:relative;overflow:hidden;min-height:260px}
-.photo-service img{width:100%;height:100%;object-fit:cover;display:block;min-height:260px;transition:transform 0.4s}
-.photo-service:hover img{transform:scale(1.04)}
-.photo-service-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,79,106,0.9) 0%,rgba(10,79,106,0.05) 60%);display:flex;align-items:flex-end;padding:22px}
-.photo-service-text h3{color:#f0fbfc;font-size:15px;font-weight:500;margin-bottom:4px}
-.photo-service-text p{color:#9dd4e0;font-size:12px;line-height:1.5}
-
-/* ABOUT SPLIT */
-.about-split{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
-.about-img-wrap{position:relative;border-radius:12px;overflow:hidden}
-.about-img-wrap img{width:100%;height:360px;object-fit:cover;display:block;border-radius:12px}
-.about-logo-badge{position:absolute;bottom:16px;right:16px;background:rgba(10,79,106,0.92);border:0.5px solid rgba(41,184,200,0.4);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px}
+/* ABOUT */
+.about-split{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.about-img-wrap{position:relative;border-radius:16px;overflow:hidden}
+.about-img-wrap img{width:100%;height:440px;object-fit:cover;display:block;transition:transform 0.8s ease}
+.about-img-wrap:hover img{transform:scale(1.04)}
+.about-logo-badge{position:absolute;bottom:18px;right:18px;background:rgba(10,79,106,0.92);border:0.5px solid rgba(41,184,200,0.4);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px}
 .about-logo-badge img{width:32px;height:32px;border-radius:50%;object-fit:cover}
 .about-logo-badge span{color:#e8f7fa;font-size:11px;font-weight:500;line-height:1.4}
-.about-text h2{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;margin-bottom:14px;color:#0a4f6a;line-height:1.25}
-.about-text p{font-size:14px;color:#5a7a85;line-height:1.8;margin-bottom:14px}
-.cert-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
-.cert-pill{background:#e8f7fa;color:#0a4f6a;font-size:12px;font-weight:500;padding:5px 14px;border-radius:20px;border:0.5px solid rgba(41,184,200,0.35)}
+.about-text h2{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,3.4vw,40px);font-weight:600;margin-bottom:16px;color:#0a4f6a;line-height:1.15}
+.about-text p{font-size:15px;color:var(--muted);line-height:1.85;margin-bottom:14px}
+.cert-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.cert-pill{background:#e8f7fa;color:#0a4f6a;font-size:12px;font-weight:500;padding:6px 14px;border-radius:20px;border:0.5px solid rgba(41,184,200,0.35)}
+
+/* STATS */
+.stats{background:linear-gradient(120deg,#072f40,#0a4f6a);padding:64px 48px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.stat{text-align:center;padding:24px 12px;border-radius:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(41,184,200,0.2)}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:clamp(44px,5vw,60px);font-weight:600;color:#29b8c8;line-height:1}
+.stat-label{margin-top:10px;font-size:13px;color:#b8e6f0;letter-spacing:0.02em}
 
 /* QEST4 */
-.qest-section{background:#0a4f6a;padding:56px 48px}
-.qest-inner{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.qest-section{background:#0a4f6a;padding:88px 48px}
+.qest-inner{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
 .qest-text h2{font-family:'Cormorant Garamond',serif;color:#f0fbfc;font-size:30px;font-weight:600;margin-bottom:12px;line-height:1.25}
-.qest-text p{color:#9dd4e0;font-size:14px;line-height:1.8;margin-bottom:20px}
-.qest-list{list-style:none;display:flex;flex-direction:column;gap:10px}
-.qest-list li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#b8e6f0}
-.qest-dot{width:18px;height:18px;min-width:18px;background:#29b8c8;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-top:1px}
-.qest-dot svg{width:10px;height:10px;stroke:#042C53;fill:none;stroke-width:2.5}
-.qest-img-wrap{border-radius:12px;overflow:hidden;position:relative}
-.qest-img-wrap img{width:100%;height:300px;object-fit:cover;display:block;border-radius:12px;opacity:0.85}
-.qest-img-label{position:absolute;bottom:0;left:0;right:0;background:rgba(10,79,106,0.9);padding:14px 18px;border-radius:0 0 12px 12px}
-.qest-img-label p{color:#b8e6f0;font-size:12px;line-height:1.6}
+.qest-text p{color:#9dd4e0;font-size:15px;line-height:1.85;margin-bottom:22px}
+.qest-list{list-style:none;display:flex;flex-direction:column;gap:12px}
+.qest-list li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:#b8e6f0}
+.qest-img-wrap{border-radius:16px;overflow:hidden;position:relative}
+.qest-img-wrap img{width:100%;height:380px;object-fit:cover;display:block;opacity:0.9}
+.qest-img-label{position:absolute;bottom:0;left:0;right:0;background:rgba(10,79,106,0.9);padding:16px 20px}
+.qest-img-label p{color:#b8e6f0;font-size:13px;line-height:1.6}
 
 /* STEPS */
-.steps-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
-.step{text-align:center;padding:28px 20px;background:#fff;border:0.5px solid rgba(41,184,200,0.2);border-radius:12px}
-.step-num{width:44px;height:44px;border-radius:50%;background:#0a4f6a;color:#e8f7fa;font-size:18px;font-weight:500;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
-.step h3{font-size:15px;font-weight:500;margin-bottom:6px;color:#0a4f6a}
-.step p{font-size:13px;color:#5a7a85;line-height:1.6}
+.steps-row{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;position:relative}
+.step{position:relative;text-align:center;padding:32px 22px;background:#fff;border:0.5px solid rgba(41,184,200,0.25);border-radius:14px}
+.step-num{width:52px;height:52px;border-radius:50%;background:#0a4f6a;color:#e8f7fa;font-size:20px;font-weight:500;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 0 0 6px #e8f7fa;transition:background 0.3s,transform 0.3s}
+.step:hover .step-num{background:#29b8c8;color:#042C53;transform:scale(1.08)}
+.step h3{font-size:16px;font-weight:500;margin-bottom:8px;color:#0a4f6a}
+.step p{font-size:13px;color:var(--muted);line-height:1.65}
 
-/* ANIMALS */
-.animals-section{background:#0a4f6a;padding:56px 48px;scroll-margin-top:66px}
-.animals-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;color:#f0fbfc;margin-bottom:10px;line-height:1.2}
-.animals-sub{font-size:15px;color:#9dd4e0;line-height:1.7;margin-bottom:36px;max-width:560px}
-.animal-cards{display:grid;grid-template-columns:1.35fr 1fr;gap:20px;align-items:stretch}
-.animal-card{background:#fff;border:0.5px solid rgba(41,184,200,0.2);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
-.animal-card.featured{border-top:3px solid #29b8c8;box-shadow:0 12px 40px rgba(0,0,0,0.25)}
-.animal-photo{position:relative;height:220px;overflow:hidden}
-.animal-card.featured .animal-photo{height:300px}
-.animal-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.4s}
-.animal-card:hover .animal-photo img{transform:scale(1.04)}
-.animal-tag{position:absolute;top:14px;left:14px;background:rgba(10,79,106,0.92);border:0.5px solid rgba(41,184,200,0.5);color:#e8f7fa;font-size:11px;font-weight:500;padding:4px 12px;border-radius:20px;display:flex;align-items:center;gap:6px}
-.animal-body{padding:24px}
-.animal-card.featured .animal-body{padding:28px}
-.animal-body h3{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:#0a4f6a;margin-bottom:8px;line-height:1.2}
-.animal-card.featured .animal-body h3{font-size:30px}
-.animal-body p{font-size:14px;color:#5a7a85;line-height:1.75;margin-bottom:18px}
-.animal-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px 16px}
-.animal-list li{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:#1a2e35;line-height:1.45}
-.animal-callout{margin-top:24px;display:flex;align-items:center;gap:16px;background:rgba(41,184,200,0.14);border:0.5px solid rgba(41,184,200,0.5);border-left:3px solid #29b8c8;border-radius:12px;padding:18px 22px}
-.animal-callout-icon{width:40px;height:40px;min-width:40px;border-radius:50%;background:#29b8c8;display:flex;align-items:center;justify-content:center}
-.animal-callout-icon svg{width:20px;height:20px;stroke:#042C53;fill:none;stroke-width:1.6}
-.animal-callout p{color:#e8f7fa;font-size:14px;line-height:1.6}
-.animal-callout strong{color:#fff;font-weight:500}
-.animals-cta{margin-top:28px}
-.animals-disclaimer{margin-top:18px;font-size:12px;color:#6ab0c0;line-height:1.6;max-width:620px}
+/* FOUNDATIONS */
+.foundations{background:linear-gradient(160deg,#0a4f6a,#072f40);padding:88px 48px;text-align:center}
+.foundations .section-title{color:#f0fbfc}
+.foundations .section-sub{color:#9dd4e0;margin:0 auto 40px}
+.found-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:960px;margin:0 auto 36px}
+.found-item{background:rgba(255,255,255,0.06);border:1px solid rgba(41,184,200,0.22);border-radius:12px;padding:22px 14px;transition:transform 0.3s,background 0.3s,border-color 0.3s,box-shadow 0.3s}
+.found-item:hover{transform:translateY(-6px);background:rgba(41,184,200,0.14);border-color:#29b8c8;box-shadow:0 16px 32px rgba(0,0,0,0.25)}
+.found-item svg{width:28px;height:28px;stroke:#29b8c8;fill:none;stroke-width:1.5;display:block;margin:0 auto 10px}
+.found-item span{font-size:13px;font-weight:500;color:#e8f7fa}
 
-/* PORTAL PREVIEW */
-.portal-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
-.portal-card{background:#fff;border:0.5px solid rgba(41,184,200,0.2);border-radius:12px;overflow:hidden}
-.portal-card-photo{height:110px;overflow:hidden}
-.portal-card-photo img{width:100%;height:100%;object-fit:cover;display:block}
-.portal-card-body{padding:16px}
-.portal-card-body h4{font-size:14px;font-weight:500;margin-bottom:4px;color:#0a4f6a}
-.portal-card-body p{font-size:12px;color:#5a7a85;line-height:1.5}
-.portal-badge{display:inline-block;background:#e8f7fa;color:#0a4f6a;font-size:10px;font-weight:500;padding:2px 8px;border-radius:10px;margin-top:8px;border:0.5px solid rgba(41,184,200,0.3)}
+/* PORTAL */
+.portal-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.portal-card{background:#fff;border:0.5px solid rgba(41,184,200,0.25);border-radius:14px;overflow:hidden}
+.portal-card-photo{height:140px;overflow:hidden}
+.portal-card-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.6s ease}
+.portal-card:hover .portal-card-photo img{transform:scale(1.07)}
+.portal-card-body{padding:18px}
+.portal-card-body h4{font-size:15px;font-weight:500;margin-bottom:5px;color:#0a4f6a}
+.portal-card-body p{font-size:13px;color:var(--muted);line-height:1.55}
+.portal-badge{display:inline-block;background:#e8f7fa;color:#0a4f6a;font-size:10px;font-weight:500;padding:3px 9px;border-radius:10px;margin-top:10px;border:0.5px solid rgba(41,184,200,0.3)}
 
 /* TESTIMONIALS */
-.testimonials{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
-.testimonial{background:#fff;border:0.5px solid rgba(41,184,200,0.2);border-radius:12px;padding:22px;border-top:3px solid #29b8c8}
-.stars{display:flex;gap:3px;margin-bottom:12px}
-.star{width:12px;height:12px;background:#29b8c8;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
-.testimonial q{font-size:13px;color:#5a7a85;line-height:1.7;font-style:italic;display:block;margin-bottom:12px}
+.testimonials{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.testimonial{background:#fff;border:0.5px solid rgba(41,184,200,0.25);border-radius:14px;padding:26px;border-top:3px solid #29b8c8}
+.stars{display:flex;gap:3px;margin-bottom:14px}
+.star{width:13px;height:13px;background:#29b8c8;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.testimonial q{font-size:14px;color:var(--muted);line-height:1.75;font-style:italic;display:block;margin-bottom:14px}
 .testimonial-author{font-size:12px;font-weight:500;color:#1a9aaa}
 
 /* CTA */
-.cta-section{background:#e8f7fa;padding:56px 48px;text-align:center}
-.cta-logo{width:68px;height:68px;border-radius:50%;object-fit:cover;margin:0 auto 16px;display:block;border:3px solid rgba(41,184,200,0.4)}
-.cta-section h2{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;color:#0a4f6a;margin-bottom:10px}
-.cta-section p{font-size:14px;color:#1a9aaa;line-height:1.7;margin-bottom:24px;max-width:420px;margin-left:auto;margin-right:auto}
-.cta-pills{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:28px}
-.cta-pill{background:#fff;border:0.5px solid rgba(41,184,200,0.4);border-radius:20px;padding:6px 16px;font-size:12px;color:#0a4f6a;display:flex;align-items:center;gap:6px}
-.cta-pill-num{background:#0a4f6a;color:#e8f7fa;border-radius:50%;width:17px;height:17px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500}
+.cta-section{position:relative;background:#e8f7fa;padding:96px 48px;text-align:center;overflow:hidden}
+.cta-section::before{content:'';position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(41,184,200,0.25),transparent 70%);top:-200px;left:50%;transform:translateX(-50%)}
+.cta-section>*{position:relative}
+.cta-logo{width:76px;height:76px;border-radius:50%;object-fit:cover;margin:0 auto 18px;display:block;border:3px solid rgba(41,184,200,0.4)}
+.cta-section h2{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,44px);font-weight:600;color:#0a4f6a;margin-bottom:12px}
+.cta-section p{font-size:15px;color:#1a9aaa;line-height:1.7;margin:0 auto 26px;max-width:460px}
+.cta-pills{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:30px}
+.cta-pill{background:#fff;border:0.5px solid rgba(41,184,200,0.4);border-radius:20px;padding:7px 16px;font-size:12px;color:#0a4f6a;display:flex;align-items:center;gap:6px}
+.cta-pill-num{background:#0a4f6a;color:#e8f7fa;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500}
+.cta-btns{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.btn-outline{background:#fff;color:#0a4f6a;font-weight:500;font-size:14px;padding:12px 24px;border-radius:8px;border:1px solid rgba(10,79,106,0.3);text-decoration:none;display:inline-block;transition:background 0.2s,transform 0.2s}
+.btn-outline:hover{background:#0a4f6a;color:#e8f7fa;transform:translateY(-2px)}
 
 /* FOOTER */
-footer{background:#072f40;padding:40px 48px}
+footer{background:#072f40;padding:48px 48px 32px}
 .footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:28px;margin-bottom:28px}
 .footer-logo-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .footer-logo-row img{width:40px;height:40px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(41,184,200,0.3)}
@@ -165,61 +235,163 @@ footer{background:#072f40;padding:40px 48px}
 .footer-links a{color:#456f7a;text-decoration:none;font-size:11px}
 .footer-links a:hover{color:#29b8c8}
 
-@media(max-width:768px){
-  .about-split,.qest-inner{grid-template-columns:1fr}
-  .footer-grid{grid-template-columns:1fr 1fr}
-  .hero h1{font-size:30px}
-  .hero-content{padding:40px 24px}
-  .section{padding:40px 24px}
-  .qest-section{padding:40px 24px}
-  .animals-section{padding:40px 24px}
-  .animal-cards{grid-template-columns:1fr}
-  .animal-card.featured .animal-photo{height:240px}
+@media(max-width:1100px){
+  .nav-links .nav-link{padding:7px 8px}
+  .service-grid,.portal-cards{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:960px){
+  nav,nav.solid{padding:10px 18px}
+  .nav-toggle{display:block}
+  .nav-right{position:absolute;top:100%;left:0;right:0;background:#0a4f6a;flex-direction:column;align-items:stretch;gap:12px;padding:12px 18px 20px;box-shadow:0 12px 24px rgba(0,0,0,0.25);display:none}
+  nav.open{background:#0a4f6a}
+  nav.open .nav-right{display:flex}
+  .nav-links{flex-direction:column}
+  .nav-link{font-size:15px;padding:11px 8px;border-bottom:0.5px solid rgba(255,255,255,0.08);border-radius:0}
+  .nav-actions .btn-login,.nav-actions .btn-newclient{flex:1;text-align:center;padding:11px}
+  .animal-cards,.about-split,.qest-inner{grid-template-columns:1fr}
+  .stats-grid,.steps-row,.found-grid{grid-template-columns:repeat(2,1fr)}
+  .testimonials{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  html{scroll-padding-top:64px}
+  .section,.animals,.qest-section,.foundations,.cta-section{padding:60px 20px}
+  .stats{padding:48px 20px}
+  footer{padding:40px 20px 28px}
+  .nav-brand{font-size:14px}
+  .hero-content{padding:84px 20px 90px}
+  .hero-logo{width:76px;height:76px;margin-bottom:16px}
+  .choices{grid-template-columns:1fr;gap:12px}
+  .choice{padding:16px 18px}
+  .animal-photo{height:240px}
+  .animal-card.featured .animal-photo{height:280px}
+  .animal-card.featured .animal-photo h3,.animal-photo h3{font-size:34px;left:22px}
+  .animal-body{padding:22px}
   .animal-list{grid-template-columns:1fr}
   .animal-callout{align-items:flex-start}
-  .cta-section{padding:40px 24px}
-  footer{padding:32px 24px}
-  nav{padding:10px 16px;position:relative}
-  .animals-section{scroll-margin-top:0}
+  .service-grid,.portal-cards{grid-template-columns:1fr}
+  .service-card{min-height:260px}
+  .about-img-wrap img{height:300px}
+  .qest-img-wrap img{height:260px}
+  .stat{padding:18px 8px}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}
+  .js .reveal{opacity:1;transform:none}
 }
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="nav-logo">
+<nav id="nav">
+  <a href="#top" class="nav-logo">
     <img src="FINAL_LOGO.jpg" alt="Quest for Wellness logo">
     <div class="nav-brand">Quest for Wellness<span>LLC · Holistic Health</span></div>
-  </div>
-  <div class="nav-links">
-    <a href="#about" class="nav-link">About</a>
-    <a href="#services" class="nav-link">Services</a>
-    <a href="qest4" class="nav-link">The Qest4</a>
-    <a href="before-your-visit" class="nav-link">Before Your Visit</a>
-    <a href="#animals" class="nav-link">Animals</a>
-    <a href="#portal" class="nav-link">Client Portal</a>
-    <a href="#contact" class="nav-link">Contact</a>
-  </div>
-  <div class="nav-actions">
-    <a href="client-portal" class="btn-login">Client login</a>
-    <a href="intake-form" class="btn-newclient">New client</a>
+  </a>
+  <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="#top" class="nav-link">Home</a>
+      <a href="#services" class="nav-link">Services</a>
+      <a href="qest4" class="nav-link">The Qest4</a>
+      <a href="#animals" class="nav-link">Animals</a>
+      <a href="before-your-visit" class="nav-link">Before Your Visit</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <a href="client-portal" class="btn-login">Client login</a>
+      <a href="intake-form" class="btn-newclient">New client</a>
+    </div>
   </div>
 </nav>
 
-<div class="hero">
+<!-- 1. HERO -->
+<header class="hero" id="top">
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
+  <canvas id="particles" aria-hidden="true"></canvas>
   <div class="hero-content">
-    <div class="hero-badge"><div class="hero-dot"></div>Certified Qest4 practitioner</div>
-    <h1>Your journey to <em>natural wellness</em> starts here</h1>
-    <p>Holistic health services powered by the Qest4 bioresonance system — a non-invasive, personalized approach to understanding your body's unique needs.</p>
-    <div class="hero-btns">
-      <a href="intake-form" class="btn-primary">Start your wellness quest</a>
-      <a href="#qest4" class="btn-ghost">Learn about Qest4</a>
+    <img class="hero-logo fade d1" src="FINAL_LOGO.jpg" alt="Quest for Wellness, LLC">
+    <div class="fade d1"><div class="hero-badge"><div class="hero-dot"></div>Certified Qest4 practitioner</div></div>
+    <h1 class="fade d2">Your quest for <em>wellness</em> starts here</h1>
+    <p class="hero-sub fade d3">Bioenergetic testing for people and animals — from Colorado to everywhere</p>
+    <div class="choices fade d4">
+      <a href="#services" class="choice">
+        <div class="choice-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg></div>
+        <div><strong>I'm here for myself</strong><small>Holistic wellness for people</small></div>
+      </a>
+      <a href="#animals" class="choice primary">
+        <div class="choice-icon"><svg viewBox="0 0 24 24"><circle cx="5.5" cy="10" r="2"/><circle cx="9.5" cy="5.5" r="2"/><circle cx="14.5" cy="5.5" r="2"/><circle cx="18.5" cy="10" r="2"/><path d="M12 12c-3 0-5.5 3.5-5.5 6 0 1.7 1.3 2.5 2.8 2.5 1.2 0 1.8-.6 2.7-.6s1.5.6 2.7.6c1.5 0 2.8-.8 2.8-2.5 0-2.5-2.5-6-5.5-6z"/></svg></div>
+        <div><strong>I'm here for my animal</strong><small>Horses &amp; dogs — remote testing</small></div>
+      </a>
     </div>
   </div>
-</div>
+  <a href="#animals" class="scroll-cue fade d5">Scroll to explore<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></a>
+</header>
 
+<!-- 2. ANIMALS -->
+<section id="animals" class="animals">
+  <div class="wrap">
+    <div class="animals-head reveal">
+      <div>
+        <div class="section-label" style="color:#29b8c8">Animals &amp; Pets</div>
+        <h2 class="animals-title">Now serving <em>horses</em> &amp; <em>dogs</em></h2>
+        <div class="animals-kicker">Qest4 works for your animals too</div>
+        <p class="animals-sub">The same powerful bioenergetic testing that helps people find balance works beautifully for animals. Safe, non-invasive, and incredibly insightful.</p>
+      </div>
+      <div class="remote-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>REMOTE TESTING AVAILABLE NATIONWIDE</div>
+    </div>
+    <div class="animal-cards">
+      <div class="animal-card featured reveal">
+        <div class="animal-photo">
+          <img src="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=1000&q=80" alt="Horse in a pasture">
+          <div class="animal-tag"><div class="hero-dot"></div>Featured · Horses</div>
+          <h3>Equine wellness</h3>
+        </div>
+        <div class="animal-body">
+          <p>From performance horses and barrel horses to trail horses and beloved companions, Qest4 testing helps uncover what your horse can't tell you — so they can feel, move, and perform at their best.</p>
+          <ul class="animal-list">
+            <li><div class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Nutritional imbalances</li>
+            <li><div class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Allergy identification</li>
+            <li><div class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Digestive health</li>
+            <li><div class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Stress and behavioral issues</li>
+            <li><div class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Immune support</li>
+            <li><div class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Performance optimization</li>
+          </ul>
+        </div>
+      </div>
+      <div class="animal-card reveal reveal-d2">
+        <div class="animal-photo">
+          <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&q=80" alt="Happy dog outdoors">
+          <div class="animal-tag"><div class="hero-dot"></div>Dogs</div>
+          <h3>Canine wellness</h3>
+        </div>
+        <div class="animal-body">
+          <p>Whether they're a family dog or a hard-working partner, Qest4 testing gives you insight into what's behind their symptoms and how to support their health naturally.</p>
+          <ul class="animal-list">
+            <li><div class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Food sensitivities</li>
+            <li><div class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Skin and coat issues</li>
+            <li><div class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Digestive imbalances</li>
+            <li><div class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Energy and vitality</li>
+            <li><div class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Immune support</li>
+            <li><div class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Behavioral stress</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="animal-callout reveal">
+      <div class="animal-callout-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3,7 12,13 21,7"/></svg></div>
+      <p><strong>Remote testing available</strong> — send a hair sample by mail. No in-person visit required for animals.</p>
+    </div>
+    <div class="animals-cta reveal">
+      <a href="animal-intake-form" class="btn-primary">Request an animal wellness assessment</a>
+    </div>
+    <p class="animals-disclaimer">Qest4 testing is a complementary wellness tool and is not a substitute for veterinary diagnosis or treatment. Please continue to work with your veterinarian for your animal's medical care.</p>
+  </div>
+</section>
+
+<!-- 3. TRUST BAR -->
 <div class="trust-bar">
   <div class="trust-item"><svg viewBox="0 0 16 16"><path d="M8 1l1.5 4.5H14l-3.7 2.6 1.4 4.4L8 10l-3.7 2.5 1.4-4.4L2 5.5h4.5z"/></svg>Certified practitioner</div>
   <div class="trust-item"><svg viewBox="0 0 16 16"><path d="M8 14s-6-3.8-6-7.5a6 6 0 0 1 12 0C14 10.2 8 14 8 14z"/></svg>100% holistic &amp; natural</div>
@@ -228,41 +400,50 @@ footer{background:#072f40;padding:40px 48px}
   <div class="trust-item"><svg viewBox="0 0 16 16"><rect x="3" y="6" width="10" height="8" rx="1.5"/><path d="M5 6V4a3 3 0 0 1 6 0v2"/></svg>Secure client portal</div>
 </div>
 
-<div id="services" class="section" style="padding-bottom:0">
-  <div class="section-label">What we offer</div>
-  <div class="section-title">Services designed around you</div>
-  <div class="section-sub">Every session is personalized. We use advanced bioresonance technology alongside holistic wellness expertise to identify imbalances and chart a natural path forward.</div>
-</div>
+<!-- 4. SERVICES -->
+<section id="services" class="section">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-label">What we offer</div>
+      <h2 class="section-title">Services designed around you</h2>
+      <p class="section-sub">Every session is personalized. We use advanced bioresonance technology alongside holistic wellness expertise to identify imbalances and chart a natural path forward.</p>
+    </div>
+    <div class="service-grid">
+      <a href="intake-form" class="service-card reveal">
+        <img src="https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=600&q=75" alt="Initial wellness assessment">
+        <div class="service-num">01</div>
+        <div class="service-overlay"><div><h3>Initial wellness assessment</h3><p>Comprehensive Qest4 scan to establish your baseline health picture</p></div></div>
+      </a>
+      <a href="intake-form" class="service-card reveal reveal-d1">
+        <img src="https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=600&q=75" alt="Bioresonance testing">
+        <div class="service-num">02</div>
+        <div class="service-overlay"><div><h3>Bioresonance testing</h3><p>Non-invasive energetic testing across hundreds of health areas</p></div></div>
+      </a>
+      <a href="intake-form" class="service-card reveal reveal-d2">
+        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=75" alt="Wellness optimization">
+        <div class="service-num">03</div>
+        <div class="service-overlay"><div><h3>Wellness optimization</h3><p>Personalized nutritional and supplement recommendations</p></div></div>
+      </a>
+      <a href="intake-form" class="service-card reveal reveal-d3">
+        <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&q=75" alt="Follow-up visits">
+        <div class="service-num">04</div>
+        <div class="service-overlay"><div><h3>Follow-up appointments</h3><p>Track progress over time with repeat assessments and updated protocols</p></div></div>
+      </a>
+    </div>
+  </div>
+</section>
 
-<div class="photo-services">
-  <div class="photo-service">
-    <img src="https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=600&q=75" alt="Initial wellness assessment">
-    <div class="photo-service-overlay"><div class="photo-service-text"><h3>Initial wellness assessment</h3><p>Comprehensive Qest4 scan to establish your baseline health picture</p></div></div>
-  </div>
-  <div class="photo-service">
-    <img src="https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=600&q=75" alt="Bioresonance testing">
-    <div class="photo-service-overlay"><div class="photo-service-text"><h3>Bioresonance testing</h3><p>Non-invasive energetic testing across hundreds of health areas</p></div></div>
-  </div>
-  <div class="photo-service">
-    <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=75" alt="Wellness optimization">
-    <div class="photo-service-overlay"><div class="photo-service-text"><h3>Wellness optimization</h3><p>Personalized nutritional and supplement recommendations</p></div></div>
-  </div>
-  <div class="photo-service">
-    <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&q=75" alt="Follow-up visits">
-    <div class="photo-service-overlay"><div class="photo-service-text"><h3>Follow-up appointments</h3><p>Track progress over time with repeat assessments and updated protocols</p></div></div>
-  </div>
-</div>
-
-<div id="about" class="section section-alt">
-  <div class="about-split">
-    <div class="about-img-wrap">
-      <img src="https://images.unsplash.com/photo-1470058869958-2a77ade41c02?w=700&q=80" alt="Natural holistic wellness">
+<!-- 5. ABOUT -->
+<section id="about" class="section section-alt">
+  <div class="wrap about-split">
+    <div class="about-img-wrap reveal">
+      <img src="https://images.unsplash.com/photo-1470058869958-2a77ade41c02?w=800&q=80" alt="Natural holistic wellness">
       <div class="about-logo-badge">
         <img src="FINAL_LOGO.jpg" alt="Quest for Wellness">
         <span>Quest for Wellness, LLC<br><span style="opacity:0.65;font-weight:400">Certified practitioner</span></span>
       </div>
     </div>
-    <div class="about-text">
+    <div class="about-text reveal reveal-d2">
       <div class="section-label">About us</div>
       <h2>Holistic wellness rooted in nature and science</h2>
       <p>At Quest for Wellness, we believe the body has an innate intelligence to heal when given the right support. Our approach combines the precision of the Qest4 bioresonance system with time-honored holistic wellness principles.</p>
@@ -274,176 +455,166 @@ footer{background:#072f40;padding:40px 48px}
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<div id="qest4" class="qest-section">
-  <div class="section-label" style="color:#29b8c8;margin-bottom:8px">Technology</div>
-  <div style="font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;color:#f0fbfc;margin-bottom:36px;line-height:1.2">What is the Qest4?</div>
-  <div class="qest-inner">
-    <div class="qest-text">
-      <h2>Science-backed bioresonance testing</h2>
-      <p>The Qest4 is a sophisticated bio-energetic assessment system used by certified holistic practitioners worldwide. It communicates with the body using subtle electrical signals to detect areas of stress and imbalance — without any needles, blood draws, or discomfort.</p>
-      <ul class="qest-list">
-        <li><div class="qest-dot"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Tests hundreds of health areas in one comfortable session</li>
-        <li><div class="qest-dot"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Completely non-invasive — no needles or blood draws</li>
-        <li><div class="qest-dot"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Results imported directly into your secure client file</li>
-        <li><div class="qest-dot"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Guides personalized supplement and lifestyle recommendations</li>
-        <li><div class="qest-dot"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Trusted by certified practitioners internationally</li>
-      </ul>
-      <a href="intake-form" class="btn-primary" style="margin-top:24px;display:inline-block">Start with a new client form</a>
-    </div>
-    <div class="qest-img-wrap">
-      <img src="https://images.unsplash.com/photo-1618220179428-22790b461013?w=700&q=80" alt="Warm wellness consultation space">
-      <div class="qest-img-label"><p>Your Qest4 session is relaxed, private, and completely non-invasive. Most sessions take 60–90 minutes.</p></div>
-    </div>
+<!-- STATS -->
+<section class="stats" aria-label="Quest for Wellness by the numbers">
+  <div class="wrap stats-grid">
+    <div class="stat reveal"><div class="stat-num" data-count="500" data-suffix="+">500+</div><div class="stat-label">Sessions completed</div></div>
+    <div class="stat reveal reveal-d1"><div class="stat-num" data-count="2">2</div><div class="stat-label">Species served</div></div>
+    <div class="stat reveal reveal-d2"><div class="stat-num" data-count="50">50</div><div class="stat-label">States reachable via remote testing</div></div>
+    <div class="stat reveal reveal-d3"><div class="stat-num" data-count="100" data-suffix="%">100%</div><div class="stat-label">Non-invasive</div></div>
   </div>
-</div>
+</section>
 
-<div class="section">
-  <div class="section-label">Getting started</div>
-  <div class="section-title">Your first visit, step by step</div>
-  <div class="steps-row">
-    <div class="step"><div class="step-num">1</div><h3>Complete your intake form</h3><p>Fill out your health history online — securely emailed to us to prepare for your visit.</p></div>
-    <div class="step"><div class="step-num">2</div><h3>We review &amp; confirm</h3><p>We'll reach out to confirm your appointment and answer any questions before you arrive.</p></div>
-    <div class="step"><div class="step-num">3</div><h3>Your Qest4 session</h3><p>A relaxed, comfortable assessment where we run your full bioresonance scan.</p></div>
-    <div class="step"><div class="step-num">4</div><h3>Receive your results</h3><p>Your personalized report and recommendations are posted securely to your client portal.</p></div>
-  </div>
-</div>
-
-<div id="animals" class="animals-section">
-  <div class="section-label" style="color:#29b8c8">Animals &amp; Pets</div>
-  <div class="animals-title">Qest4 works for your animals too</div>
-  <div class="animals-sub">The same powerful bioenergetic testing that helps people find balance works beautifully for animals. Safe, non-invasive, and incredibly insightful.</div>
-  <div class="animal-cards">
-    <div class="animal-card featured">
-      <div class="animal-photo">
-        <img src="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=900&q=80" alt="Horse in a pasture">
-        <div class="animal-tag"><div class="hero-dot"></div>Featured · Horses</div>
-      </div>
-      <div class="animal-body">
-        <h3>Equine wellness</h3>
-        <p>From performance horses and barrel horses to trail horses and beloved companions, Qest4 testing helps uncover what your horse can't tell you — so they can feel, move, and perform at their best.</p>
-        <ul class="animal-list">
-          <li><div class="qest-dot"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Nutritional imbalances</li>
-          <li><div class="qest-dot"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Allergy identification</li>
-          <li><div class="qest-dot"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Digestive health</li>
-          <li><div class="qest-dot"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Stress and behavioral issues</li>
-          <li><div class="qest-dot"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Immune support</li>
-          <li><div class="qest-dot"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Performance optimization</li>
+<!-- 6. QEST4 -->
+<section id="qest4" class="qest-section">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-label" style="color:#29b8c8">Technology</div>
+      <h2 class="section-title" style="color:#f0fbfc;margin-bottom:40px">What is the Qest4?</h2>
+    </div>
+    <div class="qest-inner">
+      <div class="qest-text reveal">
+        <h2>Science-backed bioresonance testing</h2>
+        <p>The Qest4 is a sophisticated bio-energetic assessment system used by certified holistic practitioners worldwide. It communicates with the body using subtle electrical signals to detect areas of stress and imbalance — without any needles, blood draws, or discomfort.</p>
+        <ul class="qest-list">
+          <li><div class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Tests hundreds of health areas in one comfortable session</li>
+          <li><div class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Completely non-invasive — no needles or blood draws</li>
+          <li><div class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Results imported directly into your secure client file</li>
+          <li><div class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Guides personalized supplement and lifestyle recommendations</li>
+          <li><div class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Trusted by certified practitioners internationally</li>
         </ul>
+        <div style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap">
+          <a href="intake-form" class="btn-primary">Start with a new client form</a>
+          <a href="qest4" class="btn-outline" style="background:transparent;color:#b8e6f0;border-color:rgba(184,230,240,0.45)">Learn more about the Qest4</a>
+        </div>
       </div>
-    </div>
-    <div class="animal-card">
-      <div class="animal-photo">
-        <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=700&q=80" alt="Happy dog outdoors">
-        <div class="animal-tag"><div class="hero-dot"></div>Dogs</div>
-      </div>
-      <div class="animal-body">
-        <h3>Canine wellness</h3>
-        <p>Whether they're a family dog or a hard-working partner, Qest4 testing gives you insight into what's behind their symptoms and how to support their health naturally.</p>
-        <ul class="animal-list">
-          <li><div class="qest-dot"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Food sensitivities</li>
-          <li><div class="qest-dot"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Skin and coat issues</li>
-          <li><div class="qest-dot"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Digestive imbalances</li>
-          <li><div class="qest-dot"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Energy and vitality</li>
-          <li><div class="qest-dot"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Immune support</li>
-          <li><div class="qest-dot"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Behavioral stress</li>
-        </ul>
+      <div class="qest-img-wrap reveal reveal-d2 lift">
+        <img src="https://images.unsplash.com/photo-1618220179428-22790b461013?w=800&q=80" alt="Warm wellness consultation space">
+        <div class="qest-img-label"><p>Your Qest4 session is relaxed, private, and completely non-invasive. Most sessions take 60–90 minutes.</p></div>
       </div>
     </div>
   </div>
-  <div class="animal-callout">
-    <div class="animal-callout-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3,7 12,13 21,7"/></svg></div>
-    <p><strong>Remote testing available</strong> — send a hair sample by mail. No in-person visit required for animals.</p>
-  </div>
-  <div class="animals-cta"><a href="animal-intake-form" class="btn-primary">Request an animal wellness assessment</a></div>
-  <p class="animals-disclaimer">Qest4 testing is a complementary wellness tool and is not a substitute for veterinary diagnosis or treatment. Please continue to work with your veterinarian for your animal's medical care.</p>
-</div>
+</section>
 
-<div id="portal" class="section section-alt">
-  <div class="section-label">Client portal</div>
-  <div class="section-title">Your wellness hub — always available</div>
-  <div class="section-sub">Existing clients get a secure, password-protected portal with everything from their appointments in one convenient place.</div>
-  <div class="portal-cards">
-    <div class="portal-card">
-      <div class="portal-card-photo"><img src="https://images.unsplash.com/photo-1517842645767-c639042777db?w=400&q=70" alt="Appointment notes"></div>
-      <div class="portal-card-body"><h4>Appointment notes</h4><p>Post-session summaries posted privately after each visit.</p><div class="portal-badge">Secure &amp; private</div></div>
+<!-- 7. STEPS -->
+<section class="section">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-label">Getting started</div>
+      <h2 class="section-title" style="margin-bottom:36px">Your first visit, step by step</h2>
     </div>
-    <div class="portal-card">
-      <div class="portal-card-photo"><img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&q=70" alt="Documents"></div>
-      <div class="portal-card-body"><h4>Documents &amp; reports</h4><p>Download your Qest4 reports and supplement recommendations.</p><div class="portal-badge">PDF download</div></div>
-    </div>
-    <div class="portal-card">
-      <div class="portal-card-photo"><img src="https://images.unsplash.com/photo-1506784365847-bbad939e9335?w=400&q=70" alt="Scheduling"></div>
-      <div class="portal-card-body"><h4>Book appointments</h4><p>Schedule your next session directly from your portal.</p><div class="portal-badge">Live scheduling</div></div>
-    </div>
-    <div class="portal-card">
-      <div class="portal-card-photo"><img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=400&q=70" alt="Profile"></div>
-      <div class="portal-card-body"><h4>Secure messaging</h4><p>Message Kelly directly with questions between visits.</p><div class="portal-badge">Password protected</div></div>
+    <div class="steps-row">
+      <div class="step lift reveal"><div class="step-num">1</div><h3>Complete your intake form</h3><p>Fill out your health history online — securely emailed to us to prepare for your visit.</p></div>
+      <div class="step lift reveal reveal-d1"><div class="step-num">2</div><h3>We review &amp; confirm</h3><p>We'll reach out to confirm your appointment and answer any questions before you arrive.</p></div>
+      <div class="step lift reveal reveal-d2"><div class="step-num">3</div><h3>Your Qest4 session</h3><p>A relaxed, comfortable assessment where we run your full bioresonance scan.</p></div>
+      <div class="step lift reveal reveal-d3"><div class="step-num">4</div><h3>Receive your results</h3><p>Your personalized report and recommendations are posted securely to your client portal.</p></div>
     </div>
   </div>
-  <div style="margin-top:24px;text-align:center">
-    <a href="client-portal" class="btn-primary" style="background:#0a4f6a;color:#e8f7fa">Sign in to your portal</a>
-  </div>
-</div>
+</section>
 
-
-<div style="background:#0a4f6a;padding:48px">
-  <div style="text-align:center;margin-bottom:32px">
-    <div style="font-size:11px;font-weight:500;color:#29b8c8;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:8px">Kelly's philosophy</div>
-    <div style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;color:#f0fbfc;margin-bottom:10px">The Foundations of Health</div>
-    <p style="font-size:14px;color:#9dd4e0;max-width:520px;margin:0 auto;line-height:1.7">The body is designed to heal itself when given the proper support. These foundations guide every wellness plan Kelly creates.</p>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;max-width:900px;margin:0 auto 28px">
-    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(41,184,200,0.2);border-radius:10px;padding:16px;text-align:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#29b8c8" stroke-width="1.5" style="display:block;margin:0 auto 8px"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/></svg><span style="font-size:12px;font-weight:500;color:#e8f7fa">Whole food nutrition</span></div>
-    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(41,184,200,0.2);border-radius:10px;padding:16px;text-align:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#29b8c8" stroke-width="1.5" style="display:block;margin:0 auto 8px"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/></svg><span style="font-size:12px;font-weight:500;color:#e8f7fa">Proper hydration</span></div>
-    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(41,184,200,0.2);border-radius:10px;padding:16px;text-align:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#29b8c8" stroke-width="1.5" style="display:block;margin:0 auto 8px"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span style="font-size:12px;font-weight:500;color:#e8f7fa">Rest &amp; recovery</span></div>
-    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(41,184,200,0.2);border-radius:10px;padding:16px;text-align:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#29b8c8" stroke-width="1.5" style="display:block;margin:0 auto 8px"><circle cx="12" cy="5" r="1"/><path d="M7 22l5-12 5 12M9.5 17h5"/></svg><span style="font-size:12px;font-weight:500;color:#e8f7fa">Exercise &amp; movement</span></div>
-    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(41,184,200,0.2);border-radius:10px;padding:16px;text-align:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#29b8c8" stroke-width="1.5" style="display:block;margin:0 auto 8px"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/></svg><span style="font-size:12px;font-weight:500;color:#e8f7fa">Sunlight &amp; fresh air</span></div>
-    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(41,184,200,0.2);border-radius:10px;padding:16px;text-align:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#29b8c8" stroke-width="1.5" style="display:block;margin:0 auto 8px"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span style="font-size:12px;font-weight:500;color:#e8f7fa">Body &amp; energy work</span></div>
-    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(41,184,200,0.2);border-radius:10px;padding:16px;text-align:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#29b8c8" stroke-width="1.5" style="display:block;margin:0 auto 8px"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg><span style="font-size:12px;font-weight:500;color:#e8f7fa">Emotional balance</span></div>
-    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(41,184,200,0.2);border-radius:10px;padding:16px;text-align:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#29b8c8" stroke-width="1.5" style="display:block;margin:0 auto 8px"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M8 12s1-3 4-3 4 3 4 3"/></svg><span style="font-size:12px;font-weight:500;color:#e8f7fa">Breathing &amp; stress reduction</span></div>
-  </div>
-  <div style="text-align:center">
-    <a href="qest4" style="background:#29b8c8;color:#042C53;font-weight:500;font-size:14px;padding:11px 24px;border-radius:8px;text-decoration:none;display:inline-block">Learn more about our approach</a>
-  </div>
-</div>
-
-<div class="section">
-  <div class="section-label">Client stories</div>
-  <div class="section-title">Real results, real journeys</div>
-  <div style="margin-bottom:24px"></div>
-  <div class="testimonials">
-    <div class="testimonial">
-      <div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
-      <q>I had no idea what bioresonance testing was before my first visit. The Qest4 results were eye-opening — things I'd struggled with for years finally made sense.</q>
-      <div class="testimonial-author">— Sarah M., Aurora CO</div>
+<!-- 8. FOUNDATIONS -->
+<section class="foundations">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-label" style="color:#29b8c8">Kelly's philosophy</div>
+      <h2 class="section-title">The Foundations of Health</h2>
+      <p class="section-sub">The body is designed to heal itself when given the proper support. These foundations guide every wellness plan Kelly creates.</p>
     </div>
-    <div class="testimonial">
-      <div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
-      <q>The intake form was easy to fill out online, and having my results in the client portal afterward was so convenient. I refer back to my notes constantly.</q>
-      <div class="testimonial-author">— James T.</div>
+    <div class="found-grid">
+      <div class="found-item reveal"><svg viewBox="0 0 24 24"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/></svg><span>Whole food nutrition</span></div>
+      <div class="found-item reveal reveal-d1"><svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/></svg><span>Proper hydration</span></div>
+      <div class="found-item reveal reveal-d2"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Rest &amp; recovery</span></div>
+      <div class="found-item reveal reveal-d3"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"/><path d="M7 22l5-12 5 12M9.5 17h5"/></svg><span>Exercise &amp; movement</span></div>
+      <div class="found-item reveal"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/></svg><span>Sunlight &amp; fresh air</span></div>
+      <div class="found-item reveal reveal-d1"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>Body &amp; energy work</span></div>
+      <div class="found-item reveal reveal-d2"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg><span>Emotional balance</span></div>
+      <div class="found-item reveal reveal-d3"><svg viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M8 12s1-3 4-3 4 3 4 3"/></svg><span>Breathing &amp; stress reduction</span></div>
     </div>
-    <div class="testimonial">
-      <div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
-      <q>I appreciated how thorough and natural everything felt. No guesswork — just a clear, personalized picture of what my body actually needed.</q>
-      <div class="testimonial-author">— Linda R.</div>
+    <a href="qest4" class="btn-primary reveal">Learn more about our approach</a>
+  </div>
+</section>
+
+<!-- 9. PORTAL -->
+<section id="portal" class="section section-alt">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-label">Client portal</div>
+      <h2 class="section-title">Your wellness hub — always available</h2>
+      <p class="section-sub">Existing clients get a secure, password-protected portal with everything from their appointments in one convenient place.</p>
+    </div>
+    <div class="portal-cards">
+      <div class="portal-card lift reveal">
+        <div class="portal-card-photo"><img src="https://images.unsplash.com/photo-1517842645767-c639042777db?w=500&q=70" alt="Appointment notes"></div>
+        <div class="portal-card-body"><h4>Appointment notes</h4><p>Post-session summaries posted privately after each visit.</p><div class="portal-badge">Secure &amp; private</div></div>
+      </div>
+      <div class="portal-card lift reveal reveal-d1">
+        <div class="portal-card-photo"><img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=500&q=70" alt="Documents"></div>
+        <div class="portal-card-body"><h4>Documents &amp; reports</h4><p>Download your Qest4 reports and supplement recommendations.</p><div class="portal-badge">PDF download</div></div>
+      </div>
+      <div class="portal-card lift reveal reveal-d2">
+        <div class="portal-card-photo"><img src="https://images.unsplash.com/photo-1506784365847-bbad939e9335?w=500&q=70" alt="Scheduling"></div>
+        <div class="portal-card-body"><h4>Book appointments</h4><p>Schedule your next session directly from your portal.</p><div class="portal-badge">Live scheduling</div></div>
+      </div>
+      <div class="portal-card lift reveal reveal-d3">
+        <div class="portal-card-photo"><img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=500&q=70" alt="Profile"></div>
+        <div class="portal-card-body"><h4>Secure messaging</h4><p>Message Kelly directly with questions between visits.</p><div class="portal-badge">Password protected</div></div>
+      </div>
+    </div>
+    <div style="margin-top:32px;text-align:center" class="reveal">
+      <a href="client-portal" class="btn-primary" style="background:#0a4f6a;color:#e8f7fa">Sign in to your portal</a>
     </div>
   </div>
-</div>
+</section>
 
-<div id="contact" class="cta-section">
-  <img class="cta-logo" src="FINAL_LOGO.jpg" alt="Quest for Wellness">
-  <h2>Ready to start your wellness quest?</h2>
-  <p>New clients begin with our secure online health history form. It takes just a few minutes and helps us prepare a personalized session for you.</p>
-  <div class="cta-pills">
-    <div class="cta-pill"><div class="cta-pill-num">1</div>Fill out your intake form</div>
-    <div class="cta-pill"><div class="cta-pill-num">2</div>We'll be in touch</div>
-    <div class="cta-pill"><div class="cta-pill-num">3</div>Book your first session</div>
+<!-- 10. TESTIMONIALS -->
+<section class="section">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-label">Client stories</div>
+      <h2 class="section-title" style="margin-bottom:32px">Real results, real journeys</h2>
+    </div>
+    <div class="testimonials">
+      <div class="testimonial lift reveal">
+        <div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+        <q>I had no idea what bioresonance testing was before my first visit. The Qest4 results were eye-opening — things I'd struggled with for years finally made sense.</q>
+        <div class="testimonial-author">— Sarah M., Aurora CO</div>
+      </div>
+      <div class="testimonial lift reveal reveal-d1">
+        <div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+        <q>The intake form was easy to fill out online, and having my results in the client portal afterward was so convenient. I refer back to my notes constantly.</q>
+        <div class="testimonial-author">— James T.</div>
+      </div>
+      <div class="testimonial lift reveal reveal-d2">
+        <div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+        <q>I appreciated how thorough and natural everything felt. No guesswork — just a clear, personalized picture of what my body actually needed.</q>
+        <div class="testimonial-author">— Linda R.</div>
+      </div>
+    </div>
   </div>
-  <a href="intake-form" class="btn-primary">Complete new client intake form</a>
-</div>
+</section>
 
+<!-- 11. CTA -->
+<section id="contact" class="cta-section">
+  <div class="reveal">
+    <img class="cta-logo" src="FINAL_LOGO.jpg" alt="Quest for Wellness">
+    <h2>Ready to start your wellness quest?</h2>
+    <p>New clients begin with our secure online health history form. It takes just a few minutes and helps us prepare a personalized session for you.</p>
+    <div class="cta-pills">
+      <div class="cta-pill"><div class="cta-pill-num">1</div>Fill out your intake form</div>
+      <div class="cta-pill"><div class="cta-pill-num">2</div>We'll be in touch</div>
+      <div class="cta-pill"><div class="cta-pill-num">3</div>Book your first session</div>
+    </div>
+    <div class="cta-btns">
+      <a href="intake-form" class="btn-primary">Complete new client intake form</a>
+      <a href="animal-intake-form" class="btn-outline">Animal intake form</a>
+    </div>
+    <p style="margin-top:22px;font-size:13px;color:#5a7a85">Questions? Email <a href="mailto:QuestforWellness22@gmail.com" style="color:#0a4f6a">QuestforWellness22@gmail.com</a></p>
+  </div>
+</section>
+
+<!-- 12. FOOTER -->
 <footer>
   <div class="footer-grid">
     <div class="footer-col">
@@ -460,10 +631,12 @@ footer{background:#072f40;padding:40px 48px}
       <a href="#services">Bioresonance testing</a>
       <a href="#services">Wellness optimization</a>
       <a href="#services">Follow-up visits</a>
+      <a href="#animals">Horses &amp; dogs</a>
     </div>
     <div class="footer-col">
       <h4>Client area</h4>
       <a href="intake-form">New client intake</a>
+      <a href="animal-intake-form">Animal intake</a>
       <a href="client-portal">Client login</a>
       <a href="intake-form">Book appointment</a>
     </div>
@@ -483,5 +656,125 @@ footer{background:#072f40;padding:40px 48px}
   </div>
 </footer>
 
+<script>
+(function () {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ── Nav: transparent over hero, solid teal once scrolled ──
+  const nav = document.getElementById('nav');
+  const toggle = document.getElementById('navToggle');
+  const onScroll = () => nav.classList.toggle('solid', window.scrollY > 40);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  toggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  nav.querySelectorAll('.nav-right a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
+
+  // ── Scroll reveal ──
+  const reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window && !reduceMotion) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target;
+        el.classList.add('in');
+        io.unobserve(el);
+        // Drop reveal styles once the entrance finishes so hover tilt/lift take over
+        setTimeout(() => el.classList.remove('reveal', 'in', 'reveal-d1', 'reveal-d2', 'reveal-d3'), 1200);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(el => io.observe(el));
+  } else {
+    reveals.forEach(el => el.classList.add('in'));
+  }
+
+  // ── Stats counters ──
+  const counters = document.querySelectorAll('[data-count]');
+  const runCounter = el => {
+    const target = +el.dataset.count, suffix = el.dataset.suffix || '';
+    if (reduceMotion) { el.textContent = target + suffix; return; }
+    const start = performance.now(), dur = 1800;
+    const tick = now => {
+      const p = Math.min((now - start) / dur, 1);
+      el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    el.textContent = '0' + suffix;
+    requestAnimationFrame(tick);
+  };
+  if ('IntersectionObserver' in window) {
+    const co = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { runCounter(e.target); co.unobserve(e.target); } });
+    }, { threshold: 0.6 });
+    counters.forEach(el => co.observe(el));
+  }
+
+  // ── Hero particles ──
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  const hero = document.querySelector('.hero');
+  let w, h, dpr, particles = [], running = true, raf;
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = canvas.clientWidth; h = canvas.clientHeight;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const count = Math.round(Math.min(90, (w * h) / 16000));
+    particles = Array.from({ length: count }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 2.2 + 0.6,
+      vx: (Math.random() - 0.5) * 0.18,
+      vy: -(Math.random() * 0.25 + 0.05),
+      a: Math.random() * 0.5 + 0.2,
+      phase: Math.random() * Math.PI * 2,
+      teal: Math.random() < 0.6
+    }));
+  }
+
+  function draw(t) {
+    ctx.clearRect(0, 0, w, h);
+    for (const p of particles) {
+      p.x += p.vx + Math.sin(t / 2400 + p.phase) * 0.12;
+      p.y += p.vy;
+      if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
+      if (p.x < -10) p.x = w + 10; else if (p.x > w + 10) p.x = -10;
+      const alpha = p.a * (0.65 + 0.35 * Math.sin(t / 900 + p.phase));
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.teal ? `rgba(41,184,200,${alpha})` : `rgba(240,251,252,${alpha * 0.8})`;
+      ctx.shadowColor = p.teal ? 'rgba(41,184,200,0.8)' : 'rgba(255,255,255,0.6)';
+      ctx.shadowBlur = 8;
+      ctx.fill();
+    }
+    if (running) raf = requestAnimationFrame(draw);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  if (reduceMotion) {
+    draw(0); running = false;
+  } else {
+    raf = requestAnimationFrame(draw);
+    // Pause when the hero is off-screen or the tab is hidden
+    const setRunning = on => {
+      if (on && !running) { running = true; raf = requestAnimationFrame(draw); }
+      else if (!on) { running = false; cancelAnimationFrame(raf); }
+    };
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([e]) => setRunning(e.isIntersecting && !document.hidden)).observe(hero);
+    }
+    document.addEventListener('visibilitychange', () => setRunning(!document.hidden && window.scrollY < hero.offsetHeight));
+  }
+})();
+</script>
 </body>
 </html>
