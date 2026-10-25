@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animal Wellness Intake Form — Quest for Wellness, LLC</title>
+<meta name="description" content="Request a Qest4 bioenergetic wellness assessment for your horse or dog. Remote testing available by mailed hair sample.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+:root {
+  --teal: #1a9aaa;
+  --teal-deep: #0a4f6a;
+  --teal-light: #29b8c8;
+  --teal-bg: #e8f7fa;
+  --teal-subtle: #f0fbfc;
+  --navy: #072f40;
+  --white: #ffffff;
+  --text: #1a2e35;
+  --text-muted: #5a7a85;
+  --border: rgba(26,154,170,0.2);
+  --border-strong: rgba(26,154,170,0.45);
+  --error: #c0392b;
+  --radius: 10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #f4f9fa;
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* Header */
+.site-header {
+  background: var(--teal-deep);
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+}
+.header-logo { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(41,184,200,0.5); }
+.header-text { color: #e8f7fa; text-decoration: none; }
+.header-text strong { display: block; font-size: 15px; font-weight: 500; letter-spacing: 0.01em; }
+.header-text span { font-size: 11px; opacity: 0.65; }
+.header-right { margin-left: auto; color: rgba(232,247,250,0.6); font-size: 12px; text-align: right; line-height: 1.4; }
+
+/* Main layout */
+.main { max-width: 780px; margin: 0 auto; padding: 36px 24px 80px; }
+
+.section-header { margin-bottom: 28px; }
+.section-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; color: var(--teal); text-transform: uppercase; margin-bottom: 6px; }
+.section-title { font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 600; color: var(--teal-deep); line-height: 1.2; margin-bottom: 8px; }
+.section-sub { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+
+.card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; margin-bottom: 20px; }
+.card-title { font-size: 13px; font-weight: 500; color: var(--teal-deep); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+
+/* Form fields */
+.field-row { display: grid; gap: 16px; margin-bottom: 16px; }
+.field-row:last-child { margin-bottom: 0; }
+.field-row.cols-2 { grid-template-columns: 1fr 1fr; }
+.field-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+
+label { font-size: 12px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+label.req::after { content: ' *'; color: var(--teal); }
+
+input[type="text"], input[type="email"], input[type="tel"], input[type="number"], input[type="date"], select, textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: 7px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: white;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  -webkit-appearance: none;
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(26,154,170,0.12); }
+input.invalid, textarea.invalid, .radio-group.invalid { border-color: var(--error); box-shadow: 0 0 0 3px rgba(192,57,43,0.1); border-radius: 7px; }
+textarea { resize: vertical; min-height: 70px; }
+select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231a9aaa' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+
+/* Radio / checkbox pills */
+.radio-group, .check-group { display: flex; flex-wrap: wrap; gap: 8px; }
+.radio-opt, .check-opt {
+  display: flex; align-items: center; gap: 7px;
+  padding: 8px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 13px; color: var(--text);
+  text-transform: none; letter-spacing: 0; font-weight: 400;
+  transition: all 0.15s;
+  user-select: none;
+  background: white;
+}
+.radio-opt:has(input:checked), .check-opt:has(input:checked) { background: var(--teal-bg); border-color: var(--teal); color: var(--teal-deep); font-weight: 500; }
+.radio-opt input, .check-opt input { display: none; }
+
+/* Species picker */
+.species-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.species-opt {
+  position: relative; display: block; cursor: pointer;
+  border: 2px solid var(--border); border-radius: var(--radius); overflow: hidden;
+  background: white; transition: all 0.15s;
+  text-transform: none; letter-spacing: 0;
+}
+.species-opt input { position: absolute; opacity: 0; pointer-events: none; }
+.species-opt img { width: 100%; height: 130px; object-fit: cover; display: block; }
+.species-opt span { display: block; padding: 12px 16px; font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--teal-deep); }
+.species-opt:has(input:checked) { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(26,154,170,0.15); }
+.species-opt:has(input:checked) span::after { content: ' ✓'; color: var(--teal); }
+.species-only { display: none; }
+
+/* Info boxes */
+.privacy-note {
+  background: #f0f9f0; border: 1px solid rgba(26,138,106,0.25);
+  border-radius: 7px; padding: 12px 16px;
+  font-size: 12px; color: #1a5a40; line-height: 1.6;
+  margin-bottom: 20px;
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.sample-box { background: var(--teal-subtle); border: 1px solid var(--border); border-left: 3px solid var(--teal-light); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 18px; }
+.sample-box h4 { font-size: 14px; font-weight: 500; color: var(--teal-deep); margin-bottom: 8px; }
+.sample-box ol { font-size: 13px; color: var(--text); padding-left: 18px; line-height: 1.8; }
+.sample-box p { font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-top: 10px; }
+.consent-text { font-size: 13px; line-height: 1.8; color: var(--text); margin-bottom: 16px; }
+.consent-text strong { color: var(--teal-deep); }
+.agree {
+  display: flex; align-items: flex-start; gap: 10px; cursor: pointer;
+  padding: 12px 14px; background: var(--teal-subtle); border: 1px solid var(--border-strong); border-radius: 7px;
+  font-size: 13px; color: var(--text); text-transform: none; letter-spacing: 0; font-weight: 400; line-height: 1.6;
+  margin-bottom: 16px;
+}
+.agree input { margin-top: 4px; accent-color: var(--teal); width: 16px; height: 16px; flex-shrink: 0; }
+.agree.invalid { border-color: var(--error); }
+.hint { font-size: 11px; color: var(--text-muted); margin-top: 3px; text-transform: none; letter-spacing: 0; }
+.form-error { display: none; background: #fef0f0; border: 1px solid rgba(192,57,43,0.25); border-radius: 7px; padding: 10px 14px; font-size: 13px; color: #a93226; margin-bottom: 16px; }
+
+/* Buttons */
+.form-nav { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 12px; }
+.btn { padding: 11px 28px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; border: none; transition: all 0.18s; text-decoration: none; display: inline-block; }
+.btn-secondary { background: white; color: var(--teal-deep); border: 1px solid var(--border-strong); }
+.btn-secondary:hover { background: var(--teal-bg); }
+.btn-submit { background: var(--teal-deep); color: white; padding: 13px 36px; font-size: 15px; }
+.btn-submit:hover { background: var(--navy); }
+.btn-submit:disabled { opacity: 0.6; cursor: default; }
+
+/* Success screen */
+.success-screen { display: none; text-align: center; padding: 60px 32px; }
+.success-screen.show { display: block; }
+.success-icon { width: 72px; height: 72px; border-radius: 50%; background: var(--teal-bg); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; }
+.success-icon svg { width: 32px; height: 32px; stroke: var(--teal); fill: none; stroke-width: 2; }
+.success-screen h2 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; color: var(--teal-deep); margin-bottom: 12px; }
+.success-screen p { color: var(--text-muted); font-size: 14px; line-height: 1.7; max-width: 460px; margin: 0 auto 8px; }
+
+@media (max-width: 600px) {
+  .field-row.cols-2, .field-row.cols-3 { grid-template-columns: 1fr; }
+  .main { padding: 20px 16px 60px; }
+  .site-header { padding: 12px 16px; }
+  .header-right { display: none; }
+  .card { padding: 18px; }
+  .species-opt img { height: 100px; }
+  .section-title { font-size: 28px; }
+  .form-nav .btn { width: 100%; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index"><img class="header-logo" src="FINAL_LOGO.jpg" alt="Quest for Wellness logo"></a>
+  <a class="header-text" href="index">
+    <strong>Quest for Wellness, LLC</strong>
+    <span>Kelly Parsons · CHHP, CNC, Qest4 Bioenergetic Practitioner</span>
+  </a>
+  <div class="header-right">Animal Wellness<br>Intake Form</div>
+</header>
+
+<main class="main">
+
+<div id="formWrap">
+  <div class="section-header">
+    <div class="section-eyebrow">Animals &amp; Pets</div>
+    <div class="section-title">Animal wellness intake</div>
+    <div class="section-sub">Tell us about your horse or dog so Kelly can prepare their Qest4 bioenergetic assessment. Remote testing is available — no in-person visit required.</div>
+  </div>
+
+  <div class="privacy-note">
+    <span>🔒</span>
+    <span>Quest for Wellness, LLC does not share or sell your information to anyone. Your contact information is used only to contact you about your animal's assessment.</span>
+  </div>
+
+  <!-- ── Species ── -->
+  <div class="card">
+    <div class="card-title">Which animal is this for?</div>
+    <div class="species-picker" id="speciesGroup">
+      <label class="species-opt">
+        <input type="radio" name="species" value="Horse">
+        <img src="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=600&q=70" alt="Horse">
+        <span>Horse</span>
+      </label>
+      <label class="species-opt">
+        <input type="radio" name="species" value="Dog">
+        <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600&q=70" alt="Dog">
+        <span>Dog</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- ── Owner ── -->
+  <div class="card">
+    <div class="card-title">Owner information</div>
+    <div class="field-row cols-2">
+      <div class="field"><label class="req" for="ownerName">Owner name</label><input type="text" id="ownerName" placeholder="First and last name" autocomplete="name"></div>
+      <div class="field"><label class="req" for="ownerEmail">Email address</label><input type="email" id="ownerEmail" placeholder="you@example.com" autocomplete="email"></div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field"><label class="req" for="ownerPhone">Phone number</label><input type="tel" id="ownerPhone" placeholder="(555) 000-0000" autocomplete="tel"></div>
+      <div class="field"><label for="contactPref">Best way to reach you</label>
+        <select id="contactPref"><option>Email</option><option>Phone call</option><option>Text message</option></select>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label for="ownerAddress">Mailing address</label><input type="text" id="ownerAddress" placeholder="Street address, city, state, zip" autocomplete="street-address"><div class="hint">Used to mail any recommended products back to you.</div></div>
+    </div>
+  </div>
+
+  <!-- ── Animal basics ── -->
+  <div class="card">
+    <div class="card-title">About your animal</div>
+    <div class="field-row cols-3">
+      <div class="field"><label class="req" for="animalName">Animal's name</label><input type="text" id="animalName" placeholder="Name"></div>
+      <div class="field"><label for="breed">Breed</label><input type="text" id="breed" placeholder="Breed or mix"></div>
+      <div class="field"><label for="animalAge">Age</label><input type="text" id="animalAge" placeholder="e.g. 8 years"></div>
+    </div>
+    <div class="field-row cols-3">
+      <div class="field">
+        <label>Sex</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="animalSex" value="Male"> Male</label>
+          <label class="radio-opt"><input type="radio" name="animalSex" value="Female"> Female</label>
+        </div>
+      </div>
+      <div class="field"><label for="altered">Spayed / neutered / gelded?</label>
+        <select id="altered"><option value="">Select</option><option>Yes</option><option>No</option><option>Not sure</option></select>
+      </div>
+      <div class="field"><label for="weight">Approx. weight</label><input type="text" id="weight" placeholder="e.g. 1,100 lbs"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label for="markings">Color / markings</label><input type="text" id="markings" placeholder="e.g. Bay with white blaze"></div>
+    </div>
+  </div>
+
+  <!-- ── Horse only ── -->
+  <div class="card species-only" data-species="Horse">
+    <div class="card-title">Horse details</div>
+    <div class="field-row">
+      <div class="field">
+        <label>What does your horse do? (select all that apply)</label>
+        <div class="check-group">
+          <label class="check-opt"><input type="checkbox" name="horseUse" value="Barrel racing"> Barrel racing</label>
+          <label class="check-opt"><input type="checkbox" name="horseUse" value="Performance / show"> Performance / show</label>
+          <label class="check-opt"><input type="checkbox" name="horseUse" value="Trail riding"> Trail riding</label>
+          <label class="check-opt"><input type="checkbox" name="horseUse" value="Ranch work"> Ranch work</label>
+          <label class="check-opt"><input type="checkbox" name="horseUse" value="Breeding"> Breeding</label>
+          <label class="check-opt"><input type="checkbox" name="horseUse" value="Companion / retired"> Companion / retired</label>
+        </div>
+      </div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field"><label for="workload">Current workload</label>
+        <select id="workload"><option value="">Select</option><option>Not in work</option><option>Light (1–2 days/week)</option><option>Moderate (3–4 days/week)</option><option>Heavy / competing (5+ days/week)</option></select>
+      </div>
+      <div class="field"><label for="housing">Housing</label>
+        <select id="housing"><option value="">Select</option><option>Pasture full-time</option><option>Stall full-time</option><option>Stall with daily turnout</option><option>Dry lot / paddock</option></select>
+      </div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field"><label for="hay">Hay / forage</label><input type="text" id="hay" placeholder="Type and amount, e.g. grass hay free choice"></div>
+      <div class="field"><label for="grain">Grain / concentrate</label><input type="text" id="grain" placeholder="Brand and amount per day"></div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field"><label for="farrier">Farrier / hoof care</label><input type="text" id="farrier" placeholder="Shod or barefoot, how often"></div>
+      <div class="field"><label for="travel">Recent travel or competitions</label><input type="text" id="travel" placeholder="Any in the last 3 months?"></div>
+    </div>
+  </div>
+
+  <!-- ── Dog only ── -->
+  <div class="card species-only" data-species="Dog">
+    <div class="card-title">Dog details</div>
+    <div class="field-row cols-2">
+      <div class="field">
+        <label>Your dog is a…</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="dogRole" value="Family dog"> Family dog</label>
+          <label class="radio-opt"><input type="radio" name="dogRole" value="Working dog"> Working dog</label>
+          <label class="radio-opt"><input type="radio" name="dogRole" value="Sport / show dog"> Sport / show</label>
+        </div>
+      </div>
+      <div class="field"><label for="dogLiving">Lives mostly</label>
+        <select id="dogLiving"><option value="">Select</option><option>Indoors</option><option>Outdoors</option><option>Both</option></select>
+      </div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field"><label for="dogFood">Food brand &amp; type</label><input type="text" id="dogFood" placeholder="e.g. kibble, raw, home-cooked"></div>
+      <div class="field"><label for="treats">Treats &amp; chews</label><input type="text" id="treats" placeholder="What and how often"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label for="activity">Daily activity</label><input type="text" id="activity" placeholder="Walks, play, work, training"></div>
+    </div>
+  </div>
+
+  <!-- ── Health ── -->
+  <div class="card">
+    <div class="card-title">Health &amp; wellness</div>
+    <div class="field-row">
+      <div class="field"><label class="req" for="concerns">Main concerns or goals</label><textarea id="concerns" rows="3" placeholder="What would you most like Kelly to look at?"></textarea></div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Areas of concern (select all that apply)</label>
+        <div class="check-group">
+          <label class="check-opt"><input type="checkbox" name="areas" value="Nutrition"> Nutrition</label>
+          <label class="check-opt"><input type="checkbox" name="areas" value="Allergies / sensitivities"> Allergies / sensitivities</label>
+          <label class="check-opt"><input type="checkbox" name="areas" value="Digestive"> Digestive</label>
+          <label class="check-opt"><input type="checkbox" name="areas" value="Skin / coat"> Skin / coat</label>
+          <label class="check-opt"><input type="checkbox" name="areas" value="Stress / behavior"> Stress / behavior</label>
+          <label class="check-opt"><input type="checkbox" name="areas" value="Immune support"> Immune support</label>
+          <label class="check-opt"><input type="checkbox" name="areas" value="Energy / vitality"> Energy / vitality</label>
+          <label class="check-opt"><input type="checkbox" name="areas" value="Performance"> Performance</label>
+          <label class="check-opt"><input type="checkbox" name="areas" value="Joints / movement"> Joints / movement</label>
+        </div>
+      </div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field"><label for="duration">How long has this been going on?</label><input type="text" id="duration" placeholder="e.g. 6 months"></div>
+      <div class="field"><label for="otherAnimals">Other animals in the home / barn</label><input type="text" id="otherAnimals" placeholder="e.g. 2 horses, 1 cat"></div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field"><label for="meds">Current medications</label><textarea id="meds" rows="2" placeholder="Name and dose, or none"></textarea></div>
+      <div class="field"><label for="supplements">Current supplements</label><textarea id="supplements" rows="2" placeholder="Name and amount, or none"></textarea></div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field"><label for="history">Past injuries, illnesses or surgeries</label><textarea id="history" rows="2" placeholder="Include approximate dates"></textarea></div>
+      <div class="field"><label for="behavior">Recent behavior changes</label><textarea id="behavior" rows="2" placeholder="Anxiety, aggression, appetite, energy…"></textarea></div>
+    </div>
+  </div>
+
+  <!-- ── Veterinarian ── -->
+  <div class="card">
+    <div class="card-title">Veterinarian</div>
+    <div class="field-row cols-2">
+      <div class="field"><label for="vetName">Veterinarian / clinic name</label><input type="text" id="vetName" placeholder="Dr. name or clinic"></div>
+      <div class="field"><label for="vetPhone">Vet phone</label><input type="tel" id="vetPhone" placeholder="(555) 000-0000"></div>
+    </div>
+  </div>
+
+  <!-- ── Sample ── -->
+  <div class="card">
+    <div class="card-title">Your animal's sample</div>
+    <!--
+      KELLY TO CONFIRM: the collection steps below are common practice, not Qest4's
+      official animal protocol. Check the amount, body location, and whether a nail
+      clipping is also needed, then edit this list to match.
+    -->
+    <div class="sample-box">
+      <h4>How to collect a hair sample</h4>
+      <ol>
+        <li>Wash and dry your hands, and handle only one animal at a time.</li>
+        <li class="species-only" data-species="Horse">Pull a small pinch of hair (about 20–30 strands) from the <strong>mane or tail</strong> — pulled, not cut, so the roots are included.</li>
+        <li class="species-only" data-species="Dog">Pull or brush out a small pinch of hair (about 20–30 strands) from the <strong>base of the tail or along the back</strong>.</li>
+        <li>Place the hair in a <strong>clean paper envelope</strong> — not plastic — and seal it.</li>
+        <li>Write your animal's name, your name and the date on the envelope.</li>
+      </ol>
+      <!-- KELLY TO CONFIRM: replace this sentence with the mailing address once decided. -->
+      <p>After Kelly receives this form, she'll email you the mailing address and next steps.</p>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label class="req">How will you provide the sample?</label>
+        <div class="radio-group" id="sampleGroup">
+          <label class="radio-opt"><input type="radio" name="sampleMethod" value="Mail a hair sample"> Mail a hair sample</label>
+          <label class="radio-opt"><input type="radio" name="sampleMethod" value="Bring my animal in person"> Bring my animal in person</label>
+          <label class="radio-opt"><input type="radio" name="sampleMethod" value="Kelly visits (farm / home call)"> Farm or home visit</label>
+        </div>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label for="notes">Anything else Kelly should know?</label><textarea id="notes" rows="2" placeholder="Optional"></textarea></div>
+    </div>
+  </div>
+
+  <!-- ── Agreement ── -->
+  <div class="card">
+    <div class="card-title">Agreement</div>
+    <div class="consent-text">
+      I understand that Kelly Parsons is a Qest4-certified bioenergetic practitioner and <strong>not a licensed veterinarian</strong>. Qest4 testing is a complementary wellness tool that identifies energetic imbalances. It <strong>does not diagnose, treat or cure any disease</strong> and is <strong>not a substitute for veterinary diagnosis or treatment</strong>. I will continue to work with my veterinarian for my animal's medical care and will not change or stop any prescribed medication without my veterinarian's guidance. Any decision to follow Kelly's recommendations is my own, and I am the owner or authorized agent of this animal.
+    </div>
+    <label class="agree" id="agreeLabel"><input type="checkbox" id="agree"> I have read and agree to the statement above.</label>
+    <div class="field-row cols-2">
+      <div class="field"><label class="req" for="sigName">Owner's full name (signature)</label><input type="text" id="sigName" placeholder="Type your full name"></div>
+      <div class="field"><label for="sigDate">Date</label><input type="date" id="sigDate"></div>
+    </div>
+  </div>
+
+  <div class="form-error" id="formError"></div>
+  <div class="form-nav">
+    <a href="index#animals" class="btn btn-secondary">← Back to site</a>
+    <button class="btn btn-submit" onclick="submitForm()">Submit animal intake →</button>
+  </div>
+</div>
+
+<!-- ============ SUCCESS ============ -->
+<div class="success-screen" id="successScreen">
+  <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+  <h2 id="successTitle">Thank you!</h2>
+  <p id="successMsg">Kelly will review your information and email you the next steps for <span id="successAnimal"></span>'s assessment, including where to mail the hair sample.</p>
+  <p style="margin-top:20px"><a href="index" class="btn btn-secondary">Back to Quest for Wellness</a></p>
+  <p style="margin-top:20px;font-size:12px;color:#aaa">Quest for Wellness, LLC · Kelly Parsons CHHP, CNC · questforwellnessllc.com</p>
+</div>
+
+</main>
+
+<script>
+// ── EmailJS ──────────────────────────────────────────────────────
+// Same service and key as intake-form.html. The animal form needs its OWN
+// template — create it in EmailJS (Email Templates → Create New) with:
+//   To email:  QuestforWellness22@gmail.com
+//   Subject:   Animal Intake — {{animal_name}} ({{species}}) — {{owner_name}}
+//   Reply-to:  {{owner_email}}
+//   Body:      {{summary}}
+// then paste its Template ID below. Until then, Submit opens the client's
+// email app with the same summary addressed to Kelly.
+const EMAILJS_SERVICE_ID  = 'service_txf5npp';
+const EMAILJS_PUBLIC_KEY  = 'GLrZXNUH4Ja0S0--j';
+const ANIMAL_TEMPLATE_ID  = 'YOUR_ANIMAL_TEMPLATE_ID';
+const AUTO_REPLY_TEMPLATE_ID = 'template_3n5673o';
+const KELLY_EMAIL = 'QuestforWellness22@gmail.com';
+
+// Show horse- or dog-only fields for the selected species
+function updateSpecies() {
+  const el = document.querySelector('input[name="species"]:checked');
+  const species = el ? el.value : '';
+  document.querySelectorAll('.species-only').forEach(s => {
+    s.style.display = s.dataset.species === species ? (s.tagName === 'LI' ? 'list-item' : 'block') : 'none';
+  });
+}
+document.querySelectorAll('input[name="species"]').forEach(r => r.addEventListener('change', updateSpecies));
+
+// Preselect species from ?species=horse or ?species=dog
+const preset = new URLSearchParams(location.search).get('species');
+if (preset) {
+  const match = document.querySelector(`input[name="species"][value="${preset.charAt(0).toUpperCase() + preset.slice(1).toLowerCase()}"]`);
+  if (match) match.checked = true;
+}
+updateSpecies();
+document.getElementById('sigDate').valueAsDate = new Date();
+
+function collectFormData() {
+  const val = id => document.getElementById(id).value.trim();
+  const radio = name => { const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : ''; };
+  const checks = name => Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(e => e.value).join(', ');
+  const species = radio('species');
+
+  const sections = [
+    ['OWNER', [
+      ['Name', val('ownerName')], ['Email', val('ownerEmail')], ['Phone', val('ownerPhone')],
+      ['Best contact', val('contactPref')], ['Mailing address', val('ownerAddress')]
+    ]],
+    ['ANIMAL', [
+      ['Species', species], ['Name', val('animalName')], ['Breed', val('breed')], ['Age', val('animalAge')],
+      ['Sex', radio('animalSex')], ['Spayed/neutered/gelded', val('altered')], ['Weight', val('weight')], ['Color/markings', val('markings')]
+    ]],
+  ];
+  if (species === 'Horse') sections.push(['HORSE DETAILS', [
+    ['Use', checks('horseUse')], ['Workload', val('workload')], ['Housing', val('housing')],
+    ['Hay/forage', val('hay')], ['Grain', val('grain')], ['Farrier', val('farrier')], ['Recent travel/competitions', val('travel')]
+  ]]);
+  if (species === 'Dog') sections.push(['DOG DETAILS', [
+    ['Role', radio('dogRole')], ['Lives', val('dogLiving')], ['Food', val('dogFood')], ['Treats', val('treats')], ['Activity', val('activity')]
+  ]]);
+  sections.push(
+    ['HEALTH', [
+      ['Main concerns', val('concerns')], ['Areas of concern', checks('areas')], ['Duration', val('duration')],
+      ['Other animals', val('otherAnimals')], ['Medications', val('meds')], ['Supplements', val('supplements')],
+      ['History', val('history')], ['Behavior changes', val('behavior')]
+    ]],
+    ['VETERINARIAN', [['Vet/clinic', val('vetName')], ['Vet phone', val('vetPhone')]]],
+    ['SAMPLE', [['Method', radio('sampleMethod')], ['Notes', val('notes')]]],
+    ['AGREEMENT', [['Agreed to terms', 'Yes'], ['Signed', val('sigName')], ['Date', val('sigDate')]]]
+  );
+
+  const summary = sections.map(([title, rows]) =>
+    title + '\n' + rows.map(([k, v]) => `  ${k}: ${v || '—'}`).join('\n')
+  ).join('\n\n');
+
+  return {
+    species,
+    owner_name: val('ownerName'),
+    owner_email: val('ownerEmail'),
+    animal_name: val('animalName'),
+    summary,
+    submitted_date: new Date().toLocaleDateString(),
+    // Names the existing auto-reply template uses
+    client_name: val('ownerName'),
+    client_email: val('ownerEmail'),
+  };
+}
+
+function validate() {
+  document.querySelectorAll('.invalid').forEach(el => el.classList.remove('invalid'));
+  const missing = [];
+  const need = (ok, el, label) => { if (!ok) { missing.push(label); if (el) el.classList.add('invalid'); } };
+  const val = id => document.getElementById(id).value.trim();
+
+  need(document.querySelector('input[name="species"]:checked'), document.getElementById('speciesGroup'), 'horse or dog');
+  need(val('ownerName'), document.getElementById('ownerName'), 'owner name');
+  need(/^\S+@\S+\.\S+$/.test(val('ownerEmail')), document.getElementById('ownerEmail'), 'a valid email');
+  need(val('ownerPhone'), document.getElementById('ownerPhone'), 'phone number');
+  need(val('animalName'), document.getElementById('animalName'), "animal's name");
+  need(val('concerns'), document.getElementById('concerns'), 'main concerns');
+  need(document.querySelector('input[name="sampleMethod"]:checked'), document.getElementById('sampleGroup'), 'sample method');
+  need(document.getElementById('agree').checked, document.getElementById('agreeLabel'), 'agreement');
+  need(val('sigName'), document.getElementById('sigName'), 'signature name');
+  return missing;
+}
+
+async function submitForm() {
+  const err = document.getElementById('formError');
+  const missing = validate();
+  if (missing.length) {
+    err.textContent = 'Please complete: ' + missing.join(', ') + '.';
+    err.style.display = 'block';
+    document.querySelector('.invalid').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  err.style.display = 'none';
+
+  const submitBtn = document.querySelector('.btn-submit');
+  const data = collectFormData();
+
+  // Template not created yet — hand off to the client's email app instead
+  if (ANIMAL_TEMPLATE_ID === 'YOUR_ANIMAL_TEMPLATE_ID') {
+    const subject = `Animal Intake — ${data.animal_name} (${data.species}) — ${data.owner_name}`;
+    location.href = `mailto:${KELLY_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(data.summary)}`;
+    showSuccess(data, true);
+    return;
+  }
+
+  submitBtn.textContent = 'Sending…';
+  submitBtn.disabled = true;
+
+  // Send intake to Kelly — if this fails, let the owner know and retry
+  try {
+    await emailjs.send(EMAILJS_SERVICE_ID, ANIMAL_TEMPLATE_ID, data, EMAILJS_PUBLIC_KEY);
+  } catch (e) {
+    console.error('Animal intake email error:', e);
+    submitBtn.textContent = 'Submit animal intake →';
+    submitBtn.disabled = false;
+    err.textContent = 'There was a problem sending your form. Please try again or email Kelly directly at ' + KELLY_EMAIL + '.';
+    err.style.display = 'block';
+    return;
+  }
+  // Auto-reply to owner — best effort, don't block success screen
+  try {
+    await emailjs.send(EMAILJS_SERVICE_ID, AUTO_REPLY_TEMPLATE_ID, data, EMAILJS_PUBLIC_KEY);
+  } catch (e) {
+    console.error('Auto-reply error:', e);
+  }
+  showSuccess(data, false);
+}
+
+function showSuccess(data, viaEmailApp) {
+  document.getElementById('formWrap').style.display = 'none';
+  document.getElementById('successTitle').textContent = 'Thank you, ' + data.owner_name.split(' ')[0] + '!';
+  document.getElementById('successAnimal').textContent = data.animal_name;
+  if (viaEmailApp) {
+    document.getElementById('successMsg').innerHTML =
+      'Your email app should now be open with your answers addressed to Kelly — <strong>please press Send</strong> to finish. ' +
+      'If it didn\'t open, email <a href="mailto:' + KELLY_EMAIL + '">' + KELLY_EMAIL + '</a> and Kelly will follow up.';
+  }
+  document.getElementById('successScreen').classList.add('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

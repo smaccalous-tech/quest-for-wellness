@@ -121,6 +121,7 @@ nav{background:#0a4f6a;display:flex;align-items:center;justify-content:space-bet
 .animal-callout p{color:#e8f7fa;font-size:14px;line-height:1.6}
 .animal-callout strong{color:#fff;font-weight:500}
 .animals-cta{margin-top:28px}
+.animals-disclaimer{margin-top:18px;font-size:12px;color:#6ab0c0;line-height:1.6;max-width:620px}
 
 /* PORTAL PREVIEW */
 .portal-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
@@ -178,7 +179,8 @@ footer{background:#072f40;padding:40px 48px}
   .animal-callout{align-items:flex-start}
   .cta-section{padding:40px 24px}
   footer{padding:32px 24px}
-  nav{padding:10px 16px}
+  nav{padding:10px 16px;position:relative}
+  .animals-section{scroll-margin-top:0}
 }
 </style>
 </head>
@@ -354,7 +356,8 @@ footer{background:#072f40;padding:40px 48px}
     <div class="animal-callout-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3,7 12,13 21,7"/></svg></div>
     <p><strong>Remote testing available</strong> — send a hair sample by mail. No in-person visit required for animals.</p>
   </div>
-  <div class="animals-cta"><a href="intake-form" class="btn-primary">Request an animal wellness assessment</a></div>
+  <div class="animals-cta"><a href="animal-intake-form" class="btn-primary">Request an animal wellness assessment</a></div>
+  <p class="animals-disclaimer">Qest4 testing is a complementary wellness tool and is not a substitute for veterinary diagnosis or treatment. Please continue to work with your veterinarian for your animal's medical care.</p>
 </div>
 
 <div id="portal" class="section section-alt">
