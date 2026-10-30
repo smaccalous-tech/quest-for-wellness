@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- TEMPORARY coming-soon gate page. See gate.js for how it works and how to remove it. -->
+<script src="gate.js" data-gate="page"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Coming Soon — Quest for Wellness, LLC</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--teal:#1a9aaa;--teal-deep:#0a4f6a;--teal-light:#29b8c8;--teal-bg:#e8f7fa;--navy:#072f40}
+html,body{height:100%}
+body{font-family:'DM Sans',sans-serif;color:#f0fbfc;background:#072f40;overflow-x:hidden}
+
+.scene{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;padding:32px 20px;overflow:hidden}
+.bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1519414442781-fbd745c5b497?w=1600&q=80') center/cover no-repeat;transform:scale(1.06);animation:zoom 20s ease-out forwards}
+@keyframes zoom{to{transform:scale(1)}}
+.overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(7,47,64,0.55) 0%,rgba(10,79,106,0.62) 45%,rgba(7,47,64,0.9) 100%)}
+
+.content{position:relative;z-index:1;width:100%;max-width:520px;text-align:center}
+.logo{width:104px;height:104px;border-radius:50%;object-fit:cover;border:3px solid rgba(41,184,200,0.6);box-shadow:0 0 44px rgba(41,184,200,0.35);margin:0 auto 22px;display:block}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(41,184,200,0.18);border:0.5px solid rgba(41,184,200,0.6);color:#b8e6f0;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;padding:6px 16px;border-radius:20px;margin-bottom:18px}
+.dot{width:7px;height:7px;border-radius:50%;background:#29b8c8;box-shadow:0 0 8px #29b8c8;animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.35}}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(38px,8vw,60px);font-weight:600;line-height:1.08;margin-bottom:14px;text-shadow:0 2px 24px rgba(0,0,0,0.35)}
+h1 em{color:#29b8c8;font-style:normal}
+.sub{font-size:16px;color:#b8e6f0;line-height:1.65;margin:0 auto 32px;max-width:420px}
+
+.card{background:rgba(255,255,255,0.08);border:1px solid rgba(184,230,240,0.3);border-radius:16px;padding:24px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);text-align:left}
+.card label{display:block;font-size:11px;font-weight:500;color:#9dd4e0;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:8px}
+.row{display:flex;gap:10px}
+.row input{flex:1;min-width:0;padding:14px 16px;border-radius:10px;border:1px solid rgba(184,230,240,0.45);background:rgba(7,47,64,0.55);color:#fff;font-family:'DM Sans',sans-serif;font-size:16px;transition:border-color .15s,box-shadow .15s}
+.row input::placeholder{color:rgba(184,230,240,0.55)}
+.row input:focus{outline:none;border-color:#29b8c8;box-shadow:0 0 0 3px rgba(41,184,200,0.25)}
+.row input.wrong{border-color:#ff8a7a;box-shadow:0 0 0 3px rgba(255,138,122,0.25)}
+.row button{padding:14px 24px;border:none;border-radius:10px;background:#29b8c8;color:#042C53;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:background .15s,transform .15s}
+.row button:hover{background:#3cc9d8;transform:translateY(-1px)}
+.row button:disabled{opacity:.6;cursor:default;transform:none}
+.error{min-height:20px;margin-top:10px;font-size:13px;color:#ffb3a8;font-weight:500}
+.shake{animation:shake .45s cubic-bezier(.36,.07,.19,.97)}
+@keyframes shake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-8px)}40%,60%{transform:translateX(8px)}}
+
+.foot{margin-top:28px;font-size:13px;color:#9dd4e0;line-height:1.8}
+.foot a{color:#e8f7fa;text-decoration:underline;text-underline-offset:3px}
+.foot a:hover{color:#29b8c8}
+.fine{margin-top:6px;font-size:11px;color:rgba(157,212,224,0.7)}
+
+.fade{opacity:0;transform:translateY(14px);animation:up .8s ease forwards}
+.d1{animation-delay:.15s}.d2{animation-delay:.35s}.d3{animation-delay:.55s}.d4{animation-delay:.75s}
+@keyframes up{to{opacity:1;transform:none}}
+
+@media(max-width:480px){
+  .bg{background-position:78% center}
+  .row{flex-direction:column}
+  .row button{width:100%}
+  .card{padding:20px}
+  .logo{width:86px;height:86px}
+}
+@media(prefers-reduced-motion:reduce){
+  .bg,.fade,.dot{animation:none;opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<main class="scene">
+  <div class="bg" aria-hidden="true"></div>
+  <div class="overlay" aria-hidden="true"></div>
+  <div class="content">
+    <img class="logo fade" src="FINAL_LOGO.jpg" alt="Quest for Wellness, LLC">
+    <div class="badge fade d1"><span class="dot"></span>Coming soon</div>
+    <h1 class="fade d1">Your quest for <em>wellness</em> starts here</h1>
+    <p class="sub fade d2">Holistic, bioenergetic wellness for people and animals — from Colorado to everywhere. Our new site is almost ready.</p>
+
+    <form class="card fade d3" id="gateForm" novalidate>
+      <label for="gatePassword">Preview password</label>
+      <div class="row">
+        <input type="password" id="gatePassword" autocomplete="off" placeholder="Enter password" aria-describedby="gateError" required>
+        <button type="submit" id="gateBtn">Enter</button>
+      </div>
+      <div class="error" id="gateError" role="alert" aria-live="polite"></div>
+    </form>
+
+    <div class="foot fade d4">
+      Existing client? <a href="client-portal">Sign in to your portal</a>
+      <div class="fine">Quest for Wellness, LLC · Kelly Parsons, CHHP, CNC</div>
+    </div>
+  </div>
+</main>
+
+<script>
+(function () {
+  var form = document.getElementById('gateForm');
+  var input = document.getElementById('gatePassword');
+  var btn = document.getElementById('gateBtn');
+  var error = document.getElementById('gateError');
+
+  function fail(message) {
+    error.textContent = message;
+    input.classList.add('wrong');
+    input.classList.remove('shake');
+    void input.offsetWidth; // restart the animation
+    input.classList.add('shake');
+    input.select();
+  }
+
+  input.addEventListener('input', function () {
+    error.textContent = '';
+    input.classList.remove('wrong');
+  });
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    if (!window.QFWGate) return; // already unlocked and redirecting
+    btn.disabled = true;
+    try {
+      if (await window.QFWGate.check(input.value)) {
+        window.QFWGate.unlock();
+      } else {
+        fail('Incorrect password');
+      }
+    } catch (err) {
+      fail('Please open the secure (https) version of this site.');
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  input.focus();
+})();
+</script>
+</body>
+</html>
